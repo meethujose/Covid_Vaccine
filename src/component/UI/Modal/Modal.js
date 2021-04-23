@@ -6,7 +6,7 @@ export default function Modal(props) {
     <>
       <BackDrop onClick={props.onClick} />
 
-      <div className='Modal'>
+      <div className='Modal Modal-body'>
         <span className='close' onClick={props.onClick}>
           &times;
         </span>

@@ -95,7 +95,7 @@ export default function Register({ setShowModal }) {
           />
         </div>
         <div className='form_box'>
-          <label>EID No.</label>
+          <label>Mob Number</label>
           <input
             type='text'
             placeholder='Phone Number'
@@ -106,7 +106,7 @@ export default function Register({ setShowModal }) {
           />
         </div>
         <div className='form_box'>
-          <label>Mobile No.</label>
+          <label>Emirates Id</label>
           <input
             type='text'
             placeholder='Emirates Id'

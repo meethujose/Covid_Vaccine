@@ -3,12 +3,10 @@ import EmpCard from "../UI/EmpCard/EmpCard";
 import db from "../../Data/FirebaseConfig";
 import Modal from "../UI/Modal/Modal";
 import "./Emplist.css";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 import report from "../Icons/report.svg";
-export default function EmpList({userArray, setUserArray, setMount, mount}) {
-
-  
+export default function EmpList({ userArray, setUserArray, setMount, mount }) {
   const [showModal, setShowModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState({});
   useEffect(() => {
@@ -35,27 +33,32 @@ export default function EmpList({userArray, setUserArray, setMount, mount}) {
     <div>
       {userArray.map((item) => (
         <EmpCard key={item.eid} onClick={() => clickHandler(item)}>
-          <img className='emplist' src={report} />
-          <h3 className="emplistheader"> {item.name}</h3>
-          <p className="emplistheader">{item.eid}</p>
+          <div className='empcard__textwrapper'>
+            <h3 className='emplist__name'> {item.name}</h3>
+            <h3 className="emplist__eid">{item.eid}</h3>
+          </div>
+          <div className='empcard__imagewrapper'>
+            <img className='reporticon' src={report} />
+          </div>
         </EmpCard>
       ))}
       {showModal ? (
-       
         <Modal onClick={clickHandler}>
-          <div className="cardwrap">
-           <div className="Empcard">
-          <img className="imgCard"src={selectedUser.Avatar} />
-          <h3>{selectedUser && selectedUser.name}</h3>
-          <h3>{selectedUser && selectedUser.eid}</h3>
+          <div className='EmpDetailsWrap'>
+            <img className={"imgCard"} src={selectedUser.Avatar} alt='' />
+            <div>
+              <h3 className='emplist__name emplist--white'>
+                {selectedUser.name}
+              </h3>
+              <h3 className='emplist__eid emplist--white'>
+                {selectedUser.eid}
+              </h3>
+            </div>
           </div>
-      <div className="EmpVaccine"></div>
-      <div className="EmpTest"></div>
-      </div>
+          <div className='EmpVaccine'></div>
+          <div className='EmpTest'></div>
         </Modal>
-        
       ) : null}
-      
     </div>
   );
 }
