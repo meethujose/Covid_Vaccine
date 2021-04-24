@@ -4,7 +4,7 @@ import Modal from "../../component/UI/Modal/Modal";
 import Register from "../Register/Register";
 import AddIcon from "../Icons/AddUser.svg";
 import LogoutIcon from "../Icons/Logout.svg";
-
+// test add user
 export default function AddUser() {
   const [showModal, setShowModal] = useState(false);
   const clickHandler = () => {
