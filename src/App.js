@@ -6,21 +6,26 @@ import Header from "./component/UI/Header/Header";
 import Register from "./component/Register/Register";
 import AddUser from "./component/AddUser/AddUser";
 import Search from './component/UI/Search/Search';
+import SignUp from './component/SignUp/SignUp';
+import SignIn from './component/SignIn/SignIn';
 function App() {
   const [userArray, setUserArray] = useState([]);
   const [mount, setMount] = useState(false);
   return (
     <Router>
       <div>
+       
         <Switch>
           <Route path='/' exact>
+       
             <Header>
               <Search userArray={userArray} setUserArray={setUserArray} setMount={setMount} />
               <AddUser />
             </Header>
             <EmpList userArray={userArray} setUserArray={setUserArray} mount={mount} setMount={setMount}/>
           </Route>
-          <Route path='/Register' component={Register} />
+          <Route path='/login' component={SignIn} />
+          <Route path='/register' component={SignUp} />
         </Switch>
       </div>
     </Router>
