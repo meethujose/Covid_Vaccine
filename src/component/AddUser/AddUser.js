@@ -14,7 +14,7 @@ export default function AddUser() {
   return (
     <div className='AddUser'>
       <div>
-        <img className='logouticon' src={LogoutIcon} onClick={clickHandler} />
+        <img className='logouticon' src={LogoutIcon} />
         <img className='icon' src={AddIcon} onClick={clickHandler} />
       </div>
       {showModal ? (

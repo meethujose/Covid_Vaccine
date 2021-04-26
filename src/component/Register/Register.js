@@ -5,6 +5,7 @@ import user from "../Images/user.png";
 import ReactCrop from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import Model from "../UI/Modal/Modal";
+import axios from 'axios';
 //Image Crop
 function generateDownload(canvas, crop) {
   if (!crop || !canvas) {
@@ -61,12 +62,15 @@ export default function Register({ setShowModal }) {
       () => {
         storageRef.snapshot.ref.getDownloadURL().then(async (url) => {
           console.log(url);
-          const res = await db.collection("users").add({
-            name: formData.username,
-            number: formData.PhoneNumber,
-            eid: formData.EmiratesId,
-            Avatar: url,
-          });
+          const res = await axios
+            .post("http://lulu.transituae.net/api/empcreate/", {
+              name: formData.username,
+              emiratesID: formData.EmiratesId,
+              avatarURL: url,
+            })
+            .then(function (response) {
+              console.log(response);
+            });
           formData.username = "";
           formData.PhoneNumber = "";
           formData.EmiratesId = "";
@@ -122,14 +126,14 @@ export default function Register({ setShowModal }) {
 
     const scaleX = image.naturalWidth / image.width;
     const scaleY = image.naturalHeight / image.height;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     const pixelRatio = window.devicePixelRatio;
 
     canvas.width = crop.width * pixelRatio;
     canvas.height = crop.height * pixelRatio;
 
     ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
-    ctx.imageSmoothingQuality = 'high';
+    ctx.imageSmoothingQuality = "high";
 
     ctx.drawImage(
       image,
@@ -145,75 +149,78 @@ export default function Register({ setShowModal }) {
   }, [completedCrop]);
 
   return (
-    <div className="register">
+    <div className='register'>
       <label>
         <input
-          type="file"
-          id="file"
-          name="image"
+          type='file'
+          id='file'
+          name='image'
           required
           ref={imageRef}
-          onChange={onSelectFile}
-        ></input>
-        <img src={user} className="imgFile" alt="img" />
+          onChange={onSelectFile}></input>
+        <img src={user} className='imgFile' alt='img' />
       </label>
-      {selected ? 
-      <>
-
-<div className="Crop">
-          <ReactCrop
-            className="fileimage"
-            style={{width: "100%", height: "90%"}}
-            src={upImg}
-            onImageLoaded={onLoad}
-            crop={crop}
-            onChange={(c) => setCrop(c)}
-            onComplete={(c) => setCompletedCrop(c)}
-          />
-        </div>
-        <button className="btn btn-primary" onClick={() => setSelected(false)}>Crop</button>
-       </>
-       : 
-      <form className="addform" onSubmit={submitData}>
-        <div className="form_box">
-          <label>Name</label>
-          <input
-            type="text"
-            placeholder="Name"
-            name="username"
-            required
-            className="inputField"
-            onChange={handleChange}
-          />
-        </div>
-        <div className="form_box">
-          <label>Mob Number</label>
-          <input
-            type="text"
-            placeholder="Phone Number"
-            name="PhoneNumber"
-            required
-            className="inputField"
-            onChange={handleChange}
-          />
-        </div>
-        <div className="form_box">
-          <label>Emirates Id</label>
-          <input
-            type="text"
-            placeholder="Emirates Id"
-            name="EmiratesId"
-            required
-            className="inputField"
-            onChange={(e) => {
-              EidChangeHandler(e);
-              handleChange(e);
-            }}
-            value={EidField}
-          />
-        </div>
-        <input type="submit" className=" regSubButton" value="Submit" />
-      </form>}
+      {selected ? (
+        <>
+          <div className='Crop'>
+            <ReactCrop
+              className='fileimage'
+              style={{ width: "100%", height: "90%" }}
+              src={upImg}
+              onImageLoaded={onLoad}
+              crop={crop}
+              onChange={(c) => setCrop(c)}
+              onComplete={(c) => setCompletedCrop(c)}
+            />
+          </div>
+          <button
+            className='btn btn-primary'
+            onClick={() => setSelected(false)}>
+            Crop
+          </button>
+        </>
+      ) : (
+        <form className='addform' onSubmit={submitData}>
+          <div className='form_box'>
+            <label>Name</label>
+            <input
+              type='text'
+              placeholder='Name'
+              name='username'
+              required
+              className='inputField'
+              onChange={handleChange}
+            />
+          </div>
+          <div className='form_box'>
+            <label>Mob Number</label>
+            <input
+              type='text'
+              placeholder='Phone Number'
+              name='PhoneNumber'
+              required
+              className='inputField'
+              onChange={handleChange}
+            />
+          </div>
+          <div className='form_box'>
+            <label>Emirates Id</label>
+            <input
+              type='text'
+              placeholder='Emirates Id'
+              name='EmiratesId'
+              required
+              className='inputField'
+              onChange={(e) => {
+                EidChangeHandler(e);
+                handleChange(e);
+              }}
+              value={EidField}
+            />
+          </div>
+          <input type='submit' className=' regSubButton' value='Submit' />
+        </form>
+      )}
     </div>
   );
 }

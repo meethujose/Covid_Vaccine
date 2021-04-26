@@ -8,7 +8,7 @@
   margin-left: 1.5rem;
   font-family: Segoe UI;
 }
-.Empcard{
+.Empcard {
   display: flex;
   position: relative;
   width: 100%;
@@ -16,12 +16,10 @@
   margin: auto;
   padding: 10px;
   margin-top: 20px;
-  background-color:#87C1AB;
+  background-color: #87c1ab;
   border-radius: 10px;
   box-shadow: 0px 0px 5px rgb(133 131 131);
   z-index: 1;
-  
-
 }
 .empcard__textwrapper {
   display: inline;
@@ -31,14 +29,14 @@
 
 .emplist__name {
   text-align: left;
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-weight: 500;
   font-size: 1rem;
   color: rgb(77, 74, 74);
 }
 .emplist__eid {
   text-align: left;
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-weight: 300;
   font-size: 1rem;
   color: rgb(77, 74, 74);
@@ -47,28 +45,50 @@
   text-align: center;
   color: white;
 }
+
 .empcard__imagewrapper {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 20%;
-  
+}
+.empVaccine--text {
+  display: flex;
+  text-align: left;
+  color: #5cbdae;
+  margin-left: 1rem;
+  width: 70%;
+  flex-direction: row;
 }
 
+.emplist--black {
+  display: flex;
+  text-align: left;
+  color: #a19797;
+  margin-left: 1rem;
+  width: 70%;
+  flex-direction: row;
+}
+
+.plusicon {
+  width: 1.5rem;
+  height: 1.5rem;
+  display: inline-block;
+}
 .reporticon {
   width: 2.5rem;
   height: 2.5rem;
 }
 @media screen and (max-width: 250px) {
-  .reporticon { 
+  .reporticon {
     display: none;
- }
- .empcard__imagewrapper {
-  display: none;
-}
-.empcard__textwrapper {
-  width: 100%;
-}
+  }
+  .empcard__imagewrapper {
+    display: none;
+  }
+  .empcard__textwrapper {
+    width: 100%;
+  }
 }
 .imgCard {
   position: relative;
@@ -81,7 +101,7 @@
   border: 5px solid rgb(255, 255, 255);
   box-shadow: 0px 0px 8px #888888;
 }
-.EmpVaccine{
+.EmpVaccine {
   position: relative;
   width: 100%;
   height: 120px;
@@ -92,9 +112,8 @@
   border-radius: 10px;
   box-shadow: 0px 0px 5px rgb(133 131 131);
   z-index: 1;
-
 }
-.EmpTest{
+.EmpTest {
   position: relative;
   width: 100%;
   height: 120px;
@@ -105,10 +124,13 @@
   border-radius: 10px;
   box-shadow: 0px 0px 5px rgb(133 131 131);
   z-index: 1;
-
 }
-.EmpDetailsWrap{
-  background-image: linear-gradient(to bottom right, rgb(122, 192, 145), rgb(43, 192, 175));
+.EmpDetailsWrap {
+  background-image: linear-gradient(
+    to bottom right,
+    rgb(122, 192, 145),
+    rgb(43, 192, 175)
+  );
   border-radius: 5px;
   margin-top: 2rem;
   border: 5px solid rgb(255, 255, 255);
@@ -116,6 +138,43 @@
   box-shadow: 0px 0px 8px #888888;
 }
 
-
-
-
+.addform {
+  display: flex;
+  flex-direction: column;
+  row-gap: 12px;
+  width: 100%;
+}
+.form_box {
+  display: grid;
+  grid-template-columns: 0.3fr 1fr;
+  gap: 12px;
+}
+.inputField {
+  width: 100%;
+  padding-left: 12px;
+  box-shadow: none !important;
+  border: 1px solid rgb(167, 164, 164);
+  border-radius: 8px;
+}
+.EmpSetailsText {
+  color: #5cbdae;
+}
+.vaccine {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  row-gap: 12px;
+  box-sizing: border-box;
+ 
+}
+.regSubButton {
+  margin-top: 50px;
+  background-color: #b2d0d7;
+  color: white;
+  width:30%;
+}
