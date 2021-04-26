@@ -112,6 +112,8 @@
   border-radius: 10px;
   box-shadow: 0px 0px 5px rgb(133 131 131);
   z-index: 1;
+  display: flex;
+  justify-content: space-between;
 }
 .EmpTest {
   position: relative;

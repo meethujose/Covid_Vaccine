@@ -2,43 +2,41 @@ import React, { useState, useEffect } from "react";
 import db, { storage } from "../../Data/FirebaseConfig";
 import axios from "axios";
 import EmpCard from "../UI/EmpCard/EmpCard";
-
+import Moment from "moment";
 import Modal from "../UI/Modal/Modal";
 import "./Emplist.css";
 import { Link } from "react-router-dom";
 import Plus from "../Icons/plus.svg";
 import report from "../Icons/report.svg";
 import Register from "../Register/Register";
+import moment from "moment";
 export default function EmpList({ userArray, setUserArray, setMount, mount }) {
   const fileRef = React.useRef();
   const [selectedUser, setSelectedUser] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({});
   const [showVaccineModal, setShowVaccineModal] = useState(false);
+  const [userVaccineData, setUserVaccineData] = useState();
   const clickPlusHandler = () => {
     const tempVaccineShowModal = showVaccineModal;
     setShowVaccineModal(!tempVaccineShowModal);
   };
-  // useEffect(() => {
-  //   const tempUserArray = [];
-  // db.collection("users")
-  //   .get()
-  //   .then((querySnapshot) => {
-  //     querySnapshot.forEach((doc) => {
-  //       console.log(doc.data().name);
-
-  //       tempUserArray.push(doc.data());
-  //     });
-  //     setUserArray(tempUserArray);
-  //     setMount(false);
-  //   });
-
-  // const result = await axios(
-  //   'http://lulu.transituae.net/api/emplist/',
-  // );
-
-  // }, [mount]);
-
+  
+  useEffect(() => {
+    if(selectedUser.id){
+    axios
+      .get(`http://lulu.transituae.net/api/vaccinelist/${selectedUser.id}`)
+      .then((response) => {
+        console.log(response.data);
+        setUserVaccineData(response.data);
+      })
+      .catch((error) => {
+        console.log("failed to fetch data", error);
+      });
+    }
+    return () => {};
+  }, [selectedUser.id]);
+console.log("vaccination data:",userVaccineData);
   useEffect(() => {
     axios
       .get("http://lulu.transituae.net/api/emplist/")
@@ -50,7 +48,7 @@ export default function EmpList({ userArray, setUserArray, setMount, mount }) {
   }, []);
   const clickHandler = (item) => {
     setSelectedUser(item);
-
+    console.log("selected item", item);
     const tempShowModal = showModal;
     setShowModal(!tempShowModal);
   };
@@ -109,40 +107,40 @@ export default function EmpList({ userArray, setUserArray, setMount, mount }) {
     <div>
       {userArray.map((item) => (
         <EmpCard key={item.emiratesID} onClick={() => clickHandler(item)}>
-          <div className='empcard__textwrapper'>
-            <h3 className='emplist__name'> {item.name}</h3>
-            <h3 className='emplist__eid'>{item.emiratesID}</h3>
+          <div className="empcard__textwrapper">
+            <h3 className="emplist__name"> {item.name}</h3>
+            <h3 className="emplist__eid">{item.emiratesID}</h3>
           </div>
-          <div className='empcard__imagewrapper'>
-            <img className='reporticon' src={report} />
+          <div className="empcard__imagewrapper">
+            <img className="reporticon" src={report} />
           </div>
         </EmpCard>
       ))}
       {showModal ? (
         <Modal onClick={clickHandler}>
-          <div className='EmpDetailsWrap'>
-            <img className={"imgCard"} src={selectedUser.Avatar} alt='' />
+          <div className="EmpDetailsWrap">
+            <img className={"imgCard"} src={selectedUser.Avatar} alt="" />
             <div>
-              <h3 className='emplist__name emplist--white'>
+              <h3 className="emplist__name emplist--white">
                 {selectedUser.name}
               </h3>
-              <h3 className='emplist__eid emplist--white'>
+              <h3 className="emplist__eid emplist--white">
                 {selectedUser.emiratesID}
               </h3>
             </div>
           </div>
           {/* Emp Vaccination Details */}
 
-          <div className='EmpVaccine'>
-            <h3 className='emplist__name emplist--black'>
+          <div className="EmpVaccine">
+            <h3 className="emplist__name emplist--black">
               Vaccination Details
             </h3>
-            <img className='plusicon' src={Plus} onClick={clickPlusHandler} />
+            <img className="plusicon" src={Plus} onClick={clickPlusHandler} />
             {showVaccineModal ? (
               <Modal onClick={clickPlusHandler}>
-                <div className='vaccine'>
-                  <form className='addform' onSubmit={submitData}>
-                    <h3 className='emplist__name empVaccine--text'>
+                <div className="vaccine">
+                  <form className="addform" onSubmit={submitData}>
+                    <h3 className="emplist__name empVaccine--text">
                       Vaccination Details
                     </h3>
                     {/* file */}
@@ -150,39 +148,50 @@ export default function EmpList({ userArray, setUserArray, setMount, mount }) {
                     <input type='file' id='file' name='attachment' required ></input>
                   </label> */}
 
-                    <div className='form_box'>
-                      <label className='EmpSetailsText'>First Dose:</label>
+                    <div className="form_box">
+                      <label className="EmpSetailsText">
+                        {selectedUser &&
+                        !Object.prototype.hasOwnProperty.call(
+                          selectedUser,
+                          "vaccine_dose"
+                        )
+                          ? "First"
+                          : "Second"}{" "}
+                        Dose:
+                      </label>
                       <input
-                        type='date'
-                        placeholder='First Dose'
-                        name='First_Dose'
+                        type="date"
+                        placeholder="First Dose"
+                        name="First_Dose"
                         required
-                        className='inputField'
+                        className="inputField"
                         onChange={handleChange}
+                        max={moment().utc().format("YYYY-MM-DD")}
                       />
                     </div>
-                    <div className='form_box'>
-                      <label className='EmpSetailsText'>Remarks:</label>
+                    <div className="form_box">
+                      <label className="EmpSetailsText">Remarks:</label>
                       <input
-                        type='text'
-                        placeholder='Remarks'
-                        name='Remarks'
+                        type="text"
+                        placeholder="Remarks"
+                        name="Remarks"
                         required
-                        className='inputField'
+                        className="inputField"
                         onChange={handleChange}
                       />
                     </div>
                     <label>Select a file:</label>
                     <input
-                      type='file'
-                      id='myfile'
-                      name='myfile'
+                      type="file"
+                      id="myfile"
+                      name="myfile"
                       ref={fileRef}
-                      onChange={handleChange}></input>
+                      onChange={handleChange}
+                    ></input>
                     <input
-                      type='submit'
-                      className=' regSubButton'
-                      value='Add'
+                      type="submit"
+                      className=" regSubButton"
+                      value="Add"
                     />
                   </form>
                 </div>
@@ -191,7 +200,64 @@ export default function EmpList({ userArray, setUserArray, setMount, mount }) {
           </div>
 
           {/* Emp Test Details */}
-          {/* <div className='EmpTest'></div> */}
+          <div className="EmpVaccine">
+            <h3 className="emplist__name emplist--black">
+              Vaccination Details
+            </h3>
+            <img className="plusicon" src={Plus} onClick={clickPlusHandler} />
+            {showVaccineModal ? (
+              <Modal onClick={clickPlusHandler}>
+                <div className="vaccine">
+                  <form className="addform" onSubmit={submitData}>
+                    <h3 className="emplist__name empVaccine--text">
+                      Vaccination Details
+                    </h3>
+                    {/* file */}
+                    {/* <label>
+                    <input type='file' id='file' name='attachment' required ></input>
+                  </label> */}
+
+                    <div className="form_box">
+                      <label className="EmpSetailsText">First Dose:</label>
+                      <input
+                        type="date"
+                        placeholder="First Dose"
+                        name="First_Dose"
+                        required
+                        className="inputField"
+                        onChange={handleChange}
+                        max={moment().utc().format("YYYY-MM-DD")}
+                      />
+                    </div>
+                    <div className="form_box">
+                      <label className="EmpSetailsText">Remarks:</label>
+                      <input
+                        type="text"
+                        placeholder="Remarks"
+                        name="Remarks"
+                        required
+                        className="inputField"
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <label>Select a file:</label>
+                    <input
+                      type="file"
+                      id="myfile"
+                      name="myfile"
+                      ref={fileRef}
+                      onChange={handleChange}
+                    ></input>
+                    <input
+                      type="submit"
+                      className=" regSubButton"
+                      value="Add"
+                    />
+                  </form>
+                </div>
+              </Modal>
+            ) : null}
+          </div>
         </Modal>
       ) : null}
     </div>

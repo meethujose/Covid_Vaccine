@@ -60,7 +60,10 @@
   height:300px;
   position: relative;
 }
-
+.error{
+  color:red;
+  text-align: center;
+}
  .Crop > img{
   width: 100% !important;
 }
