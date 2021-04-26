@@ -55,3 +55,12 @@
 #file{
   display:none;
 }
+.Crop{
+  width:100%;
+  height:300px;
+  position: relative;
+}
+
+ .Crop > img{
+  width: 100% !important;
+}

@@ -1,13 +1,42 @@
-import React from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import "./Register.css";
 import db, { storage } from "../../Data/FirebaseConfig";
 import user from "../Images/user.png";
+import ReactCrop from "react-image-crop";
+import "react-image-crop/dist/ReactCrop.css";
+import Model from "../UI/Modal/Modal";
+//Image Crop
+function generateDownload(canvas, crop) {
+  if (!crop || !canvas) {
+    return;
+  }
 
+  canvas.toBlob(
+    (blob) => {
+      const previewUrl = window.URL.createObjectURL(blob);
+
+      const anchor = document.createElement("a");
+      anchor.download = "cropPreview.png";
+      anchor.href = URL.createObjectURL(blob);
+      anchor.click();
+
+      window.URL.revokeObjectURL(previewUrl);
+    },
+    "image/png",
+    1
+  );
+}
 export default function Register({ setShowModal }) {
   const imageRef = React.useRef();
-  const [formData, setFormData] = React.useState({});
-  const [EidField, setEidField] = React.useState("");
+  const [formData, setFormData] = useState({});
+  const [EidField, setEidField] = useState("");
   const [image, setImage] = React.useState(null);
+  const [upImg, setUpImg] = useState();
+  const imgRef = useRef(null);
+  const previewCanvasRef = useRef(null);
+  const [crop, setCrop] = useState();
+  const [completedCrop, setCompletedCrop] = useState(null);
+  const [selected, setSelected] = useState(false);
   const handleChange = (e) => {
     setFormData((formData) => ({
       ...formData,
@@ -30,7 +59,7 @@ export default function Register({ setShowModal }) {
         console.log(error);
       },
       () => {
-        storageRef.snapshot.ref.getDownloadURL().then(async(url) => {
+        storageRef.snapshot.ref.getDownloadURL().then(async (url) => {
           console.log(url);
           const res = await db.collection("users").add({
             name: formData.username,
@@ -46,8 +75,6 @@ export default function Register({ setShowModal }) {
       }
     );
     //
-
-   
   };
   const EidChangeHandler = (event) => {
     const Eid = event.target.value;
@@ -70,49 +97,114 @@ export default function Register({ setShowModal }) {
       setEidField(finalValue);
     }
   };
+  //image Crop
+  const onSelectFile = (e) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setSelected(true);
+      const reader = new FileReader();
+      reader.addEventListener("load", () => setUpImg(reader.result));
+      reader.readAsDataURL(e.target.files[0]);
+    }
+  };
+
+  const onLoad = useCallback((img) => {
+    imgRef.current = img;
+  }, []);
+
+  useEffect(() => {
+    if (!completedCrop || !previewCanvasRef.current || !imgRef.current) {
+      return;
+    }
+
+    const image = imgRef.current;
+    const canvas = previewCanvasRef.current;
+    const crop = completedCrop;
+
+    const scaleX = image.naturalWidth / image.width;
+    const scaleY = image.naturalHeight / image.height;
+    const ctx = canvas.getContext('2d');
+    const pixelRatio = window.devicePixelRatio;
+
+    canvas.width = crop.width * pixelRatio;
+    canvas.height = crop.height * pixelRatio;
+
+    ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+    ctx.imageSmoothingQuality = 'high';
+
+    ctx.drawImage(
+      image,
+      crop.x * scaleX,
+      crop.y * scaleY,
+      crop.width * scaleX,
+      crop.height * scaleY,
+      0,
+      0,
+      crop.width,
+      crop.height
+    );
+  }, [completedCrop]);
 
   return (
-    <div className='register'>
+    <div className="register">
       <label>
         <input
-          type='file'
-          id='file'
-          name='image'
+          type="file"
+          id="file"
+          name="image"
           required
-          ref={imageRef}></input>
-        <img src={user} className='imgFile' />
+          ref={imageRef}
+          onChange={onSelectFile}
+        ></input>
+        <img src={user} className="imgFile" alt="img" />
       </label>
-      <form className='addform' onSubmit={submitData}>
-        <div className='form_box'>
+      {selected ? 
+      <>
+
+<div className="Crop">
+          <ReactCrop
+            className="fileimage"
+            style={{width: "100%", height: "90%"}}
+            src={upImg}
+            onImageLoaded={onLoad}
+            crop={crop}
+            onChange={(c) => setCrop(c)}
+            onComplete={(c) => setCompletedCrop(c)}
+          />
+        </div>
+        <button className="btn btn-primary" onClick={() => setSelected(false)}>Crop</button>
+       </>
+       : 
+      <form className="addform" onSubmit={submitData}>
+        <div className="form_box">
           <label>Name</label>
           <input
-            type='text'
-            placeholder='Name'
-            name='username'
+            type="text"
+            placeholder="Name"
+            name="username"
             required
-            className='inputField'
+            className="inputField"
             onChange={handleChange}
           />
         </div>
-        <div className='form_box'>
+        <div className="form_box">
           <label>Mob Number</label>
           <input
-            type='text'
-            placeholder='Phone Number'
-            name='PhoneNumber'
+            type="text"
+            placeholder="Phone Number"
+            name="PhoneNumber"
             required
-            className='inputField'
+            className="inputField"
             onChange={handleChange}
           />
         </div>
-        <div className='form_box'>
+        <div className="form_box">
           <label>Emirates Id</label>
           <input
-            type='text'
-            placeholder='Emirates Id'
-            name='EmiratesId'
+            type="text"
+            placeholder="Emirates Id"
+            name="EmiratesId"
             required
-            className='inputField'
+            className="inputField"
             onChange={(e) => {
               EidChangeHandler(e);
               handleChange(e);
@@ -120,12 +212,8 @@ export default function Register({ setShowModal }) {
             value={EidField}
           />
         </div>
-        <input
-          type='submit'
-          className=' regSubButton'
-          value='Submit'
-        />
-      </form>
+        <input type="submit" className=" regSubButton" value="Submit" />
+      </form>}
     </div>
   );
 }
