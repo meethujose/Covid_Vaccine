@@ -1,0 +1,35 @@
+.test-wrapper{
+    display: flex;
+    margin-top: 1rem;
+    justify-content: center;
+    align-items: center;
+    align-content: space-between;
+    overflow-y: scroll;
+
+}
+.test-label {
+    flex:1;
+    margin-left: 2rem;
+    color: rgb(57, 192, 197);
+    font-family: "Open Sans", sans-serif;
+    font-weight: 500;
+    font-size: 1rem;
+}
+.test-date {
+    flex:1;
+    color: rgb(57, 192, 197);
+    font-family: "Open Sans", sans-serif;
+    font-weight: 500;
+    font-size: 1rem;
+}
+.test-download-attachment {
+    flex:.5;
+    width: 2rem;
+    height: 2rem;
+
+}
+.test-edit {
+    flex:.5;
+    width: 1.5rem;
+    height: 1.5rem;
+}

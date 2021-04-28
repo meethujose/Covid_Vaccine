@@ -22,10 +22,14 @@ function App() {
               <Search userArray={userArray} setUserArray={setUserArray} setMount={setMount} />
               <AddUser />
             </Header>
+            <div className="body">
             <EmpList userArray={userArray} setUserArray={setUserArray} mount={mount} setMount={setMount}/>
+        </div>
+          
           </Route>
           <Route path='/login' component={SignIn} />
           <Route path='/register' component={SignUp} />
+          
         </Switch>
       </div>
     </Router>
