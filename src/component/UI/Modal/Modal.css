@@ -15,7 +15,13 @@
   position: fixed;
   margin-top: 0;
   padding-top: 0;
+  overflow-y: scroll;
+  height: 80%;
   animation: modalopening 400ms ease-out forwards;
+}
+::-webkit-scrollbar {
+  width: 0;  /* Remove scrollbar space */
+  background: transparent;  /* Optional: just make scrollbar invisible */
 }
 
 @keyframes modalopening {

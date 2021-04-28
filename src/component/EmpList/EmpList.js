@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import db, { storage } from "../../Data/FirebaseConfig";
 import axios from "axios";
 import EmpCard from "../UI/EmpCard/EmpCard";
+import DetailsCard from "../UI/DetailsCard/DetailsCard";
 import Moment from "moment";
 import Modal from "../UI/Modal/Modal";
 import "./Emplist.css";
@@ -10,6 +11,8 @@ import Plus from "../Icons/plus.svg";
 import report from "../Icons/report.svg";
 import Register from "../Register/Register";
 import moment from "moment";
+import VaccineDetails from "../UI/VaccineDetails/VaccineDetails";
+import TestDetails from "../UI/TestDetails/TestDetails";
 export default function EmpList({ userArray, setUserArray, setMount, mount }) {
   const fileRef = React.useRef();
   const [selectedUser, setSelectedUser] = useState({});
@@ -59,8 +62,6 @@ export default function EmpList({ userArray, setUserArray, setMount, mount }) {
 
                           <div className='vaccine'>
                             <form className='addform' onSubmit={submitData}>
-                             
-
                               <div className='form_box'>
                                 <label className='EmpSetailsText'>
                                   {selectedUser &&
@@ -240,138 +241,22 @@ export default function EmpList({ userArray, setUserArray, setMount, mount }) {
             </div>
           </div>
           {/* Emp Vaccination Details */}
-
-          <div className='EmpVaccine'>
-            <div className='EmpTitle'>
-              <h3 className='emplist__name emplist--black'>
-                Vaccination Details
-              </h3>
-
-              {status ? (
-                <img
-                  className='plusicon'
-                  src={Plus}
-                  onClick={clickPlusHandler}
-                />
-              ) : null}
+          <DetailsCard detailType = "Vaccination Details">
+            <VaccineDetails/>
+            <VaccineDetails/>
+          </DetailsCard>
+          <DetailsCard detailType = "COVID Test Details">
+            <div className = 'scrollable'>
+            <TestDetails/>
+            <TestDetails/>
+            <TestDetails/>
+            <TestDetails/>
+            <TestDetails/>
+            <TestDetails/>
+            <TestDetails/>
+            <TestDetails/>
             </div>
-            {showVaccineModal ? (
-              <Modal onClick={clickPlusHandler}>
-                <div className='vaccine'>
-                  <form className='addform' onSubmit={submitData}>
-                    <h3 className='emplist__name empVaccine--text'>
-                      Vaccination Details
-                    </h3>
-
-                    <div className='form_box'>
-                      <label className='EmpSetailsText'>
-                        {selectedUser &&
-                        !Object.prototype.hasOwnProperty.call(
-                          selectedUser,
-                          "vaccine_dose"
-                        )
-                          ? "First"
-                          : "Second"}{" "}
-                        Dose:
-                      </label>
-                      <input
-                        type='date'
-                        placeholder='First Dose'
-                        name='First_Dose'
-                        required
-                        className='inputField'
-                        onChange={handleChange}
-                        max={moment().utc().format("YYYY-MM-DD")}
-                      />
-                    </div>
-                    <div className='form_box'>
-                      <label className='EmpSetailsText'>Remarks:</label>
-                      <input
-                        type='text'
-                        placeholder='Remarks'
-                        name='Remarks'
-                        required
-                        className='inputField'
-                        onChange={handleChange}
-                      />
-                    </div>
-                    <label className='EmpSetailsText'>Attachment:</label>
-                    <input
-                      type='file'
-                      id='myfile'
-                      name='myfile'
-                      ref={fileRef}
-                      onChange={handleChange}></input>
-                    <input
-                      type='submit'
-                      className=' regSubButton'
-                      value='Add'
-                    />
-                  </form>
-                </div>
-              </Modal>
-            ) : null}
-
-            {vaccineStatus}
-          </div>
-
-          {/* Emp Test Details */}
-          <div className='EmpVaccine'>
-            <div className='EmpTitle'>
-              <h3 className='emplist__name emplist--black'>
-                Covid Test Details
-              </h3>
-              <img className='plusicon' src={Plus} onClick={clickPlusHandler} />
-            </div>
-            {/* {showVaccineModal ? (
-              <Modal onClick={clickPlusHandler}>
-                <div className='vaccine'>
-                  <form className='addform' onSubmit={submitData}>
-                    <h3 className='emplist__name empVaccine--text'>
-                      Covid Test Details
-                    </h3>
-                    
-
-                    <div className='form_box'>
-                      <label className='EmpSetailsText'>Result Date:</label>
-                      <input
-                        type='date'
-                        placeholder='First Dose'
-                        name='First_Dose'
-                        required
-                        className='inputField'
-                        onChange={handleChange}
-                        max={moment().utc().format("YYYY-MM-DD")}
-                      />
-                    </div>
-                    <div className='form_box'>
-                      <label className='EmpSetailsText'>Result:</label>
-                      <input
-                        type='text'
-                        placeholder='Remarks'
-                        name='Remarks'
-                        required
-                        className='inputField'
-                        onChange={handleChange}
-                      />
-                    </div>
-                    <label className='EmpSetailsText'>Attachment:</label>
-                    <input
-                      type='file'
-                      id='myfile'
-                      name='myfile'
-                      ref={fileRef}
-                      onChange={handleChange}></input>
-                    <input
-                      type='submit'
-                      className=' regSubButton'
-                      value='Add'
-                    />
-                  </form>
-                </div>
-              </Modal>
-            ) : null} */}
-          </div>
+          </DetailsCard>
         </Modal>
       ) : null}
     </div>

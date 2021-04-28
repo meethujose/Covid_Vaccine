@@ -101,20 +101,7 @@
   border: 5px solid rgb(255, 255, 255);
   box-shadow: 0px 0px 8px #888888;
 }
-.EmpVaccine {
-  position: relative;
-  width: 100%;
-  height: auto;
-  margin: auto;
-  padding: 10px;
-  margin-top: 20px;
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 0px 0px 5px rgb(133 131 131);
-  z-index: 1;
-  /* display: flex;
-  justify-content: space-between; */
-}
+
 .EmpTitle{
   display: flex;
   justify-content: space-between;
@@ -183,4 +170,8 @@
   background-color: #b2d0d7;
   color: white;
   width:30%;
+}
+.scrollable {
+  height: 10rem;
+  overflow-y: scroll;
 }
