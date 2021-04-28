@@ -210,9 +210,8 @@ export default function EmpList({ userArray, setUserArray, setMount, mount }) {
         });
       }
     );
-    //
   };
-  //
+ 
 
   return (
     <div>
@@ -242,8 +241,8 @@ export default function EmpList({ userArray, setUserArray, setMount, mount }) {
           </div>
           {/* Emp Vaccination Details */}
           <DetailsCard detailType = "Vaccination Details">
-            <VaccineDetails/>
-            <VaccineDetails/>
+            <VaccineDetails selectedUser={selectedUser}/>
+           
           </DetailsCard>
           <DetailsCard detailType = "COVID Test Details">
             <div className = 'scrollable'>
