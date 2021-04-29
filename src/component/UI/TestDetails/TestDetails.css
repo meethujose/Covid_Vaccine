@@ -1,5 +1,5 @@
 .test-wrapper{
-    display: flex;
+    display: inline;
     margin-top: 1rem;
     justify-content: center;
     align-items: center;
@@ -33,3 +33,14 @@
     width: 1.5rem;
     height: 1.5rem;
 }
+.row {
+    display: flex;
+    flex: 1;
+    margin-top: 1rem;
+  }
+  .scale {
+    transition: transform 0.2s;
+  }
+  .scale:hover {
+    transform: scale(1.5);
+  }

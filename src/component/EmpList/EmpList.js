@@ -13,141 +13,29 @@ import Register from "../Register/Register";
 import moment from "moment";
 import VaccineDetails from "../UI/VaccineDetails/VaccineDetails";
 import TestDetails from "../UI/TestDetails/TestDetails";
+
 export default function EmpList({ userArray, setUserArray, setMount, mount }) {
   const fileRef = React.useRef();
   const [selectedUser, setSelectedUser] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({});
   const [showVaccineModal, setShowVaccineModal] = useState(false);
-  const [userVaccineData, setUserVaccineData] = useState({});
+  const [userVaccineData, setUserVaccineData] = useState([]);
   const [vaccineStatus, setVaccineStatus] = useState(<h3>Loading...</h3>);
   const [status, setStatus] = useState(true);
+
   const clickPlusHandler = () => {
     const tempVaccineShowModal = showVaccineModal;
     setShowVaccineModal(!tempVaccineShowModal);
   };
 
-  useEffect(() => {
-    console.log("selected userid", selectedUser.id);
-    if (selectedUser.id) {
-      axios
-        .get(`http://lulu.transituae.net/api/vaccinelist/${selectedUser.id}`)
-        .then((response) => {
-          setUserVaccineData(response.data);
+  /**
+   * reset selected user
+   */
+  const resetSelectedUser = () => {
+    setSelectedUser({});
+  };
 
-          const status = response.data.length;
-          switch (status) {
-            case 0:
-              setVaccineStatus(
-                <h3 className='emplist__name'>Not vaccinated</h3>
-              );
-              break;
-            case 1:
-              setVaccineStatus(
-                <div>
-                  <h5 className='EmpSetailsText'>First Dose</h5>
-
-                  {response.data.length &&
-                    response.data.map((data) => {
-                      return (
-                        <div>
-                          {data.vaccine_dose === "Second" ? (
-                            <h3>First Dose</h3>
-                          ) : null}
-                          {/* {JSON.stringify(data,4,4)} */}
-                          {/* <p>Vaccination Dose:{data.vaccine_dose}</p>
-                          <p>Vaccination Date:{data.vaccine_date}</p>
-                          <p>Remarks:{data.remarks}</p> */}
-                          {/* form */}
-
-                          <div className='vaccine'>
-                            <form className='addform' onSubmit={submitData}>
-                              <div className='form_box'>
-                                <label className='EmpSetailsText'>
-                                  {selectedUser &&
-                                  !Object.prototype.hasOwnProperty.call(
-                                    selectedUser,
-                                    "vaccine_dose"
-                                  )
-                                    ? "First"
-                                    : "Second"}{" "}
-                                  Dose:
-                                </label>
-                                <input
-                                  type='date'
-                                  placeholder='First Dose'
-                                  name='First_Dose'
-                                  required
-                                  disabled
-                                  value={data.vaccine_date}
-                                  className='inputField'
-                                  onChange={handleChange}
-                                  max={moment().utc().format("YYYY-MM-DD")}
-                                />
-                              </div>
-                              <div className='form_box'>
-                                <label className='EmpSetailsText'>
-                                  Remarks:
-                                </label>
-                                <input
-                                  type='text'
-                                  placeholder='Remarks'
-                                  name='Remarks'
-                                  disabled
-                                  value={data.remarks}
-                                  required
-                                  className='inputField'
-                                  onChange={handleChange}
-                                />
-                              </div>
-                              <input
-                                type='submit'
-                                className=' regSubButton'
-                                value='Add'
-                              />
-                            </form>
-                          </div>
-                        </div>
-                      );
-                    })}
-                </div>
-              );
-
-              break;
-            case 2:
-              setVaccineStatus(
-                <div>
-                  <h3>First Dose</h3>
-                  {response.data.length &&
-                    response.data.map((data) => {
-                      return (
-                        <div>
-                          {/* {JSON.stringify(data,4,4)} */}
-
-                          <p>Vaccination Dose:{data.vaccine_dose}</p>
-                          <p>Vaccination Date:{data.vaccine_date}</p>
-                          <p>Remarks:{data.remarks}</p>
-                        </div>
-                      );
-                    })}
-                  {setStatus(false)}
-                </div>
-              );
-
-              break;
-            default:
-              setVaccineStatus(<h3>Data Not available</h3>);
-          }
-
-          console.log(response.data.length);
-        })
-        .catch((error) => {
-          console.log("failed to fetch data", error);
-        });
-    }
-    return () => {};
-  }, [selectedUser.id]);
-  console.log("vaccination data:", userVaccineData);
   useEffect(() => {
     axios
       .get("http://lulu.transituae.net/api/emplist/")
@@ -157,6 +45,7 @@ export default function EmpList({ userArray, setUserArray, setMount, mount }) {
       })
       .catch((err) => console.error(err));
   }, []);
+  
   const clickHandler = (item) => {
     setSelectedUser(item);
     console.log("selected item", item);
@@ -211,7 +100,6 @@ export default function EmpList({ userArray, setUserArray, setMount, mount }) {
       }
     );
   };
- 
 
   return (
     <div>
@@ -239,21 +127,28 @@ export default function EmpList({ userArray, setUserArray, setMount, mount }) {
               </h3>
             </div>
           </div>
+
           {/* Emp Vaccination Details */}
-          <DetailsCard detailType = "Vaccination Details">
-            <VaccineDetails selectedUser={selectedUser}/>
-           
+          <DetailsCard
+            selectedUser={selectedUser}
+            detailType='Vaccination Details'
+            type='VaccinationDetails'
+            userVaccineData={userVaccineData}
+            // resetSelectedUser={resetSelectedUser}
+            >
+            <VaccineDetails
+              selectedUser={selectedUser}
+              userVaccineData={userVaccineData}
+              setUserVaccineData={setUserVaccineData}
+            />
           </DetailsCard>
-          <DetailsCard detailType = "COVID Test Details">
-            <div className = 'scrollable'>
-            <TestDetails/>
-            <TestDetails/>
-            <TestDetails/>
-            <TestDetails/>
-            <TestDetails/>
-            <TestDetails/>
-            <TestDetails/>
-            <TestDetails/>
+
+          <DetailsCard
+            detailType='COVID Test Details'
+            type='TestDetails'
+            selectedUser={selectedUser}>
+            <div className='scrollable'>
+              <TestDetails selectedUser={selectedUser} />
             </div>
           </DetailsCard>
         </Modal>
