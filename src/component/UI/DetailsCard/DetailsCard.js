@@ -13,7 +13,7 @@ export default function DetailsCard(props) {
   const [TestformData, setTestFormData] = useState({});
   const [ShowVaccineModal, setShowVaccineModal] = useState(false);
   const [ShowTestDetailModal, setTestDetailsModal] = useState(false);
-
+  console.log("date", props.userVaccineData && props.userVaccineData.date);
   // click Handler to Show Modal to Edit  vaccine details
   const DetailsCardHandler = () => {
     switch (props.type) {
@@ -107,20 +107,30 @@ export default function DetailsCard(props) {
       ...TestformData,
       [e.target.name]: e.target.value,
     }));
-  }
-  const submitTestData = (e) => 
-  {
-   
+  };
+
+  const sendEditRequest = async (data) => {
+    await axios
+      .post("http://lulu.transituae.net/api/testresultcreate/", {
+        data,
+      })
+      .then(function (response) {
+        console.log("edit response: ", response);
+      })
+      .catch((error) => {
+        console.log("edit failed ", error);
+      });
+  };
+
+  const submitTestData = (e) => {
     e.preventDefault();
-    console.log("testresult",fileRef.current.files[0]);
-  
+    console.log("testresult", fileRef.current.files[0]);
     if (fileRef.current && fileRef.current.files[0]) {
-      var Testfile=  fileRef.current.files[0];
+      var Testfile = fileRef.current.files[0];
       var storageRef = storage
         .ref()
         .child(`TestResult/${Testfile.name}`)
         .put(Testfile);
-
       storageRef.on(
         "state_changed",
         (snapshot) => {},
@@ -130,30 +140,28 @@ export default function DetailsCard(props) {
         () => {
           storageRef.snapshot.ref.getDownloadURL().then(async (url) => {
             console.log(url);
-            await axios
-              .post("http://lulu.transituae.net/api/testresultcreate/", {
-                test_date: TestformData.Test_Date,
-                test_result: TestformData.Result,
-                remarks: TestformData.Remarks,
-                attachments: url,
-                name: props.selectedUser.id,
-              })
-              .then(function (response) {
-                console.log("testdata",response);
-              })
-              .catch((error) => {
-                console.log(error);
-              });
-
-           
+            const data = {
+              test_date: TestformData.Test_Date,
+              test_result: TestformData.Result,
+              remarks: TestformData.Remarks,
+              attachments: url,
+              name: props.selectedUser.id,
+            };
           });
         }
       );
     } else {
-      alert("File not selected");
+      const data = {
+        test_date: TestformData.Test_Date,
+        test_result: TestformData.Result,
+        remarks: TestformData.Remarks,
+        attachments: "",
+        name: props.selectedUser.id,
+      };
+      sendEditRequest(data);
     }
   };
- 
+
   return (
     <div className='detail-card'>
       <div className='detail-card-header'>
@@ -181,19 +189,38 @@ export default function DetailsCard(props) {
                 <label className='EmpSetailsText'>
                   {props.selectedUser &&
                   props.userVaccineData &&
-                  props.userVaccineData.length == 1
+                  props.userVaccineData.length == 0
                     ? "First Dose"
                     : "Second Dose"}
                 </label>
-                <input
-                  type='date'
-                  placeholder='Dose date'
-                  name='Dose_Date'
-                  required
-                  className='inputField'
-                  onChange={handleChange}
-                  max={moment().utc().format("YYYY-MM-DD")}
-                />
+
+                {props.selectedUser &&
+                props.userVaccineData &&
+                props.userVaccineData.length < 1 ? (
+                  <input
+                    type='date'
+                    placeholder='Dose date'
+                    name='Dose_Date'
+                    required
+                    className='inputField'
+                    onChange={handleChange}
+                    max={moment().utc().format("YYYY-MM-DD")}
+                  />
+                ) : (
+                  // "Second Dose"
+                  <input
+                    type='date'
+                    placeholder='Dose date'
+                    name='Dose_Date'
+                    required
+                    className='inputField'
+                    onChange={handleChange}
+                    min={
+                      props.userVaccineData &&
+                      props.userVaccineData[0].vaccine_date
+                    }
+                  />
+                )}
               </div>
               <div className='form_box'>
                 <label className='EmpSetailsText'>Remarks:</label>
@@ -240,14 +267,27 @@ export default function DetailsCard(props) {
               </div>
               <div className='form_box'>
                 <label className='EmpSetailsText'>Result:</label>
-                <input
+                {/* <input
                   type='text'
-                  placeholder='Result'
+                  placeholder='Negative/Positive'
                   name='Result'
                   required
                   className='inputField'
                   onChange={handleTestChange}
-                />
+                /> */}
+                <select
+                  id='Result'
+                  name='Result'
+                  className='inputField'
+                  required
+                  onChange={handleTestChange}>
+                  <option value='Negative' className='inputField'>
+                    Negative
+                  </option>
+                  <option value='Positive' className='inputField'>
+                    Positive
+                  </option>
+                </select>
               </div>
               <div className='form_box'>
                 <label className='EmpSetailsText'>Remarks:</label>

@@ -58,7 +58,7 @@ export default function VaccineDetails({
     e.preventDefault();
     //image upload
 
-    if (fileRef.current && fileRef.current.files[0]) {
+   if (fileRef.current && fileRef.current.files[0]) { 
       var file = fileRef.current.files[0];
       var storageRef = storage
         .ref()
@@ -157,14 +157,7 @@ export default function VaccineDetails({
 
               <div className='form_box'>
                 <label className='EmpSetailsText'>
-                  {selectedUser &&
-                  !Object.prototype.hasOwnProperty.call(
-                    selectedUser,
-                    "vaccine_dose"
-                  )
-                    ? "First"
-                    : "Second"}{" "}
-                  Dose:
+               Date:
                 </label>
 
                 <input
