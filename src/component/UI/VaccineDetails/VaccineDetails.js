@@ -3,6 +3,7 @@ import db, { storage } from "../../../Data/FirebaseConfig";
 import "./VaccineDetails.css";
 import DownloadSVG from "../../Icons/download.svg";
 import EditSVG from "../../Icons/edit.svg";
+import CancelSVG from "../../Icons/cancel.svg";
 import Modal from "../Modal/Modal";
 import moment from "moment";
 import axios from "axios";
@@ -52,7 +53,6 @@ export default function VaccineDetails({
         console.log("edit failed ", error);
       });
   };
-
   // function edit
   const editVaccineDetails = async (e) => {
     e.preventDefault();
@@ -122,6 +122,22 @@ export default function VaccineDetails({
       .catch((err) => console.error(err));
   }, [selectedUser]);
 
+  // delete Vaccine details
+const deleteVaccineData=async(data)=>{
+  // setSelectedVaccine(data);
+  console.log(data);
+  await axios
+  .delete(
+    `http://lulu.transituae.net/api/vaccinerud/${data.id}`,
+    
+  )
+  .then(function (response) {
+    console.log("delete response: ", response);
+  })
+  .catch((error) => {
+    console.log("delete failed ", error);
+  });
+}
   return (
     <div className='vaccine-dose-wrapper'>
       {userVaccineData &&
@@ -142,6 +158,12 @@ export default function VaccineDetails({
               alt=''
               className='vaccine-dose-edit scale'
               onClick={() => editVaccineData(vaccine)}
+            />
+              <img
+              src={CancelSVG}
+              alt=''
+              className='vaccine-dose-edit scale'
+              onClick={() => deleteVaccineData(vaccine)}
             />
           </div>
         ))}

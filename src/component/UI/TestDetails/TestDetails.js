@@ -6,7 +6,7 @@ import moment from "moment";
 import axios from "axios";
 import DownloadSVG from "../../Icons/download.svg";
 import EditSVG from "../../Icons/edit.svg";
-
+import CancelSVG from "../../Icons/cancel.svg";
 export default function VaccineDetails({ selectedUser }) {
   const fileRef = React.useRef();
   const [editModalStatus, setEditModalStatus] = useState(false);
@@ -14,7 +14,7 @@ export default function VaccineDetails({ selectedUser }) {
   const [ShowVaccineModal, setShowVaccineModal] = useState(false);
   const [selectedTest, setSelectedTest] = useState({});
   const [formData, setFormData] = useState({});
-  const[result,setResult]=useState();
+  const [result, setResult] = useState();
   // useEffect to fetch Vaccination Database
   useEffect(() => {
     axios
@@ -60,10 +60,7 @@ export default function VaccineDetails({ selectedUser }) {
 
     if (fileRef.current && fileRef.current.files[0]) {
       var file = fileRef.current.files[0];
-      var storageRef = storage
-        .ref()
-        .child(`TestResult${file.name}`)
-        .put(file);
+      var storageRef = storage.ref().child(`TestResult${file.name}`).put(file);
       storageRef.on(
         "state_changed",
         (snapshot) => {},
@@ -74,12 +71,12 @@ export default function VaccineDetails({ selectedUser }) {
           storageRef.snapshot.ref.getDownloadURL().then(async (url) => {
             console.log(url);
             const data = {
-              id: selectedTest.id,      
+              id: selectedTest.id,
               test_date: formData.Test_Date,
-              test_result:result,
+              test_result: result,
               remarks: formData.Remarks,
               attachments: url,
-              name:selectedUser.id,
+              name: selectedUser.id,
             };
             sendEditRequest(data);
 
@@ -91,19 +88,35 @@ export default function VaccineDetails({ selectedUser }) {
         }
       );
     } else {
-      
       const data = {
-        id: selectedTest.id,      
-        test_date: formData.Test_Date?formData.Test_Date:selectedTest.test_date,
-        test_result: result?result:selectedTest.test_result,
-        remarks: formData.Remarks?formData.Remarks:selectedTest.remarks,
-        attachments:selectedTest.attachments,
-        name:selectedUser.id,
+        id: selectedTest.id,
+        test_date: formData.Test_Date
+          ? formData.Test_Date
+          : selectedTest.test_date,
+        test_result: result ? result : selectedTest.test_result,
+        remarks: formData.Remarks ? formData.Remarks : selectedTest.remarks,
+        attachments: selectedTest.attachments,
+        name: selectedUser.id,
       };
       sendEditRequest(data);
     }
   };
-
+// delete Test Result Details
+const deleteTestData=async(data)=>{
+ 
+  console.log(data);
+  await axios
+  .delete(
+    `http://lulu.transituae.net/api/testresultrud/${data.id}`,
+    
+  )
+  .then(function (response) {
+    console.log("delete response: ", response);
+  })
+  .catch((error) => {
+    console.log("delete failed ", error);
+  });
+}
   return (
     <div className='test-wrapper'>
       {userTestDetails &&
@@ -122,18 +135,21 @@ export default function VaccineDetails({ selectedUser }) {
               className='test-edit'
               onClick={() => editTestData(test)}
             />
-
-           
+            <img
+              src={CancelSVG}
+              alt=''
+              className='test-edit'
+              onClick={() => deleteTestData(test)}
+            />
           </div>
         ))}
-         {/* Edit vaccine details */}
-         {editModalStatus ? (
-              <Modal onClick={editModalHandler}>
-                <div className='vaccine'>
-                
-                  <form className='addform' onSubmit={editTestDetails}>
-                  <h3 className='emplist__name empVaccine--text'>Test Details</h3>
-                  <div className='form_box'>
+      {/* Edit vaccine details */}
+      {editModalStatus ? (
+        <Modal onClick={editModalHandler}>
+          <div className='vaccine'>
+            <form className='addform' onSubmit={editTestDetails}>
+              <h3 className='emplist__name empVaccine--text'>Test Details</h3>
+              <div className='form_box'>
                 <label className='EmpSetailsText'>Result Date</label>
                 <input
                   type='date'
@@ -154,7 +170,7 @@ export default function VaccineDetails({ selectedUser }) {
                   value={result}
                   className='inputField'
                   required
-                  onChange={(e)=>setResult(e.target.value)}>
+                  onChange={(e) => setResult(e.target.value)}>
                   <option value='Negative' className='inputField'>
                     Negative
                   </option>
@@ -174,22 +190,18 @@ export default function VaccineDetails({ selectedUser }) {
                   onChange={handleChange}
                 />
               </div>
-                    <label className='EmpSetailsText'>Attachment:</label>
-                    <input
-                      type='file'
-                      id='myfile'
-                      name='myfile'
-                      ref={fileRef}
-                      onChange={handleChange}></input>
-                    <input
-                      type='submit'
-                      className=' regSubButton'
-                      value='Add'
-                    />
-                  </form>
-                </div>
-              </Modal>
-            ) : null}
+              <label className='EmpSetailsText'>Attachment:</label>
+              <input
+                type='file'
+                id='myfile'
+                name='myfile'
+                ref={fileRef}
+                onChange={handleChange}></input>
+              <input type='submit' className=' regSubButton' value='Add' />
+            </form>
+          </div>
+        </Modal>
+      ) : null}
     </div>
   );
 }
