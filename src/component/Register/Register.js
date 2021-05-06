@@ -8,7 +8,7 @@ import Model from "../UI/Modal/Modal";
 import axios from "axios";
 import { useSelector, useDispatch } from 'react-redux';
 import {empAddUpdateAction} from '../../store/empAddUpdate'
-
+import axiosInstance from "../../axios";
 //Image Crop
 function generateDownload(canvas, crop) {
   if (!crop || !canvas) {
@@ -68,8 +68,8 @@ export default function Register({ setShowModal }) {
         () => {
           storageRef.snapshot.ref.getDownloadURL().then(async (url) => {
             console.log(url);
-            const res = await axios
-              .post("http://lulu.transituae.net/api/empcreate/", {
+            const res = await axiosInstance
+              .post("api/empcreate/", {
                 name: formData.username,
                 emiratesID: formData.EmiratesId,
                 avatarURL: url,
@@ -164,6 +164,7 @@ export default function Register({ setShowModal }) {
   }, [completedCrop]);
 
   return (
+   
     <div className="register">
       <label>
         <input
@@ -241,5 +242,6 @@ export default function Register({ setShowModal }) {
         </form>
       )}
     </div>
+ 
   );
 }

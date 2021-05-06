@@ -9,6 +9,8 @@
   padding: 10px;
   row-gap: 12px;
   box-sizing: border-box;
+ 
+   
 }
 .register > img {
   width: 120px;
@@ -29,6 +31,7 @@
   flex-direction: column;
   row-gap: 12px;
   width: 100%;
+
 }
 .form_box{
   display: grid;

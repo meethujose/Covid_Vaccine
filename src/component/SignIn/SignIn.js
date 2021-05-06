@@ -34,6 +34,7 @@ export default function SignIn() {
     const url = "/api/token/";
     axios.post(url, credentials, { timeout: 5000 }).then(
       (response) => {
+        console.log('login response', response.data);
         localStorage.setItem("access_token", response.data.access);
         localStorage.setItem("refresh_token", response.data.refresh);
         dispatch(isAuth());

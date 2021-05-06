@@ -89,8 +89,8 @@ export default function EmpList({ userArray, setUserArray }) {
       () => {
         storageRef.snapshot.ref.getDownloadURL().then(async (url) => {
           console.log(url);
-          const res = await axios
-            .post("http://lulu.transituae.net/api/vaccinecreate/", {
+          const res = await axiosInstance
+            .post("api/vaccinecreate/", {
               vaccine_dose: "first",
               vaccine_date: formData.First_Dose,
               remarks: formData.Remarks,
@@ -114,27 +114,41 @@ export default function EmpList({ userArray, setUserArray }) {
   };
 
   const deleteEmpHandler = async (data) => {
-    console.log(data);
-    await axios
-      .delete(`http://lulu.transituae.net/api/emprud/${data.id}`)
-      .then(function (response) {
-        console.log("delete response: ", response);
+    console.log(data.id);
+
+    await axios({
+      method: "DELETE",
+      url: `http://lulu.transituae.net/api/emprud/${data.id}`,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
+    })
+      .then((res) => {
+        console.log("delete response: "+ res);
       })
-      .catch((error) => {
-        console.log("delete failed ", error);
-      });
+      .catch((err) => console.error(err));
+
+    // await axiosInstance
+    //   .delete(`api/emprud/${data.id}`)
+    //   .then(function (response) {
+    //     console.log("delete response: ", response);
+    //   })
+    //   .catch((error) => {
+    //     throw error;
+    //     console.log("delete failed ", error);
+    //   });
   };
   return (
     <div>
       {userArray &&
         userArray.map((item) => (
-          <EmpCard key={item.emiratesID} onClick={() => clickHandler(item)}>
+          <EmpCard key={item.emiratesID}>
             <div className="empcard__textwrapper">
               <h3 className="emplist__name"> {item.name}</h3>
               <h3 className="emplist__eid">{item.emiratesID}</h3>
             </div>
             <div className="empcard__imagewrapper">
-              <img className="reporticon" src={report} alt="" />
+              <img className="reporticon scale" src={report} alt=""  onClick={() => clickHandler(item)}/>
               <img
                 className="deleteicon scale"
                 src={deleteIcon}

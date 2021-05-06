@@ -41,7 +41,7 @@ export default function AddUser() {
         <img className="icon" src={AddIcon} onClick={clickHandler} alt=""/>
       </div>
       {showModal ? (
-        <Modal onClick={clickHandler}>
+        <Modal onClick={clickHandler}className="wrapper">
           <Register setShowModal={setShowModal} />
         </Modal>
       ) : null}

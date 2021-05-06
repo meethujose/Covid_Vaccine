@@ -7,6 +7,7 @@
   float: right;
   margin-right: 50px;
   margin-top: 45px;
+
   filter: invert(100%) sepia(100%) saturate(2%) hue-rotate(82deg)
     brightness(102%) contrast(101%);
 }
@@ -16,12 +17,13 @@
   float: right;
   margin-right: 70px;
   margin-top: 45px;
+
   filter: invert(100%) sepia(100%) saturate(2%) hue-rotate(82deg)
     brightness(102%) contrast(101%);
 }
 .settingsicon {
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   float: left;
  
   margin-top: 45px;
@@ -29,3 +31,4 @@
   filter: invert(100%) sepia(100%) saturate(2%) hue-rotate(82deg)
     brightness(102%) contrast(101%);
 }
+
