@@ -5,7 +5,7 @@ import "./Header.css";
 
 export default function Header(props) {
   return (
-    <div className='header'>
+    <div className='header headerwrapper'>
       
       {props.children}
     </div>
