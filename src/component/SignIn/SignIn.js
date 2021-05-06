@@ -1,72 +1,97 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import React, { useState, useLayoutEffect } from "react";
 import "./SignIn.css";
-import db from "../../Data/FirebaseConfig";
-import Modal from "../UI/Modal/Modal";
-import firebase from "firebase";
-
-import { auth } from "../../Data/FirebaseConfig";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "../../axios";
+import { isAuth } from "../../store/isAuthenticated";
+import { useHistory } from "react-router-dom";
 
 export default function SignIn() {
   const history = useHistory();
-  const [error, setError] = useState();
-  const [password, setPassword] = useState("");
-  const [formData, setFormData] = useState({});
-  const handleChange = (e) => {
-    setFormData((formData) => ({
-      ...formData,
-      [e.target.name]: e.target.value,
-    }));
-  };
-  const SignupHandler = async (e) => {
-    e.preventDefault();
+  const auth = useSelector((state) => state.isAuth);
+  const dispatch = useDispatch();
+  const [loginStatus, setLoginStatus] = useState(null);
+  const [mount, setMount] = useState(false);
 
-    try {
-      const res = await firebase
-        .auth()
-        .signInWithEmailAndPassword(formData.userEmail, formData.userPassword);
-      if (res.user) {
-        history.replace("/");
-      }
-    } catch (error) {
-      setError("Invalid");
+  useLayoutEffect(() => {
+    if (auth.isAuth === true) {
+      setLoginStatus(<h3>Login Success !!!</h3>);
+      setTimeout(() => {
+        history.push("/");
+      }, 1000);
     }
+    return () => {
+      setMount(false);
+    };
+  }, [mount]);
+
+  const getToken = (event) => {
+    event.preventDefault();
+    setLoginStatus(<div className="loader"></div>);
+    const credentials = {
+      username: event.target[0].value,
+      password: event.target[1].value,
+    };
+    const url = "/api/token/";
+    axios.post(url, credentials, { timeout: 5000 }).then(
+      (response) => {
+        localStorage.setItem("access_token", response.data.access);
+        localStorage.setItem("refresh_token", response.data.refresh);
+        dispatch(isAuth());
+        setMount(true);
+      },
+      (error) => {
+        try {
+          switch (error.response.status) {
+            case 400:
+              setLoginStatus(<h3>Please check your credentials</h3>);
+              break;
+            case 401:
+              setLoginStatus(<h3>Invalid User</h3>);
+              break;
+          }
+        } catch (err) {
+          setLoginStatus(<h3>Can't Reach Server</h3>);
+        }
+      }
+    );
   };
   return (
-    <Modal>
-      <div className="register">
-        <form className="addform" onSubmit={SignupHandler}>
-          <div className="form_box">
-            <label>Email id</label>
-            <input
-              type="email"
-              placeholder="E.g: faruq123@gmail.com"
-              name="userEmail"
-              required
-              value={formData.userEmail || ""}
-              id="userEmail"
-              className="inputField"
-              onChange={handleChange}
-            />
-          </div>
-          <div className="form_box">
-            <label>Password</label>
-            <input
-              type="password"
-              placeholder="Your Password"
-              name="userPassword"
-              required
-              value={formData.userPassword || ""}
-              className="inputField"
-              id="userPassword"
-              onChange={handleChange}
-            />
-          </div>
+    <div className="wrapper">
+      <div className="container">
+        <h1>Welcome</h1>
 
-          <input type="submit" className=" regSubButton" value="SignUp" />
+        <form onSubmit={getToken} className="form" method="post">
+          <input
+            name="username"
+            type="text"
+            placeholder="Username"
+            autoComplete="username"
+            required
+            autoFocus="true"
+          />
+          <input
+            name="password"
+            type="password"
+            placeholder="Password"
+            autoComplete="password"
+            required
+          />
+          <button type="submit">Login</button>
         </form>
-        {error ? <small style={{ color: "red" }}>{error}</small> : null}
+        {loginStatus ? loginStatus : null}
       </div>
-    </Modal>
+      <ul className="bg-bubbles">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+      </ul>
+    </div>
   );
 }

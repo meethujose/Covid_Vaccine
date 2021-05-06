@@ -15,15 +15,17 @@ export default function VaccineDetails({ selectedUser }) {
   const [selectedTest, setSelectedTest] = useState({});
   const [formData, setFormData] = useState({});
   const [result, setResult] = useState();
+  const[mount,setMount]=useState(true);
   // useEffect to fetch Vaccination Database
   useEffect(() => {
     axios
       .get(`http://lulu.transituae.net/api/testresultlist/${selectedUser.id}`)
       .then((response) => {
+        setMount(false);
         setUserTestDetails(response.data);
       })
       .catch((err) => console.error(err));
-  }, [selectedUser]);
+  }, [selectedUser,mount]);
   // handleChange Event
   const handleChange = (e) => {
     setFormData((formData) => ({
@@ -55,6 +57,7 @@ export default function VaccineDetails({ selectedUser }) {
   };
   // function edit
   const editTestDetails = async (e) => {
+    setMount(true);
     e.preventDefault();
     //image upload
 
@@ -103,7 +106,7 @@ export default function VaccineDetails({ selectedUser }) {
   };
 // delete Test Result Details
 const deleteTestData=async(data)=>{
- 
+ setMount(true);
   console.log(data);
   await axios
   .delete(

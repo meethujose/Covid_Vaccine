@@ -6,6 +6,9 @@ import ReactCrop from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import Model from "../UI/Modal/Modal";
 import axios from "axios";
+import { useSelector, useDispatch } from 'react-redux';
+import {empAddUpdateAction} from '../../store/empAddUpdate'
+
 //Image Crop
 function generateDownload(canvas, crop) {
   if (!crop || !canvas) {
@@ -29,6 +32,7 @@ function generateDownload(canvas, crop) {
 }
 export default function Register({ setShowModal }) {
   const imageRef = React.useRef();
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({});
   const [EidField, setEidField] = useState("");
   const [error, setError] = useState("");
@@ -71,6 +75,7 @@ export default function Register({ setShowModal }) {
                 avatarURL: url,
               })
               .then(function (response) {
+                dispatch(empAddUpdateAction.added())
                 console.log(response);
               });
             formData.username = "";

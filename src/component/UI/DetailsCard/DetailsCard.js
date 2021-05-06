@@ -13,7 +13,11 @@ export default function DetailsCard(props) {
   const [TestformData, setTestFormData] = useState({});
   const [ShowVaccineModal, setShowVaccineModal] = useState(false);
   const [ShowTestDetailModal, setTestDetailsModal] = useState(false);
-  console.log("date", props.userVaccineData && props.userVaccineData.date);
+  const[mount,setMount]=useState(true);
+  useEffect(() => {
+    console.log("mounted");
+  }, [mount]);
+  // console.log("date", props.userVaccineData && props.userVaccineData.date);
   // click Handler to Show Modal to Edit  vaccine details
   const DetailsCardHandler = () => {
     switch (props.type) {
@@ -52,6 +56,7 @@ export default function DetailsCard(props) {
   };
   // submit
   const submitData = async (e) => {
+    setMount(true);
     e.preventDefault();
 
     // attachment upload
@@ -84,6 +89,7 @@ export default function DetailsCard(props) {
                 name: props.selectedUser.id,
               })
               .then(function (response) {
+                setMount(false);
                 console.log(response);
               })
               .catch((error) => {
@@ -115,6 +121,7 @@ export default function DetailsCard(props) {
         data,
       })
       .then(function (response) {
+        setMount(false);
         console.log("edit response: ", response);
       })
       .catch((error) => {

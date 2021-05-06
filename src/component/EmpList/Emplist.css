@@ -47,10 +47,11 @@
 }
 
 .empcard__imagewrapper {
-  display: flex;
+  display: inline-flex;
   justify-content: center;
   align-items: center;
   width: 20%;
+ 
 }
 .empVaccine--text {
   display: flex;
@@ -78,6 +79,18 @@
 .reporticon {
   width: 2.5rem;
   height: 2.5rem;
+  margin-left:0.9rem ;
+}
+.deleteicon {
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-left:0.9rem ;
+}
+.scale {
+  transition: transform 0.2s;
+}
+.scale:hover {
+  transform: scale(1.5);
 }
 @media screen and (max-width: 250px) {
   .reporticon {

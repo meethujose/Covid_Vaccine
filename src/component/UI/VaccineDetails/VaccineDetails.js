@@ -19,6 +19,7 @@ export default function VaccineDetails({
   const [editModalStatus, setEditModalStatus] = useState(false);
   const [formData, setFormData] = useState({});
   const [selectedVaccine, setSelectedVaccine] = useState({});
+  const[mount,setMount]=useState(true);
   // const [userArray, setUserArray] = useState();
 
   // click Handler to Edit  vaccine details
@@ -55,6 +56,7 @@ export default function VaccineDetails({
   };
   // function edit
   const editVaccineDetails = async (e) => {
+    setMount(true);
     e.preventDefault();
     //image upload
 
@@ -116,14 +118,16 @@ export default function VaccineDetails({
     axios
       .get(`http://lulu.transituae.net/api/vaccinelist/${selectedUser.id}`)
       .then((response) => {
+        setMount(false);
         // setUserArray(response.data);
         setUserVaccineData(response.data);
       })
       .catch((err) => console.error(err));
-  }, [selectedUser]);
+  }, [selectedUser,mount]);
 
   // delete Vaccine details
 const deleteVaccineData=async(data)=>{
+  setMount(true);
   // setSelectedVaccine(data);
   console.log(data);
   await axios
