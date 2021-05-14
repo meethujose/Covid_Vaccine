@@ -2,7 +2,6 @@
   z-index: 5;
   margin: auto;
   background:  white;
-
   border: 1px solid #ccc;
   box-shadow: 1px 1px 1px black;
   padding: 16px;
@@ -20,7 +19,7 @@
   height: 80%;
   animation: modalopening 400ms ease-out forwards;
 }
-::-webkit-scrollbar {
+.Modal::-webkit-scrollbar {
   width: 0;  /* Remove scrollbar space */
   background: transparent;  /* Optional: just make scrollbar invisible */
 }

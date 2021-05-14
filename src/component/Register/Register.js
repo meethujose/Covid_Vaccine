@@ -6,8 +6,8 @@ import ReactCrop from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import Model from "../UI/Modal/Modal";
 import axios from "axios";
-import { useSelector, useDispatch } from 'react-redux';
-import {empAddUpdateAction} from '../../store/empAddUpdate'
+import { useSelector, useDispatch } from "react-redux";
+import { empAddUpdateAction } from "../../store/empAddUpdate";
 import axiosInstance from "../../axios";
 //Image Crop
 function generateDownload(canvas, crop) {
@@ -37,11 +37,13 @@ export default function Register({ setShowModal }) {
   const [EidField, setEidField] = useState("");
   const [error, setError] = useState("");
   const [upImg, setUpImg] = useState();
+  const [imgUrl, setimgUrl] = useState();
   const imgRef = useRef(null);
   const previewCanvasRef = useRef(null);
   const [crop, setCrop] = useState();
   const [completedCrop, setCompletedCrop] = useState(null);
   const [selected, setSelected] = useState(false);
+  const [profileImage, setProfileImage] = useState(user);
   const handleChange = (e) => {
     setFormData((formData) => ({
       ...formData,
@@ -51,43 +53,42 @@ export default function Register({ setShowModal }) {
 
   const submitData = async (e) => {
     e.preventDefault();
-    //image upload
-
     console.log("clicked");
     var image = imageRef.current.files[0];
-    console.log("image:", image);
     if (image) {
-      var storageRef = storage.ref().child(`images/${image.name}`).put(image);
-
-      storageRef.on(
-        "state_changed",
-        (snapshot) => {},
-        (error) => {
-          console.log(error);
-        },
-        () => {
-          storageRef.snapshot.ref.getDownloadURL().then(async (url) => {
-            console.log(url);
-            const res = await axiosInstance
-              .post("api/empcreate/", {
-                name: formData.username,
-                emiratesID: formData.EmiratesId,
-                avatarURL: url,
-              })
-              .then(function (response) {
-                dispatch(empAddUpdateAction.added())
-                console.log(response);
-              });
-            formData.username = "";
-            formData.PhoneNumber = "";
-            formData.EmiratesId = "";
-            setShowModal(false);
-          });
-        }
-      );
+      var storageRef = storage.ref().child(`images/${formData.EmiratesId}`);
+      storageRef.put(image).then((snapshot) => {
+        snapshot.ref.getDownloadURL().then(async (url) => {
+          console.log(url);
+          setimgUrl(url)
+        });
+        // console.log('Uploaded a blob or file!');
+      });
     } else {
-      setError("Image not selected");
-    }
+      const url =
+        "https://firebasestorage.googleapis.com/v0/b/vaccine-9e17d.appspot.com/o/images%2FaddEmployee.png?alt=media&token=ac8c7ac6-773d-44ff-afa0-1aa76ea1d3d7";
+        setimgUrl(url)
+      }
+    axiosInstance
+      .post("api/empcreate/", {
+        name: formData.username,
+        emiratesID: formData.EmiratesId,
+        avatarURL: {imgUrl},
+      })
+      .then(function (response) {
+        dispatch(empAddUpdateAction.added());
+        console.log(response);
+        formData.username = "";
+        formData.PhoneNumber = "";
+        formData.EmiratesId = "";
+        setShowModal(false);
+      });
+
+    //     }
+    //   );
+    // } else {
+    //   setError("Image not selected");
+    // }
   };
   const EidChangeHandler = (event) => {
     const Eid = event.target.value;
@@ -112,18 +113,21 @@ export default function Register({ setShowModal }) {
   };
   //image Crop
   const onSelectFile = (e) => {
+    console.log(imageRef.current.files[0]);
+    setProfileImage( URL.createObjectURL(e.target.files[0]));
     const supportedFormat = ["jpeg", "jpg", "png"];
 
-    if (supportedFormat.includes(e.target.files[0].type.split("/")[1])) {
-      if (e.target.files && e.target.files.length > 0) {
-        setSelected(true);
-        const reader = new FileReader();
-        reader.addEventListener("load", () => setUpImg(reader.result));
-        reader.readAsDataURL(e.target.files[0]);
-      }
-    } else {
-      alert("invalid file format,supported format's jpeg, jpg, png");
-    }
+    // if (supportedFormat.includes(e.target.files[0].type.split("/")[1])) {
+    //   if (e.target.files && e.target.files.length > 0) {
+    //     setProfileImage();
+    //     setSelected(true);
+    //     const reader = new FileReader();
+    //     reader.addEventListener("load", () => setUpImg(reader.result));
+    //     reader.readAsDataURL(e.target.files[0]);
+    //   }
+    // } else {
+    //   alert("invalid file format,supported format's jpeg, jpg, png");
+    // }
   };
 
   const onLoad = useCallback((img) => {
@@ -164,25 +168,23 @@ export default function Register({ setShowModal }) {
   }, [completedCrop]);
 
   return (
-   
-    <div className="register">
+    <div className='register'>
       <label>
         <input
-          type="file"
-          id="file"
-          name="image"
+          type='file'
+          id='file'
+          name='image'
           required
           ref={imageRef}
-          onChange={onSelectFile}
-        ></input>
-        <img src={user} className="imgFile" alt="img" />
+          onChange={onSelectFile}></input>
+        <img src={profileImage} className='imgFile' alt='img' />
       </label>
-      <p className="error">{error}</p>
+      <p className='error'>{error}</p>
       {selected ? (
         <>
-          <div className="Crop">
+          <div className='Crop'>
             <ReactCrop
-              className="fileimage"
+              className='fileimage'
               style={{ width: "100%", height: "90%" }}
               src={upImg}
               onImageLoaded={onLoad}
@@ -192,44 +194,43 @@ export default function Register({ setShowModal }) {
             />
           </div>
           <button
-            className="btn btn-primary"
-            onClick={() => setSelected(false)}
-          >
+            className='btn btn-primary'
+            onClick={() => setSelected(false)}>
             Crop
           </button>
         </>
       ) : (
-        <form className="addform" onSubmit={submitData}>
-          <div className="form_box">
+        <form className='addform' onSubmit={submitData}>
+          <div className='form_box'>
             <label>Name</label>
             <input
-              type="text"
-              placeholder="Name"
-              name="username"
+              type='text'
+              placeholder='Name'
+              name='username'
               required
-              className="inputField"
+              className='inputField'
               onChange={handleChange}
             />
           </div>
-          <div className="form_box">
+          <div className='form_box'>
             <label>Mob Number</label>
             <input
-              type="text"
-              placeholder="Phone Number"
-              name="PhoneNumber"
+              type='text'
+              placeholder='Phone Number'
+              name='PhoneNumber'
               required
-              className="inputField"
+              className='inputField'
               onChange={handleChange}
             />
           </div>
-          <div className="form_box">
+          <div className='form_box'>
             <label>Emirates Id</label>
             <input
-              type="text"
-              placeholder="Emirates Id"
-              name="EmiratesId"
+              type='text'
+              placeholder='Emirates Id'
+              name='EmiratesId'
               required
-              className="inputField"
+              className='inputField'
               onChange={(e) => {
                 EidChangeHandler(e);
                 handleChange(e);
@@ -238,10 +239,9 @@ export default function Register({ setShowModal }) {
             />
           </div>
 
-          <input type="submit" className=" regSubButton" value="Submit" />
+          <input type='submit' className=' regButton' value='Submit' />
         </form>
       )}
     </div>
- 
   );
 }

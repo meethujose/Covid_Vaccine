@@ -70,12 +70,12 @@
   transition-timing-function: ease-in-put;
   font-weight: 200;
 }
-form {
+.SignINform {
   padding: 20px 0;
   position: relative;
   z-index: 2;
 }
-form input {
+.SignINinput {
   appearance: none;
   outline: 0;
   border: 1px solid rgba(255, 255, 255, 0.4);
@@ -91,15 +91,15 @@ form input {
   transition-duration: 0.25s;
   font-weight: 300;
 }
-form input:hover {
+.SignINinput :hover {
   background-color: rgba(255, 255, 255, 0.4);
 }
-form input:focus {
+.SignINinput :focus {
   background-color: white;
   width: 300px;
   color: #212724;
 }
-form button {
+.SignINbutton {
   appearance: none;
   outline: 0;
   background-color: white;
@@ -112,7 +112,7 @@ form button {
   font-size: 18px;
   transition-duration: 0.25s;
 }
-form button:hover {
+.SignINbutton:hover {
   background-color: #7ff1b8;
 }
 .bg-bubbles {

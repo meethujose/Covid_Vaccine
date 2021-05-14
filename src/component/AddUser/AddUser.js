@@ -22,16 +22,16 @@ export default function AddUser() {
   const setLogout = () => {
     dispatch(isAuth());
     localStorage.clear();
-    history.replace("/login");
+    // history.replace("/login");
   };
 
   return (
     <div className="AddUser">
-      <img
+      {/* <img
           className="settingsicon"
           src={SettingsIcon}
          
-        alt=""/>
+        alt=""/> */}
       <div>
         <img
           className="logouticon"

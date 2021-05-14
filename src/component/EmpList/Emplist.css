@@ -134,11 +134,16 @@
   z-index: 1;
 }
 .EmpDetailsWrap {
-  background-image: linear-gradient(
+  /* background-image: linear-gradient(
     to bottom right,
     rgb(122, 192, 145),
     rgb(43, 192, 175)
-  );
+  ); */
+  background: #50a3a2;
+  background: -webkit-linear-gradient(top left, #50a3a2 0%, #53e3a6 100%);
+  background: -moz-linear-gradient(top left, #50a3a2 0%, #53e3a6 100%);
+  background: -o-linear-gradient(top left, #50a3a2 0%, #53e3a6 100%);
+  background: linear-gradient(to bottom right, #50a3a2 0%, #53e3a6 100%);
   border-radius: 5px;
   margin-top: 2rem;
   border: 5px solid rgb(255, 255, 255);
@@ -190,3 +195,9 @@
   height: 10rem;
   overflow-y: scroll;
 }
+.scrollable::-webkit-scrollbar {
+  display: none;
+}
+
+
+/*  */

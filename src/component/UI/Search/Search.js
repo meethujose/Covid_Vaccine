@@ -2,6 +2,8 @@ import React from "react";
 import "./Search.css";
 import { useDispatch, useSelector } from "react-redux";
 import axios from 'axios';
+import axiosInstance from '../../../axios'
+import { empAddUpdateAction } from "../../../store/empAddUpdate";
 // var filteredElements = [];
 export default function Search({ userArray, setUserArray, setMount }) {
   
@@ -22,15 +24,15 @@ export default function Search({ userArray, setUserArray, setMount }) {
   const handleSearch = (e) => {
     let searchTerm = e.target.value;
     if (searchTerm.length === 0) {
-      dispatch({ type: "MOUNT" });
+      dispatch(empAddUpdateAction.added());
     } else {
       if (typeof cancelToken != typeof undefined) {
         cancelToken.cancel("Cancelled");
       }
       cancelToken = axios.CancelToken.source();
-      axios({
+      axiosInstance({
         method: "GET",
-        url: `http://localhost:8888/search/${searchTerm}`,
+        url: `/api/emplist/?search=${searchTerm}`,
         cancelToken: cancelToken.token,
       }).then((res) => {
         setUserArray(res.data);

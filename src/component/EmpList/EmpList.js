@@ -44,14 +44,16 @@ export default function EmpList({ userArray, setUserArray }) {
     getData();
   }, [empAddUpdateState]);
 
-  const getData = async () => {
-    await axios({
-      method: "GET",
-      url: "http://lulu.transituae.net/api/emplist/",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-      },
-    })
+  const getData =  () => {
+   // await axios({
+    //   method: "GET",
+    //   url: "http://lulu.transituae.net/api/emplist/",
+    //   headers: {
+    //     Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+    //   },
+    // })
+     axiosInstance
+    .get("api/emplist/")
       .then((res) => {
         setUserArray(res.data);
       })
@@ -115,28 +117,15 @@ export default function EmpList({ userArray, setUserArray }) {
 
   const deleteEmpHandler = async (data) => {
     console.log(data.id);
-
-    await axios({
-      method: "DELETE",
-      url: `http://lulu.transituae.net/api/emprud/${data.id}`,
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-      },
-    })
-      .then((res) => {
-        console.log("delete response: "+ res);
+    await axiosInstance
+      .delete(`api/emprud/${data.id}`)
+      .then(function (response) {
+        console.log("delete response: ", response);
       })
-      .catch((err) => console.error(err));
-
-    // await axiosInstance
-    //   .delete(`api/emprud/${data.id}`)
-    //   .then(function (response) {
-    //     console.log("delete response: ", response);
-    //   })
-    //   .catch((error) => {
-    //     throw error;
-    //     console.log("delete failed ", error);
-    //   });
+      .catch((error) => {
+        throw error;
+        console.log("delete failed ", error);
+      });
   };
   return (
     <div>

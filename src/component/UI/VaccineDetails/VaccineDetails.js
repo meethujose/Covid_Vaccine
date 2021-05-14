@@ -7,7 +7,7 @@ import CancelSVG from "../../Icons/cancel.svg";
 import Modal from "../Modal/Modal";
 import moment from "moment";
 import axios from "axios";
-
+import axiosInstance from '../../../axios'
 export default function VaccineDetails({
   selectedUser,
   userVaccineData,
@@ -42,9 +42,9 @@ export default function VaccineDetails({
 
   // send api request
   const sendEditRequest = async (data) => {
-    await axios
+    await axiosInstance
       .put(
-        `http://lulu.transituae.net/api/vaccinerud/${selectedVaccine.id}`,
+        `api/vaccinerud/${selectedVaccine.id}`,
         data
       )
       .then(function (response) {
@@ -115,8 +115,8 @@ export default function VaccineDetails({
   };
 
   useEffect(() => {
-    axios
-      .get(`http://lulu.transituae.net/api/vaccinelist/${selectedUser.id}`)
+    axiosInstance
+      .get(`api/vaccinelist/${selectedUser.id}`)
       .then((response) => {
         setMount(false);
         // setUserArray(response.data);
@@ -130,9 +130,9 @@ const deleteVaccineData=async(data)=>{
   setMount(true);
   // setSelectedVaccine(data);
   console.log(data);
-  await axios
+  await axiosInstance
   .delete(
-    `http://lulu.transituae.net/api/vaccinerud/${data.id}`,
+    `api/vaccinerud/${data.id}`,
     
   )
   .then(function (response) {
@@ -192,7 +192,7 @@ const deleteVaccineData=async(data)=>{
                   name='vaccine_date'
                   required
                   defaultValue={selectedVaccine.vaccine_date}
-                  className='inputField'
+                  className='EditinputField'
                   onChange={handleChange}
                   max={moment().utc().format("YYYY-MM-DD")}
                 />
@@ -205,10 +205,11 @@ const deleteVaccineData=async(data)=>{
                   name='remarks'
                   required
                   defaultValue={selectedVaccine.remarks}
-                  className='inputField'
+                  className='EditinputField'
                   onChange={handleChange}
                 />
               </div>
+              <div className='form_box'>
               <label className='EmpSetailsText'>Attachment:</label>
               <input
                 type='file'
@@ -216,7 +217,8 @@ const deleteVaccineData=async(data)=>{
                 name='myfile'
                 // ref={fileRef}
                 onChange={handleChange}></input>
-              <input type='submit' className=' regSubButton' value='Add' />
+                </div>
+              <input type='submit' className=' EditButton' value='Add' />
             </form>
           </div>
         </Modal>

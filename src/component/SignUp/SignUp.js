@@ -1,69 +1,116 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useHistory, useParams } from "react-router-dom";
 import "./SignUp.css";
-import firebase from 'firebase';
+import axios from '../../axios'
+import { Redirect, Route } from "react-router";
 
-import {auth} from "../../Data/FirebaseConfig"
-import Modal from "../UI/Modal/Modal";
 export default function SignUp() {
-  const history = useHistory();
+  const string = useParams().string
   const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
-  const [formData, setFormData] = useState({});
-  const handleChange = (e) => {
-    setFormData((formData) => ({
-      ...formData,
-      [e.target.name]: e.target.value,
-    }));
-  };
-  const SignupHandler = async (e) => {
-    e.preventDefault();
+  const [confirmedPassword, setConfirmedPassword] = useState("");
+  const [confirmedPasswordStyle, setConfirmedPasswordStyle] = useState(null);
+  const [submitButtonStatus, setSubmitButtonStatus] = useState(true)
+  const [loginStatus, setLoginStatus] = useState(null);
 
-    // const res = await db.collection("Authentication").add({
-    //   Email: formData.userEmail,
-    //   Password: formData.userPassword,
-    // });
- 
-        const resp = await firebase.auth().createUserWithEmailAndPassword(formData.userEmail, formData.userPassword);
-       
-        history.replace("/login");
-    
-   
-  };
+
+  useEffect(()=>{
+    axios.post("api/retrieveuserid/", {
+                token: string
+              })
+              .then(function (response) {
+                console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", response.data.email);
+                setEmail(response.data.email)
+                setName(response.data.first_name + " " + response.data.last_name)
+              })
+              .catch(function (error) {
+                // handle error
+                console.log(error);
+              })
+  },[]);
+  const passwordHandler = (event) => {
+    console.log(event.target.value)
+    setPassword(event.target.value)
+    console.log(password)
+  }
+  const passwordConfirmHandler = (event) => {
+    setConfirmedPasswordStyle({borderBlockColor:"red"});
+    setSubmitButtonStatus(true)
+    setConfirmedPassword(event.target.value)
+    if (event.target.value === password) {
+      setConfirmedPasswordStyle(null)
+      setSubmitButtonStatus(false)
+    }
+  }
+  const signUpHandler = (event) => {
+    event.preventDefault();
+    setLoginStatus(<div className="loader"></div>);
+
+    const data = {
+      "email": email,
+      "password": password
+        }
+    axios.post("api/usercreate/",data)
+    .then((response) => {
+      console.log(response);
+      setLoginStatus(<h3>User Created Successfully !!!</h3>);
+      window.location = '/login'
+
+
+    }, (error) => {
+      console.log(error);
+      setLoginStatus(<h3>Invalid or Expired link !!!</h3>);
+    });
+  }
   return (
-    <Modal>
-      <div className="register">
-        <form className="addform" onSubmit={SignupHandler}>
-          <div className="form_box">
-            <label>Email id</label>
-            <input
-              type="email"
-              placeholder="E.g: faruq123@gmail.com"
-              name="userEmail"
-              required
-              value={formData.userEmail || ""}
-              id="userEmail"
-              className="inputField"
-              onChange={handleChange}
-            />
-          </div>
-          <div className="form_box">
-            <label>Password</label>
-            <input
-              type="password"
-              placeholder="Your Password"
-              name="userPassword"
-              required
-              value={formData.userPassword || ""}
-              className="inputField"
-              id="userPassword"
-              onChange={handleChange}
-            />
-          </div>
+    <div className="wrapper">
+      <div className="container">
+        <h1>Welcome {name}</h1>
 
-          <input type="submit" className=" regSubButton" value="SignUp" />
+        <form className="formSignUp" method="post" onSubmit={signUpHandler}>
+          <input
+            name="username"
+            type="text"
+            placeholder={email}
+            disabled="disabled"
+            className="formSignUpinput "
+          />
+          <input
+            name="password"
+            type="password"
+            placeholder="Password"
+            required
+            onChange = {passwordHandler}
+            className="formSignUpinput "
+          />
+          <input
+            name="password"
+            type="password"
+            placeholder="Confirm Password"
+            required
+            className="formSignUpinput "
+            style = {confirmedPasswordStyle}
+            onChange = {passwordConfirmHandler}
+          />
+          <button type="submit" className="formSignUpbutton" disabled={submitButtonStatus}>Sign Up</button>
         </form>
+        {loginStatus ? loginStatus : null}
       </div>
-    </Modal>
+      <ul className="bg-bubbles">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+      </ul>
+    </div>
   );
 }
+
+  

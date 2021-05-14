@@ -26,7 +26,7 @@ export default function SignIn() {
 
   const getToken = (event) => {
     event.preventDefault();
-    setLoginStatus(<div className="loader"></div>);
+    setLoginStatus(<div className='loader'></div>);
     const credentials = {
       username: event.target[0].value,
       password: event.target[1].value,
@@ -34,11 +34,13 @@ export default function SignIn() {
     const url = "/api/token/";
     axios.post(url, credentials, { timeout: 5000 }).then(
       (response) => {
-        console.log('login response', response.data);
+        console.log("login response", response.data);
         localStorage.setItem("access_token", response.data.access);
         localStorage.setItem("refresh_token", response.data.refresh);
-        dispatch(isAuth());
-        setMount(true);
+        setTimeout(() => {
+          dispatch(isAuth());
+          setMount(true);
+        }, 5000);
       },
       (error) => {
         try {
@@ -57,31 +59,33 @@ export default function SignIn() {
     );
   };
   return (
-    <div className="wrapper">
-      <div className="container">
+    <div className='wrapper'>
+      <div className='container'>
         <h1>Welcome</h1>
 
-        <form onSubmit={getToken} className="form" method="post">
+        <form className="SignINform "onSubmit={getToken} method='post'>
           <input
-            name="username"
-            type="text"
-            placeholder="Username"
-            autoComplete="username"
+            name='username'
+            type='text'
+            placeholder='Username'
+            autoComplete='username'
             required
-            autoFocus="true"
+            autoFocus='true'
+            className='SignINinput '
           />
           <input
-            name="password"
-            type="password"
-            placeholder="Password"
-            autoComplete="password"
+            name='password'
+            type='password'
+            placeholder='Password'
+            autoComplete='password'
             required
+            className='SignINinput '
           />
-          <button type="submit">Login</button>
+          <button type='submit'className="SignINbutton">Login</button>
         </form>
         {loginStatus ? loginStatus : null}
       </div>
-      <ul className="bg-bubbles">
+      <ul className='bg-bubbles'>
         <li></li>
         <li></li>
         <li></li>

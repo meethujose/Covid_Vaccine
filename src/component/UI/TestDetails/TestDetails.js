@@ -7,6 +7,7 @@ import axios from "axios";
 import DownloadSVG from "../../Icons/download.svg";
 import EditSVG from "../../Icons/edit.svg";
 import CancelSVG from "../../Icons/cancel.svg";
+import axiosInstance from '../../../axios'
 export default function VaccineDetails({ selectedUser }) {
   const fileRef = React.useRef();
   const [editModalStatus, setEditModalStatus] = useState(false);
@@ -18,8 +19,8 @@ export default function VaccineDetails({ selectedUser }) {
   const[mount,setMount]=useState(true);
   // useEffect to fetch Vaccination Database
   useEffect(() => {
-    axios
-      .get(`http://lulu.transituae.net/api/testresultlist/${selectedUser.id}`)
+    axiosInstance
+      .get(`api/testresultlist/${selectedUser.id}`)
       .then((response) => {
         setMount(false);
         setUserTestDetails(response.data);
@@ -43,9 +44,9 @@ export default function VaccineDetails({ selectedUser }) {
   };
 
   const sendEditRequest = async (data) => {
-    await axios
+    await axiosInstance
       .put(
-        `http://lulu.transituae.net/api/testresultrud/${selectedTest.id}`,
+        `api/testresultrud/${selectedTest.id}`,
         data
       )
       .then(function (response) {
@@ -108,9 +109,9 @@ export default function VaccineDetails({ selectedUser }) {
 const deleteTestData=async(data)=>{
  setMount(true);
   console.log(data);
-  await axios
+  await axiosInstance
   .delete(
-    `http://lulu.transituae.net/api/testresultrud/${data.id}`,
+    `api/testresultrud/${data.id}`,
     
   )
   .then(function (response) {
@@ -160,7 +161,7 @@ const deleteTestData=async(data)=>{
                   name='Test_Date'
                   defaultValue={selectedTest.Test_Date}
                   required
-                  className='inputField'
+                  className='EditTestinputField '
                   onChange={handleChange}
                   max={moment().utc().format("YYYY-MM-DD")}
                 />
@@ -171,13 +172,13 @@ const deleteTestData=async(data)=>{
                   id='Result'
                   name='Result'
                   value={result}
-                  className='inputField'
+                  className='EditTestinputField '
                   required
                   onChange={(e) => setResult(e.target.value)}>
-                  <option value='Negative' className='inputField'>
+                  <option value='Negative'   className='EditTestinputField '>
                     Negative
                   </option>
-                  <option value='Positive' className='inputField'>
+                  <option value='Positive'   className='EditTestinputField '>
                     Positive
                   </option>
                 </select>
@@ -189,10 +190,11 @@ const deleteTestData=async(data)=>{
                   placeholder='Remarks'
                   name='Remarks'
                   required
-                  className='inputField'
+                  className='EditTestinputField '
                   onChange={handleChange}
                 />
               </div>
+              <div className='form_box'>
               <label className='EmpSetailsText'>Attachment:</label>
               <input
                 type='file'
@@ -200,7 +202,8 @@ const deleteTestData=async(data)=>{
                 name='myfile'
                 ref={fileRef}
                 onChange={handleChange}></input>
-              <input type='submit' className=' regSubButton' value='Add' />
+                </div>
+              <input type='submit' className=' EditTestButton' value='Add' />
             </form>
           </div>
         </Modal>

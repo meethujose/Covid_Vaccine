@@ -5,7 +5,7 @@ import Plus from "../../Icons/plus.svg";
 import Modal from "../Modal/Modal";
 import moment from "moment";
 import axios from "axios";
-
+import axiosInstance from '../../../axios'
 export default function DetailsCard(props) {
   const fileRef = React.useRef();
   const TestfileRef = React.useRef();
@@ -14,6 +14,7 @@ export default function DetailsCard(props) {
   const [ShowVaccineModal, setShowVaccineModal] = useState(false);
   const [ShowTestDetailModal, setTestDetailsModal] = useState(false);
   const[mount,setMount]=useState(true);
+  const [imgUrl, setimgUrl] = useState();
   useEffect(() => {
     console.log("mounted");
   }, [mount]);
@@ -25,7 +26,6 @@ export default function DetailsCard(props) {
         setShowVaccineModal(!ShowVaccineModal);
         break;
       }
-
       case "TestDetails": {
         setTestDetailsModal(!ShowTestDetailModal);
         break;
@@ -34,7 +34,6 @@ export default function DetailsCard(props) {
         return false;
     }
   };
-
   const isVaccinationData = (vaccinationData) => {
     if (!vaccinationData) {
       return (
@@ -47,7 +46,6 @@ export default function DetailsCard(props) {
       );
     }
   };
-
   const handleChange = (e) => {
     setFormData((formData) => ({
       ...formData,
@@ -58,55 +56,46 @@ export default function DetailsCard(props) {
   const submitData = async (e) => {
     setMount(true);
     e.preventDefault();
-
     // attachment upload
-    console.log("clicked");
+
     var file = fileRef.current.files[0];
     if (file) {
-      var storageRef = storage
-        .ref()
-        .child(`Attachments/${file.name}`)
-        .put(file);
-
-      storageRef.on(
-        "state_changed",
-        (snapshot) => {},
-        (error) => {
-          console.log(error);
-        },
-        () => {
-          storageRef.snapshot.ref.getDownloadURL().then(async (url) => {
-            console.log(url);
-            const res = await axios
-              .post("http://lulu.transituae.net/api/vaccinecreate/", {
+     
+      var storageRef = storage.ref().child(`Attachments/${file.name}`);
+      
+      storageRef.put(file).then((snapshot) => {
+        snapshot.ref.getDownloadURL().then(async (url) => {
+          console.log(url);
+          setimgUrl(url)
+        });
+        // console.log('Uploaded a blob or file!');
+      });
+    }else{
+      const url="";
+      setimgUrl(url)
+      console.log(url);
+    }
+            await axiosInstance
+              .post("api/vaccinecreate/", {
                 vaccine_dose:
                   props.userVaccineData && props.userVaccineData.length == 1
                     ? "Second"
                     : "First",
                 vaccine_date: formData.Dose_Date,
-                remarks: formData.Remarks,
-                attachments: url,
+                remarks: formData.Remarks?formData.Remarks:"",
+                attachments: {imgUrl},
                 name: props.selectedUser.id,
               })
               .then(function (response) {
                 setMount(false);
                 console.log(response);
-              })
-              .catch((error) => {
-                console.log(error);
-              });
-
-            formData.First_Dose = "";
-            formData.Remarks = "";
-
+              })      
             setShowVaccineModal(false);
-          });
+            
         }
-      );
-    } else {
-      alert("File not selected");
-    }
-  };
+      
+    
+  
   // handling test details Form
   const handleTestChange = (e) => {
     setTestFormData((TestformData) => ({
@@ -116,8 +105,8 @@ export default function DetailsCard(props) {
   };
 
   const sendEditRequest = async (data) => {
-    await axios
-      .post("http://lulu.transituae.net/api/testresultcreate/", {
+    await axiosInstance
+      .post("api/testresultcreate/", {
         data,
       })
       .then(function (response) {
@@ -209,7 +198,8 @@ export default function DetailsCard(props) {
                     placeholder='Dose date'
                     name='Dose_Date'
                     required
-                    className='inputField'
+                    value= {formData.Dose_Date}
+                    className='DetailsinputField'
                     onChange={handleChange}
                     max={moment().utc().format("YYYY-MM-DD")}
                   />
@@ -220,7 +210,8 @@ export default function DetailsCard(props) {
                     placeholder='Dose date'
                     name='Dose_Date'
                     required
-                    className='inputField'
+                    value= {formData.Dose_Date}
+                    className='DetailsinputField'
                     onChange={handleChange}
                     min={
                       props.userVaccineData &&
@@ -235,12 +226,11 @@ export default function DetailsCard(props) {
                   type='text'
                   placeholder='Remarks'
                   name='Remarks'
-                  required
-                  className='inputField'
+                  className='DetailsinputField'
                   onChange={handleChange}
                 />
               </div>
-
+              <div className='form_box'>
               <label className='EmpSetailsText'>Attachment:</label>
               <input
                 type='file'
@@ -248,7 +238,8 @@ export default function DetailsCard(props) {
                 name='myfile'
                 ref={fileRef}
                 onChange={handleChange}></input>
-              <input type='submit' className=' regSubButton' value='Add' />
+                </div>
+              <input type='submit' className='AddButton' value='Add' />
             </form>
           </div>
         </Modal>
@@ -267,7 +258,7 @@ export default function DetailsCard(props) {
                   placeholder='Test_Date'
                   name='Test_Date'
                   required
-                  className='inputField'
+                  className='DetailsinputField'
                   onChange={handleTestChange}
                   max={moment().utc().format("YYYY-MM-DD")}
                 />
@@ -285,13 +276,13 @@ export default function DetailsCard(props) {
                 <select
                   id='Result'
                   name='Result'
-                  className='inputField'
+                  className='DetailsinputField'
                   required
                   onChange={handleTestChange}>
-                  <option value='Negative' className='inputField'>
+                  <option value='Negative'  className='DetailsinputField'>
                     Negative
                   </option>
-                  <option value='Positive' className='inputField'>
+                  <option value='Positive'  className='DetailsinputField'>
                     Positive
                   </option>
                 </select>
@@ -303,10 +294,11 @@ export default function DetailsCard(props) {
                   placeholder='Remarks'
                   name='Remarks'
                   required
-                  className='inputField'
+                  className='DetailsinputField'
                   onChange={handleTestChange}
                 />
               </div>
+              <div className='form_box'>
               <label className='EmpSetailsText'>Attachment:</label>
               <input
                 type='file'
@@ -314,7 +306,8 @@ export default function DetailsCard(props) {
                 name='myfile'
                 ref={fileRef}
                 onChange={handleTestChange}></input>
-              <input type='submit' className=' regSubButton' value='Add' />
+                </div>
+              <input type='submit' className='AddButton' value='Add' />
             </form>
           </div>
         </Modal>
