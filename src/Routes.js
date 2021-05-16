@@ -17,17 +17,7 @@ export default function Routes() {
   const [userArray, setUserArray] = useState([]);
   const history = useHistory();
   const dispatch = useDispatch();
-  // if (localStorage.getItem("access_token")) {  
-  //   dispatch(isAuth(true));
-  //  return( <Redirect
-  //   to={{
-  //     pathname: "/",
-  //     state: {
-  //       from: "/login",
-  //     },
-  //   }}
-  // />
-  //   ) }
+ 
 
   return (
     <div>
@@ -36,7 +26,7 @@ export default function Routes() {
           <Header>
             <Search userArray={userArray} setUserArray={setUserArray} />
             <AddUser />
-            <Sidebar/>
+            {/* <Sidebar/> */}
           </Header>
           <div className="body">
             <EmpList userArray={userArray} setUserArray={setUserArray} />

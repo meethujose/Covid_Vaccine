@@ -9,6 +9,7 @@ import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { empAddUpdateAction } from "../../store/empAddUpdate";
 import axiosInstance from "../../axios";
+import getAxiosInstance from "../../axiosInstance";
 //Image Crop
 function generateDownload(canvas, crop) {
   if (!crop || !canvas) {
@@ -31,13 +32,14 @@ function generateDownload(canvas, crop) {
   );
 }
 export default function Register({ setShowModal }) {
+  let imageUrl;
   const imageRef = React.useRef();
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({});
   const [EidField, setEidField] = useState("");
   const [error, setError] = useState("");
   const [upImg, setUpImg] = useState();
-  const [imgUrl, setimgUrl] = useState();
+ 
   const imgRef = useRef(null);
   const previewCanvasRef = useRef(null);
   const [crop, setCrop] = useState();
@@ -55,40 +57,38 @@ export default function Register({ setShowModal }) {
     e.preventDefault();
     console.log("clicked");
     var image = imageRef.current.files[0];
-    if (image) {
+    
       var storageRef = storage.ref().child(`images/${formData.EmiratesId}`);
       storageRef.put(image).then((snapshot) => {
         snapshot.ref.getDownloadURL().then(async (url) => {
-          console.log(url);
-          setimgUrl(url)
-        });
+          imageUrl=url;
+
+        }).then(async()=>{
+          getAxiosInstance().then(async axiosInstance=>{
+            await  axiosInstance
+            .post("api/empcreate/", {
+             name: formData.username,
+             emiratesID: formData.EmiratesId,
+           
+             avatarURL:imageUrl?imageUrl: "https://firebasestorage.googleapis.com/v0/b/vaccine-9e17d.appspot.com/o/images%2FaddEmployee.png?alt=media&token=ac8c7ac6-773d-44ff-afa0-1aa76ea1d3d7",
+     
+           })
+           .then(function (response) {
+             dispatch(empAddUpdateAction.added());
+             console.log(response);
+             formData.username = "";
+             formData.PhoneNumber = "";
+             formData.EmiratesId = "";
+             setShowModal(false);
+           });
+         });
+
+        })
         // console.log('Uploaded a blob or file!');
       });
-    } else {
-      const url =
-        "https://firebasestorage.googleapis.com/v0/b/vaccine-9e17d.appspot.com/o/images%2FaddEmployee.png?alt=media&token=ac8c7ac6-773d-44ff-afa0-1aa76ea1d3d7";
-        setimgUrl(url)
-      }
-    axiosInstance
-      .post("api/empcreate/", {
-        name: formData.username,
-        emiratesID: formData.EmiratesId,
-        avatarURL: {imgUrl},
-      })
-      .then(function (response) {
-        dispatch(empAddUpdateAction.added());
-        console.log(response);
-        formData.username = "";
-        formData.PhoneNumber = "";
-        formData.EmiratesId = "";
-        setShowModal(false);
-      });
-
-    //     }
-    //   );
-    // } else {
-    //   setError("Image not selected");
-    // }
+    
+  
+   
   };
   const EidChangeHandler = (event) => {
     const Eid = event.target.value;

@@ -8,6 +8,9 @@ import Modal from "../Modal/Modal";
 import moment from "moment";
 import axios from "axios";
 import axiosInstance from '../../../axios'
+import getAxiosInstance from "../../../axiosInstance";
+import { useSelector,useDispatch } from "react-redux";
+import { vaccineAddUpdateAction } from "../../../store/vaccineAddUpdate";
 export default function VaccineDetails({
   selectedUser,
   userVaccineData,
@@ -15,6 +18,8 @@ export default function VaccineDetails({
   resetSelectedUser,
 }) {
   const fileRef = React.useRef();
+  const dispatch = useDispatch();
+  const vaccineAddUpdateState = useSelector((state) => state.vaccine);
   const [ShowVaccineModal, setShowVaccineModal] = useState(false);
   const [editModalStatus, setEditModalStatus] = useState(false);
   const [formData, setFormData] = useState({});
@@ -42,17 +47,19 @@ export default function VaccineDetails({
 
   // send api request
   const sendEditRequest = async (data) => {
+    getAxiosInstance().then(async axiosInstance=>{
     await axiosInstance
       .put(
         `api/vaccinerud/${selectedVaccine.id}`,
         data
       )
       .then(function (response) {
+        dispatch(vaccineAddUpdateAction.added());
         console.log("edit response: ", response);
       })
-      .catch((error) => {
-        console.log("edit failed ", error);
-      });
+     
+      setEditModalStatus(false);
+    });
   };
   // function edit
   const editVaccineDetails = async (e) => {
@@ -77,9 +84,13 @@ export default function VaccineDetails({
             console.log(url);
             const data = {
               vaccine_dose:
-                userVaccineData && userVaccineData.length == 1
-                  ? "Second"
-                  : "First",
+              selectedUser &&
+               userVaccineData &&
+            userVaccineData.length == 0
+                  ? "First"
+                  :(selectedUser &&
+                   userVaccineData &&userVaccineData[0].vaccine_dose ==="First")?
+                  "Second":"First",
               vaccine_date: formData.vaccine_date
                 ? formData.vaccine_date
                 : selectedVaccine.vaccine_date,
@@ -115,32 +126,37 @@ export default function VaccineDetails({
   };
 
   useEffect(() => {
+    getAxiosInstance().then(async axiosInstance=>{
     axiosInstance
       .get(`api/vaccinelist/${selectedUser.id}`)
       .then((response) => {
-        setMount(false);
+       
         // setUserArray(response.data);
         setUserVaccineData(response.data);
       })
       .catch((err) => console.error(err));
-  }, [selectedUser,mount]);
+    });
+  }, [selectedUser,vaccineAddUpdateState]);
 
   // delete Vaccine details
 const deleteVaccineData=async(data)=>{
   setMount(true);
   // setSelectedVaccine(data);
   console.log(data);
+  getAxiosInstance().then(async axiosInstance=>{
   await axiosInstance
   .delete(
     `api/vaccinerud/${data.id}`,
     
   )
   .then(function (response) {
+    dispatch(vaccineAddUpdateAction.added());
     console.log("delete response: ", response);
   })
   .catch((error) => {
     console.log("delete failed ", error);
   });
+});
 }
   return (
     <div className='vaccine-dose-wrapper'>

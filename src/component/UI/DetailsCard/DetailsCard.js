@@ -5,15 +5,20 @@ import Plus from "../../Icons/plus.svg";
 import Modal from "../Modal/Modal";
 import moment from "moment";
 import axios from "axios";
-import axiosInstance from '../../../axios'
+import axiosInstance from "../../../axios";
+import getAxiosInstance from "../../../axiosInstance";
+import { useDispatch } from "react-redux";
+import { vaccineAddUpdateAction } from "../../../store/vaccineAddUpdate";
 export default function DetailsCard(props) {
+  let imageUrl = "";
   const fileRef = React.useRef();
-  const TestfileRef = React.useRef();
+  const dispatch = useDispatch();
+  const labelRef = React.useRef();
   const [formData, setFormData] = useState({});
   const [TestformData, setTestFormData] = useState({});
   const [ShowVaccineModal, setShowVaccineModal] = useState(false);
   const [ShowTestDetailModal, setTestDetailsModal] = useState(false);
-  const[mount,setMount]=useState(true);
+  const [mount, setMount] = useState(true);
   const [imgUrl, setimgUrl] = useState();
   useEffect(() => {
     console.log("mounted");
@@ -60,42 +65,45 @@ export default function DetailsCard(props) {
 
     var file = fileRef.current.files[0];
     if (file) {
-     
       var storageRef = storage.ref().child(`Attachments/${file.name}`);
-      
+
       storageRef.put(file).then((snapshot) => {
-        snapshot.ref.getDownloadURL().then(async (url) => {
-          console.log(url);
-          setimgUrl(url)
-        });
-        // console.log('Uploaded a blob or file!');
+        snapshot.ref
+          .getDownloadURL()
+          .then(async (url) => {
+            console.log(url);
+            imageUrl = url;
+          })
+          .then(async () => {
+            getAxiosInstance().then(async (axiosInstance) => {
+              await axiosInstance
+                .post("api/vaccinecreate/", {
+                  vaccine_dose:
+                    labelRef.current.innerHTML === "First Dose"
+                      ? "First"
+                      : "Second",
+                  vaccine_date: formData.Dose_Date,
+                  remarks: formData.Remarks ? formData.Remarks : "No Remarks",
+                  attachments: imageUrl ? imageUrl : "https://firebasestorage.googleapis.com/v0/b/vaccine-9e17d.appspot.com/o/images%2FaddEmployee.png?alt=media&token=ac8c7ac6-773d-44ff-afa0-1aa76ea1d3d7",
+                  name: props.selectedUser.id,
+                })
+                .then(function (response) {
+                  dispatch(vaccineAddUpdateAction.added());
+                  setMount(false);
+                  console.log(response);
+                });
+              setShowVaccineModal(false);
+            });
+          }); // console.log('Uploaded a blob or file!');
       });
-    }else{
-      const url="";
-      setimgUrl(url)
-      console.log(url);
+      // }else{
+      //   const url="";
+      //   imageUrl=url;
+      //   console.log(url);
+      // }
     }
-            await axiosInstance
-              .post("api/vaccinecreate/", {
-                vaccine_dose:
-                  props.userVaccineData && props.userVaccineData.length == 1
-                    ? "Second"
-                    : "First",
-                vaccine_date: formData.Dose_Date,
-                remarks: formData.Remarks?formData.Remarks:"",
-                attachments: {imgUrl},
-                name: props.selectedUser.id,
-              })
-              .then(function (response) {
-                setMount(false);
-                console.log(response);
-              })      
-            setShowVaccineModal(false);
-            
-        }
-      
-    
-  
+  };
+
   // handling test details Form
   const handleTestChange = (e) => {
     setTestFormData((TestformData) => ({
@@ -105,17 +113,20 @@ export default function DetailsCard(props) {
   };
 
   const sendEditRequest = async (data) => {
-    await axiosInstance
-      .post("api/testresultcreate/", {
-        data,
-      })
-      .then(function (response) {
-        setMount(false);
-        console.log("edit response: ", response);
-      })
-      .catch((error) => {
-        console.log("edit failed ", error);
-      });
+    console.log(data);
+    getAxiosInstance().then(async (axiosInstance) => {
+      await axiosInstance
+        .post("api/testresultcreate/", {
+          data,
+        })
+        .then(function (response) {
+          setMount(false);
+          console.log("edit response: ", response);
+        })
+        .catch((error) => {
+          console.log("edit failed ", error);
+        });
+    });
   };
 
   const submitTestData = (e) => {
@@ -182,41 +193,47 @@ export default function DetailsCard(props) {
                 Vaccination Details
               </h3>
               <div className='form_box'>
-                <label className='EmpSetailsText'>
+                <label className='EmpSetailsText' ref={labelRef}>
                   {props.selectedUser &&
                   props.userVaccineData &&
-                  props.userVaccineData.length == 0
+                  props.userVaccineData.length === 0
                     ? "First Dose"
-                    : "Second Dose"}
+                    : props.selectedUser &&
+                      props.userVaccineData &&
+                      props.userVaccineData[0].vaccine_dose === "First"
+                    ? "Second Dose"
+                    : "First Dose"}
                 </label>
 
-                {props.selectedUser &&
-                props.userVaccineData &&
-                props.userVaccineData.length < 1 ? (
+                {props.userVaccineData.length === 0 ? (
                   <input
                     type='date'
                     placeholder='Dose date'
                     name='Dose_Date'
                     required
-                    value= {formData.Dose_Date}
                     className='DetailsinputField'
                     onChange={handleChange}
-                    max={moment().utc().format("YYYY-MM-DD")}
+                    min={moment().utc().format("YYYY-MM-DD")}
+                  />
+                ) : props.userVaccineData[0].vaccine_dose === "First" ? (
+                  <input
+                    type='date'
+                    placeholder='Dose date'
+                    name='Dose_Date'
+                    required
+                    className='DetailsinputField'
+                    onChange={handleChange}
+                    min={props.userVaccineData[0].vaccine_date}
                   />
                 ) : (
-                  // "Second Dose"
                   <input
                     type='date'
                     placeholder='Dose date'
                     name='Dose_Date'
                     required
-                    value= {formData.Dose_Date}
                     className='DetailsinputField'
                     onChange={handleChange}
-                    min={
-                      props.userVaccineData &&
-                      props.userVaccineData[0].vaccine_date
-                    }
+                    max={props.userVaccineData[0].vaccine_date}
                   />
                 )}
               </div>
@@ -231,14 +248,14 @@ export default function DetailsCard(props) {
                 />
               </div>
               <div className='form_box'>
-              <label className='EmpSetailsText'>Attachment:</label>
-              <input
-                type='file'
-                id='myfile'
-                name='myfile'
-                ref={fileRef}
-                onChange={handleChange}></input>
-                </div>
+                <label className='EmpSetailsText'>Attachment:</label>
+                <input
+                  type='file'
+                  id='myfile'
+                  name='myfile'
+                  ref={fileRef}
+                  onChange={handleChange}></input>
+              </div>
               <input type='submit' className='AddButton' value='Add' />
             </form>
           </div>
@@ -279,10 +296,10 @@ export default function DetailsCard(props) {
                   className='DetailsinputField'
                   required
                   onChange={handleTestChange}>
-                  <option value='Negative'  className='DetailsinputField'>
+                  <option value='Negative' className='DetailsinputField'>
                     Negative
                   </option>
-                  <option value='Positive'  className='DetailsinputField'>
+                  <option value='Positive' className='DetailsinputField'>
                     Positive
                   </option>
                 </select>
@@ -299,14 +316,14 @@ export default function DetailsCard(props) {
                 />
               </div>
               <div className='form_box'>
-              <label className='EmpSetailsText'>Attachment:</label>
-              <input
-                type='file'
-                id='myfile'
-                name='myfile'
-                ref={fileRef}
-                onChange={handleTestChange}></input>
-                </div>
+                <label className='EmpSetailsText'>Attachment:</label>
+                <input
+                  type='file'
+                  id='myfile'
+                  name='myfile'
+                  ref={fileRef}
+                  onChange={handleTestChange}></input>
+              </div>
               <input type='submit' className='AddButton' value='Add' />
             </form>
           </div>

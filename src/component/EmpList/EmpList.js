@@ -16,6 +16,8 @@ import VaccineDetails from "../UI/VaccineDetails/VaccineDetails";
 import TestDetails from "../UI/TestDetails/TestDetails";
 import { useSelector } from "react-redux";
 import axiosInstance from "../../axios";
+import getAxiosInstance from "../../axiosInstance";
+// require("../../axiosBkp");
 
 export default function EmpList({ userArray, setUserArray }) {
   const empAddUpdateState = useSelector((state) => state.emp);
@@ -41,23 +43,26 @@ export default function EmpList({ userArray, setUserArray }) {
   };
 
   useEffect(() => {
+  // setTimeout(() => {
     getData();
+  // }, 5000);
+   
+    
   }, [empAddUpdateState]);
 
-  const getData =  () => {
-   // await axios({
-    //   method: "GET",
-    //   url: "http://lulu.transituae.net/api/emplist/",
-    //   headers: {
-    //     Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-    //   },
-    // })
-     axiosInstance
-    .get("api/emplist/")
+  const getData = async () => {
+
+    getAxiosInstance().then(async axiosInstance=>{
+
+      await axiosInstance
+      .get("api/emplist/")
       .then((res) => {
         setUserArray(res.data);
       })
       .catch((err) => console.error(err));
+      
+    });
+
   };
 
   const clickHandler = (item) => {
@@ -91,7 +96,8 @@ export default function EmpList({ userArray, setUserArray }) {
       () => {
         storageRef.snapshot.ref.getDownloadURL().then(async (url) => {
           console.log(url);
-          const res = await axiosInstance
+          getAxiosInstance().then(async axiosInstance=>{
+       await axiosInstance
             .post("api/vaccinecreate/", {
               vaccine_dose: "first",
               vaccine_date: formData.First_Dose,
@@ -105,7 +111,7 @@ export default function EmpList({ userArray, setUserArray }) {
             .catch((error) => {
               console.log(error);
             });
-
+          });
           formData.username = "";
           formData.PhoneNumber = "";
           formData.EmiratesId = "";
@@ -117,6 +123,7 @@ export default function EmpList({ userArray, setUserArray }) {
 
   const deleteEmpHandler = async (data) => {
     console.log(data.id);
+    getAxiosInstance().then(async axiosInstance=>{
     await axiosInstance
       .delete(`api/emprud/${data.id}`)
       .then(function (response) {
@@ -126,22 +133,28 @@ export default function EmpList({ userArray, setUserArray }) {
         throw error;
         console.log("delete failed ", error);
       });
+    });
   };
   return (
     <div>
       {userArray &&
         userArray.map((item) => (
           <EmpCard key={item.emiratesID}>
-            <div className="empcard__textwrapper">
-              <h3 className="emplist__name"> {item.name}</h3>
-              <h3 className="emplist__eid">{item.emiratesID}</h3>
+            <div className='empcard__textwrapper'>
+              <h3 className='emplist__name'> {item.name}</h3>
+              <h3 className='emplist__eid'>{item.emiratesID}</h3>
             </div>
-            <div className="empcard__imagewrapper">
-              <img className="reporticon scale" src={report} alt=""  onClick={() => clickHandler(item)}/>
+            <div className='empcard__imagewrapper'>
               <img
-                className="deleteicon scale"
+                className='reporticon scale'
+                src={report}
+                alt=''
+                onClick={() => clickHandler(item)}
+              />
+              <img
+                className='deleteicon scale'
                 src={deleteIcon}
-                alt=""
+                alt=''
                 onClick={() => deleteEmpHandler(item)}
               />
             </div>
@@ -149,13 +162,13 @@ export default function EmpList({ userArray, setUserArray }) {
         ))}
       {showModal ? (
         <Modal onClick={clickHandler}>
-          <div className="EmpDetailsWrap">
-            <img className={"imgCard"} src={selectedUser.Avatar} alt="" />
+          <div className='EmpDetailsWrap'>
+            <img className={"imgCard"} src={selectedUser.Avatar} alt='' />
             <div>
-              <h3 className="emplist__name emplist--white">
+              <h3 className='emplist__name emplist--white'>
                 {selectedUser.name}
               </h3>
-              <h3 className="emplist__eid emplist--white">
+              <h3 className='emplist__eid emplist--white'>
                 {selectedUser.emiratesID}
               </h3>
             </div>
@@ -164,8 +177,8 @@ export default function EmpList({ userArray, setUserArray }) {
           {/* Emp Vaccination Details */}
           <DetailsCard
             selectedUser={selectedUser}
-            detailType="Vaccination Details"
-            type="VaccinationDetails"
+            detailType='Vaccination Details'
+            type='VaccinationDetails'
             userVaccineData={userVaccineData}
             // resetSelectedUser={resetSelectedUser}
           >
@@ -177,11 +190,10 @@ export default function EmpList({ userArray, setUserArray }) {
           </DetailsCard>
 
           <DetailsCard
-            detailType="COVID Test Details"
-            type="TestDetails"
-            selectedUser={selectedUser}
-          >
-            <div className="scrollable">
+            detailType='COVID Test Details'
+            type='TestDetails'
+            selectedUser={selectedUser}>
+            <div className='scrollable'>
               <TestDetails selectedUser={selectedUser} />
             </div>
           </DetailsCard>

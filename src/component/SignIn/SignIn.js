@@ -3,16 +3,23 @@ import "./SignIn.css";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "../../axios";
 import { isAuth } from "../../store/isAuthenticated";
+import {authToken} from "../../store/token";
 import { useHistory } from "react-router-dom";
 
 export default function SignIn() {
   const history = useHistory();
   const auth = useSelector((state) => state.isAuth);
   const dispatch = useDispatch();
+ 
+ 
   const [loginStatus, setLoginStatus] = useState(null);
   const [mount, setMount] = useState(false);
 
   useLayoutEffect(() => {
+    if (localStorage.getItem("access_token")) {  
+      dispatch(isAuth());
+      history.replace('/');
+      }
     if (auth.isAuth === true) {
       setLoginStatus(<h3>Login Success !!!</h3>);
       setTimeout(() => {
@@ -24,7 +31,7 @@ export default function SignIn() {
     };
   }, [mount]);
 
-  const getToken = (event) => {
+  const getToken =async (event) => {
     event.preventDefault();
     setLoginStatus(<div className='loader'></div>);
     const credentials = {
@@ -32,15 +39,15 @@ export default function SignIn() {
       password: event.target[1].value,
     };
     const url = "/api/token/";
-    axios.post(url, credentials, { timeout: 5000 }).then(
-      (response) => {
+  axios.post(url, credentials).then(
+     (response)  => {
         console.log("login response", response.data);
-        localStorage.setItem("access_token", response.data.access);
-        localStorage.setItem("refresh_token", response.data.refresh);
-        setTimeout(() => {
-          dispatch(isAuth());
-          setMount(true);
-        }, 5000);
+        dispatch(authToken(response.data));
+       localStorage.setItem("access_token", response.data.access);
+       localStorage.setItem("refresh_token", response.data.refresh);
+
+       dispatch(isAuth());
+       setMount(true);
       },
       (error) => {
         try {
@@ -63,7 +70,7 @@ export default function SignIn() {
       <div className='container'>
         <h1>Welcome</h1>
 
-        <form className="SignINform "onSubmit={getToken} method='post'>
+        <form className='SignINform ' onSubmit={getToken} method='post'>
           <input
             name='username'
             type='text'
@@ -81,7 +88,9 @@ export default function SignIn() {
             required
             className='SignINinput '
           />
-          <button type='submit'className="SignINbutton">Login</button>
+          <button type='submit' className='SignINbutton'>
+            Login
+          </button>
         </form>
         {loginStatus ? loginStatus : null}
       </div>

@@ -8,6 +8,7 @@ import DownloadSVG from "../../Icons/download.svg";
 import EditSVG from "../../Icons/edit.svg";
 import CancelSVG from "../../Icons/cancel.svg";
 import axiosInstance from '../../../axios'
+import getAxiosInstance from "../../../axiosInstance";
 export default function VaccineDetails({ selectedUser }) {
   const fileRef = React.useRef();
   const [editModalStatus, setEditModalStatus] = useState(false);
@@ -19,6 +20,7 @@ export default function VaccineDetails({ selectedUser }) {
   const[mount,setMount]=useState(true);
   // useEffect to fetch Vaccination Database
   useEffect(() => {
+    getAxiosInstance().then(async axiosInstance=>{
     axiosInstance
       .get(`api/testresultlist/${selectedUser.id}`)
       .then((response) => {
@@ -26,6 +28,7 @@ export default function VaccineDetails({ selectedUser }) {
         setUserTestDetails(response.data);
       })
       .catch((err) => console.error(err));
+    });
   }, [selectedUser,mount]);
   // handleChange Event
   const handleChange = (e) => {
@@ -44,6 +47,7 @@ export default function VaccineDetails({ selectedUser }) {
   };
 
   const sendEditRequest = async (data) => {
+    getAxiosInstance().then(async axiosInstance=>{
     await axiosInstance
       .put(
         `api/testresultrud/${selectedTest.id}`,
@@ -54,6 +58,7 @@ export default function VaccineDetails({ selectedUser }) {
       })
       .catch((error) => {
         console.log("edit failed ", error);
+      });
       });
   };
   // function edit
@@ -109,6 +114,7 @@ export default function VaccineDetails({ selectedUser }) {
 const deleteTestData=async(data)=>{
  setMount(true);
   console.log(data);
+  getAxiosInstance().then(async axiosInstance=>{
   await axiosInstance
   .delete(
     `api/testresultrud/${data.id}`,
@@ -119,6 +125,7 @@ const deleteTestData=async(data)=>{
   })
   .catch((error) => {
     console.log("delete failed ", error);
+  });
   });
 }
   return (

@@ -1,11 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
 import empAddUpdateSlice from "./empAddUpdate";
+import vaccineAddUpdateSlice from "./vaccineAddUpdate";
 import isAuthenticated from "./isAuthenticated";
+import _authToken from "./token";
 
 const store = configureStore({
   reducer: {
+    vaccine:vaccineAddUpdateSlice,
     emp: empAddUpdateSlice,
     isAuth: isAuthenticated,
+    authToken: _authToken,
   },
 });
 
