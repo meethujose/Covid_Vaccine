@@ -1,12 +1,10 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import "./Register.css";
-import db, { storage } from "../../Data/FirebaseConfig";
+import { storage } from "../../Data/FirebaseConfig";
 import user from "../Images/user.png";
 import ReactCrop from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
-import Model from "../UI/Modal/Modal";
-import axios from "axios";
-import { useSelector, useDispatch } from "react-redux";
+import {useDispatch } from "react-redux";
 import { empAddUpdateAction } from "../../store/empAddUpdate";
 import axiosInstance from "../../axios";
 import getAxiosInstance from "../../axiosInstance";
@@ -68,8 +66,7 @@ export default function Register({ setShowModal }) {
             await  axiosInstance
             .post("api/empcreate/", {
              name: formData.username,
-             emiratesID: formData.EmiratesId,
-           
+             emiratesID: formData.EmiratesId,         
              avatarURL:imageUrl?imageUrl: "https://firebasestorage.googleapis.com/v0/b/vaccine-9e17d.appspot.com/o/images%2FaddEmployee.png?alt=media&token=ac8c7ac6-773d-44ff-afa0-1aa76ea1d3d7",
      
            })
@@ -84,7 +81,7 @@ export default function Register({ setShowModal }) {
          });
 
         })
-        // console.log('Uploaded a blob or file!');
+      
       });
     
   
@@ -208,7 +205,7 @@ export default function Register({ setShowModal }) {
               placeholder='Name'
               name='username'
               required
-              className='inputField'
+              className='reginputField'
               onChange={handleChange}
             />
           </div>
@@ -219,7 +216,7 @@ export default function Register({ setShowModal }) {
               placeholder='Phone Number'
               name='PhoneNumber'
               required
-              className='inputField'
+              className='reginputField'
               onChange={handleChange}
             />
           </div>
@@ -230,7 +227,7 @@ export default function Register({ setShowModal }) {
               placeholder='Emirates Id'
               name='EmiratesId'
               required
-              className='inputField'
+              className='reginputField'
               onChange={(e) => {
                 EidChangeHandler(e);
                 handleChange(e);

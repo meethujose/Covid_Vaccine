@@ -1,16 +1,17 @@
-import React, { useState, useEffect, useRef } from "react";
-import db, { storage } from "../../../Data/FirebaseConfig";
+import React, { useState, useEffect, useRef} from "react";
+import { storage } from "../../../Data/FirebaseConfig";
 import "./DetailsCard.css";
 import Plus from "../../Icons/plus.svg";
 import Modal from "../Modal/Modal";
 import moment from "moment";
-import axios from "axios";
 import axiosInstance from "../../../axios";
 import getAxiosInstance from "../../../axiosInstance";
 import { useDispatch } from "react-redux";
 import { vaccineAddUpdateAction } from "../../../store/vaccineAddUpdate";
+import { testAddUpdateAction } from "../../../store/testResult";
 export default function DetailsCard(props) {
   let imageUrl = "";
+  let testfileUrl="";
   const fileRef = React.useRef();
   const dispatch = useDispatch();
   const labelRef = React.useRef();
@@ -57,52 +58,46 @@ export default function DetailsCard(props) {
       [e.target.name]: e.target.value,
     }));
   };
-  // submit
-  const submitData = async (e) => {
-    setMount(true);
+  // vaccine Details
+  const submitData  = async (e) => {
     e.preventDefault();
-    // attachment upload
-
     var file = fileRef.current.files[0];
-    if (file) {
-      var storageRef = storage.ref().child(`Attachments/${file.name}`);
-
-      storageRef.put(file).then((snapshot) => {
-        snapshot.ref
-          .getDownloadURL()
-          .then(async (url) => {
-            console.log(url);
-            imageUrl = url;
-          })
-          .then(async () => {
-            getAxiosInstance().then(async (axiosInstance) => {
-              await axiosInstance
-                .post("api/vaccinecreate/", {
-                  vaccine_dose:
-                    labelRef.current.innerHTML === "First Dose"
-                      ? "First"
-                      : "Second",
-                  vaccine_date: formData.Dose_Date,
-                  remarks: formData.Remarks ? formData.Remarks : "No Remarks",
-                  attachments: imageUrl ? imageUrl : "https://firebasestorage.googleapis.com/v0/b/vaccine-9e17d.appspot.com/o/images%2FaddEmployee.png?alt=media&token=ac8c7ac6-773d-44ff-afa0-1aa76ea1d3d7",
-                  name: props.selectedUser.id,
-                })
-                .then(function (response) {
-                  dispatch(vaccineAddUpdateAction.added());
-                  setMount(false);
-                  console.log(response);
-                });
-              setShowVaccineModal(false);
-            });
-          }); // console.log('Uploaded a blob or file!');
+    var storageRef = storage.ref().child(`Attachments/${props.selectedUser.id}`);
+    storageRef.put(file).then((snapshot) => {
+        snapshot.ref.getDownloadURL().then(async (url) => {
+          testfileUrl=url;
+  
+        }).then(async()=>{
+          getAxiosInstance().then(async axiosInstance=>{
+            await  axiosInstance
+            .post("api/vaccinecreate/", {
+              vaccine_dose:
+              labelRef.current.innerHTML === "First Dose"
+                ? "First"
+                : "Second",
+            vaccine_date: formData.Dose_Date,
+            remarks: formData.Remarks ? formData.Remarks : "No Remarks",
+            attachments: imageUrl ? imageUrl : "https://firebasestorage.googleapis.com/v0/b/vaccine-9e17d.appspot.com/o/images%2FaddEmployee.png?alt=media&token=ac8c7ac6-773d-44ff-afa0-1aa76ea1d3d7",
+            name: props.selectedUser.id,
+           })
+           .then(function (response) {
+            dispatch(vaccineAddUpdateAction.added());
+             console.log(response);
+             formData.Dose_Date = "";
+             formData.Remarks= "";
+          
+             setShowVaccineModal(false);
+           });
+         });
+        })
       });
-      // }else{
-      //   const url="";
-      //   imageUrl=url;
-      //   console.log(url);
-      // }
-    }
   };
+
+
+
+
+
+
 
   // handling test details Form
   const handleTestChange = (e) => {
@@ -112,63 +107,36 @@ export default function DetailsCard(props) {
     }));
   };
 
-  const sendEditRequest = async (data) => {
-    console.log(data);
-    getAxiosInstance().then(async (axiosInstance) => {
-      await axiosInstance
-        .post("api/testresultcreate/", {
-          data,
-        })
-        .then(function (response) {
-          setMount(false);
-          console.log("edit response: ", response);
-        })
-        .catch((error) => {
-          console.log("edit failed ", error);
-        });
+const submitTestData = async (e) => {
+  e.preventDefault();
+  var Testfile = fileRef.current.files[0];
+  var storageRef = storage.ref().child(`TestResult/${props.selectedUser.id}`);
+  storageRef.put(Testfile).then((snapshot) => {
+      snapshot.ref.getDownloadURL().then(async (url) => {
+        testfileUrl=url;
+
+      }).then(async()=>{
+        getAxiosInstance().then(async axiosInstance=>{
+          await  axiosInstance
+          .post("api/testresultcreate/", {
+            test_date: TestformData.Test_Date,
+                            test_result: TestformData.Result,
+                            remarks: TestformData.Remarks? TestformData.Remarks:"No Remarks added",
+                            attachments: testfileUrl? testfileUrl: "",
+                            name: props.selectedUser.id,
+         })
+         .then(function (response) {
+          dispatch(testAddUpdateAction.added());
+           console.log(response);
+           TestformData.Result = "";
+           TestformData.Remarks= "";
+           TestformData.Test_Date = "";
+           setTestDetailsModal(false);
+         });
+       });
+      })
     });
-  };
-
-  const submitTestData = (e) => {
-    e.preventDefault();
-    console.log("testresult", fileRef.current.files[0]);
-    if (fileRef.current && fileRef.current.files[0]) {
-      var Testfile = fileRef.current.files[0];
-      var storageRef = storage
-        .ref()
-        .child(`TestResult/${Testfile.name}`)
-        .put(Testfile);
-      storageRef.on(
-        "state_changed",
-        (snapshot) => {},
-        (error) => {
-          console.log(error);
-        },
-        () => {
-          storageRef.snapshot.ref.getDownloadURL().then(async (url) => {
-            console.log(url);
-            const data = {
-              test_date: TestformData.Test_Date,
-              test_result: TestformData.Result,
-              remarks: TestformData.Remarks,
-              attachments: url,
-              name: props.selectedUser.id,
-            };
-          });
-        }
-      );
-    } else {
-      const data = {
-        test_date: TestformData.Test_Date,
-        test_result: TestformData.Result,
-        remarks: TestformData.Remarks,
-        attachments: "",
-        name: props.selectedUser.id,
-      };
-      sendEditRequest(data);
-    }
-  };
-
+};
   return (
     <div className='detail-card'>
       <div className='detail-card-header'>
@@ -277,7 +245,7 @@ export default function DetailsCard(props) {
                   required
                   className='DetailsinputField'
                   onChange={handleTestChange}
-                  max={moment().utc().format("YYYY-MM-DD")}
+                  min={moment().utc().format("YYYY-MM-DD")}
                 />
               </div>
               <div className='form_box'>
@@ -310,7 +278,6 @@ export default function DetailsCard(props) {
                   type='text'
                   placeholder='Remarks'
                   name='Remarks'
-                  required
                   className='DetailsinputField'
                   onChange={handleTestChange}
                 />

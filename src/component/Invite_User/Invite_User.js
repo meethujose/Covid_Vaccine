@@ -26,13 +26,6 @@ export default function Invite_User() {
          
            });
          });
-
-   
-        // console.log('Uploaded a blob or file!');
-    
-    
-  
-   
   };
     return (
         <div className='inviteUserForm'>

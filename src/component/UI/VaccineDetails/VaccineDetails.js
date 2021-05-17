@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import db, { storage } from "../../../Data/FirebaseConfig";
+import { storage } from "../../../Data/FirebaseConfig";
 import "./VaccineDetails.css";
 import DownloadSVG from "../../Icons/download.svg";
 import EditSVG from "../../Icons/edit.svg";
 import CancelSVG from "../../Icons/cancel.svg";
 import Modal from "../Modal/Modal";
 import moment from "moment";
-import axios from "axios";
+
 import axiosInstance from '../../../axios'
 import getAxiosInstance from "../../../axiosInstance";
 import { useSelector,useDispatch } from "react-redux";
@@ -15,7 +15,7 @@ export default function VaccineDetails({
   selectedUser,
   userVaccineData,
   setUserVaccineData,
-  resetSelectedUser,
+
 }) {
   const fileRef = React.useRef();
   const dispatch = useDispatch();
@@ -130,8 +130,6 @@ export default function VaccineDetails({
     axiosInstance
       .get(`api/vaccinelist/${selectedUser.id}`)
       .then((response) => {
-       
-        // setUserArray(response.data);
         setUserVaccineData(response.data);
       })
       .catch((err) => console.error(err));
@@ -141,7 +139,6 @@ export default function VaccineDetails({
   // delete Vaccine details
 const deleteVaccineData=async(data)=>{
   setMount(true);
-  // setSelectedVaccine(data);
   console.log(data);
   getAxiosInstance().then(async axiosInstance=>{
   await axiosInstance

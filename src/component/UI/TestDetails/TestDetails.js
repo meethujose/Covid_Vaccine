@@ -9,11 +9,15 @@ import EditSVG from "../../Icons/edit.svg";
 import CancelSVG from "../../Icons/cancel.svg";
 import axiosInstance from '../../../axios'
 import getAxiosInstance from "../../../axiosInstance";
+import { useSelector,useDispatch } from "react-redux";
+import {testAddUpdateAction} from "../../../store/testResult";
 export default function VaccineDetails({ selectedUser }) {
   const fileRef = React.useRef();
+  const dispatch = useDispatch();
+  const testResultAddUpdateState = useSelector((state) => state.testResult);
   const [editModalStatus, setEditModalStatus] = useState(false);
   const [userTestDetails, setUserTestDetails] = useState([]);
-  const [ShowVaccineModal, setShowVaccineModal] = useState(false);
+  const [ShowTestResultModal, setShowTestResultModal] = useState(false);
   const [selectedTest, setSelectedTest] = useState({});
   const [formData, setFormData] = useState({});
   const [result, setResult] = useState();
@@ -29,7 +33,7 @@ export default function VaccineDetails({ selectedUser }) {
       })
       .catch((err) => console.error(err));
     });
-  }, [selectedUser,mount]);
+  }, [selectedUser,mount,testResultAddUpdateState]);
   // handleChange Event
   const handleChange = (e) => {
     setFormData((formData) => ({
@@ -92,7 +96,7 @@ export default function VaccineDetails({ selectedUser }) {
             formData.First_Dose = "";
             formData.Remarks = "";
 
-            setShowVaccineModal(false);
+            setShowTestResultModal(false);
           });
         }
       );
@@ -154,7 +158,6 @@ const deleteTestData=async(data)=>{
             />
           </div>
         ))}
-      {/* Edit vaccine details */}
       {editModalStatus ? (
         <Modal onClick={editModalHandler}>
           <div className='vaccine'>
@@ -166,11 +169,12 @@ const deleteTestData=async(data)=>{
                   type='date'
                   placeholder='Test_Date'
                   name='Test_Date'
-                  defaultValue={selectedTest.Test_Date}
+                  defaultValue={selectedTest.test_date}
                   required
                   className='EditTestinputField '
                   onChange={handleChange}
-                  max={moment().utc().format("YYYY-MM-DD")}
+                 
+                
                 />
               </div>
               <div className='form_box'>
@@ -179,6 +183,7 @@ const deleteTestData=async(data)=>{
                   id='Result'
                   name='Result'
                   value={result}
+                  defaultValue={selectedTest.test_result}
                   className='EditTestinputField '
                   required
                   onChange={(e) => setResult(e.target.value)}>
@@ -195,10 +200,10 @@ const deleteTestData=async(data)=>{
                 <input
                   type='text'
                   placeholder='Remarks'
-                  name='Remarks'
-                  required
+                  name='Remarks'                
                   className='EditTestinputField '
                   onChange={handleChange}
+                  defaultValue={selectedTest.remarks}
                 />
               </div>
               <div className='form_box'>

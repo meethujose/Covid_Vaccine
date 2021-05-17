@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from 'axios';
 import axiosInstance from '../../../axios'
 import { empAddUpdateAction } from "../../../store/empAddUpdate";
+import getAxiosInstance from "../../../axiosInstance";
 // var filteredElements = [];
 export default function Search({ userArray, setUserArray, setMount }) {
   
@@ -30,6 +31,7 @@ export default function Search({ userArray, setUserArray, setMount }) {
         cancelToken.cancel("Cancelled");
       }
       cancelToken = axios.CancelToken.source();
+      getAxiosInstance().then(async axiosInstance=>{
       axiosInstance({
         method: "GET",
         url: `/api/emplist/?search=${searchTerm}`,
@@ -37,6 +39,7 @@ export default function Search({ userArray, setUserArray, setMount }) {
       }).then((res) => {
         setUserArray(res.data);
       });
+    });
     }
   };
   return (
