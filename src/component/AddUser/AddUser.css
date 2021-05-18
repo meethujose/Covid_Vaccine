@@ -1,34 +1,183 @@
 .AddUser {
   z-index: 0;
 }
-.icon {
-  width: 40px;
-  height: 40px;
-  float: right;
-  margin-right: 50px;
-  margin-top: 40px;
 
-  filter: invert(100%) sepia(100%) saturate(2%) hue-rotate(82deg)
-    brightness(102%) contrast(101%);
-}
 .logouticon {
   width: 30px;
   height: 30px;
   float: right;
   margin-right: 70px;
-  margin-top: 45px;
+  margin-top: 50px;
 
-  filter: invert(100%) sepia(100%) saturate(2%) hue-rotate(82deg)
-    brightness(102%) contrast(101%);
 }
 .settingsicon {
-  width: 40px;
-  height: 40px;
+  width: 25px;
+  height: 25px;
   float: left;
  
-  margin-top: 45px;
+  margin-top: 50px;
   margin-left: 70px;
   filter: invert(100%) sepia(100%) saturate(2%) hue-rotate(82deg)
     brightness(102%) contrast(101%);
 }
 
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+/* dropdown */
+.profile-dropdown {
+  display: inline-block;
+  position: relative;
+  background:none;
+  margin: auto;
+  font-weight: bold;
+  font-size: 1.3rem;
+
+  -webkit-user-select: none;
+  /* Chrome all / Safari all */
+  -moz-user-select: none;
+  /* Firefox all */
+  -ms-user-select: none;
+  /* IE 10+ */
+  user-select: none;
+  /* Likely future */
+}
+.profile-dropdown * {
+  -webkit-user-select: none;
+  /* Chrome all / Safari all */
+  -moz-user-select: none;
+  /* Firefox all */
+  -ms-user-select: none;
+  /* IE 10+ */
+  user-select: none;
+  /* Likely future */
+}
+.profile-dropdown input[type=checkbox] {
+  display: none;
+}
+.profile-dropdown input[type=checkbox]:checked ~ ul {
+  display: block;
+  animation: pulse 0.5s;
+}
+.profile-dropdown input[type=checkbox]:checked ~ img {
+  background:none;
+}
+.profile-dropdown input[type=checkbox]:checked ~ label {
+  background:none;
+}
+.profile-dropdown input[type=checkbox]:checked ~ label i {
+  color: #f2f2f2;
+}
+.profile-dropdown input[type=checkbox]:checked ~ label:after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  right: calc(50% - 10px);
+  display: block;
+  border-style: solid;
+  border-width: 7px 10px 0 10px;
+  border-color: orange transparent transparent transparent;
+  width: 0;
+  height: 0;
+}
+.profile-dropdown img {
+  display: inline-block;
+  background: none;
+  height: 1.8rem;
+  vertical-align: middle;
+  margin-right: 50px;
+  margin-top: 0px;
+  filter: invert(100%) sepia(100%) saturate(2%) hue-rotate(82deg)
+    brightness(102%) contrast(101%);
+  
+}
+.profile-dropdown span {
+  display: inline-block;
+  vertical-align: sub;
+  width: 125px;
+  margin-right: 2rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.profile-dropdown ul {
+  display: none;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  margin-top: 20px;
+  background: #fff;
+  position: absolute;
+  top: 100%;
+  right: 30px;
+  width: 130px;
+  border-radius: 3px;
+}
+
+.profile-dropdown ul li a {
+  display: block;
+  padding: 0.75rem 1rem;
+  text-decoration: none;
+  color: #737373;
+  font-size: 1rem;
+ 
+}
+.profile-dropdown ul li a i {
+  font-size: 1.3rem;
+  vertical-align: middle;
+  margin: 0 0.75rem 0 -0.25rem;
+}
+.profile-dropdown ul li a:hover {
+  background: #e5e5e5;
+}
+.profile-dropdown ul li:first-child a:hover {
+  border-radius: 3px 3px 0 0;
+}
+.profile-dropdown ul li:last-child a:hover {
+  border-radius: 0 0 3px 3px;
+}
+.profile-dropdown > label {
+  position: relative;
+  height: 3.5rem;
+  display: block;
+  text-decoration: none;
+  background: transparent;
+
+  box-sizing: border-box;
+  padding: 0.9rem;
+  float: right;
+  border-radius: 0 3px 3px 0;
+}
+.profile-dropdown > label i {
+  color: #b2b2b2;
+  font-size: 1.75rem;
+}
+.profile-dropdown:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+p.subtitle {
+  color: rgba(0, 0, 0, 0.5);
+  font-weight: bold;
+  text-align: center;
+  margin: 0.5rem 0 2rem;
+  letter-spacing: 0.1rem;
+}
+.avataricon {
+  width:30px;
+  height:30px;
+  border-width:0px;
+  border-style:solid;
+  border-radius:800px;
+  overflow:hidden;
+ 
+   
+}

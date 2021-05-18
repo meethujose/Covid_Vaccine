@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useRef} from "react";
+import React, { useState} from "react";
 import { storage } from "../../../Data/FirebaseConfig";
 import "./DetailsCard.css";
 import Plus from "../../Icons/plus.svg";
 import Modal from "../Modal/Modal";
 import moment from "moment";
-import axiosInstance from "../../../axios";
 import getAxiosInstance from "../../../axiosInstance";
 import { useDispatch } from "react-redux";
 import { vaccineAddUpdateAction } from "../../../store/vaccineAddUpdate";
@@ -19,13 +18,9 @@ export default function DetailsCard(props) {
   const [TestformData, setTestFormData] = useState({});
   const [ShowVaccineModal, setShowVaccineModal] = useState(false);
   const [ShowTestDetailModal, setTestDetailsModal] = useState(false);
-  const [mount, setMount] = useState(true);
-  const [imgUrl, setimgUrl] = useState();
-  useEffect(() => {
-    console.log("mounted");
-  }, [mount]);
-  // console.log("date", props.userVaccineData && props.userVaccineData.date);
-  // click Handler to Show Modal to Edit  vaccine details
+  
+  
+
   const DetailsCardHandler = () => {
     switch (props.type) {
       case "VaccinationDetails": {

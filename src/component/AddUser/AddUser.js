@@ -1,59 +1,77 @@
 import React, { useState } from "react";
 import "./AddUser.css";
-import Modal from "../../component/UI/Modal/Modal";
-import Register from "../Register/Register";
-import AddIcon from "../Icons/AddUser.svg";
+
+
 import userIcon from "../Icons/uprofile.svg";
-import SettingsIcon from "../Icons/settings.svg";
+import SettingsIcon from "../Icons/gear.svg";
 import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
 import { isAuth } from "../../store/isAuthenticated";
-import Invite_User from "../Invite_User/Invite_User";
+import { useHistory } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 // test add user
 export default function AddUser() {
-  const [showModal, setShowModal] = useState(false);
-  const [showInviteUserModal, setShowInviteUserModal] = useState(false);
+  const userAvatar=localStorage.getItem('avatar');
   
+  const Admin = localStorage.getItem("user_group") === "admin";
   const dispatch = useDispatch();
-  const clickHandler = () => {
-    const tempShowModal = showModal;
-    setShowModal(!tempShowModal);
-  };
-  const invite_UserHandler = () => {
-    setShowInviteUserModal(!showInviteUserModal);
-  };
+  const history = useHistory();
+ 
+
   const setLogout = () => {
     dispatch(isAuth());
     localStorage.clear();
     // history.replace("/login");
   };
-
+  const settingsHandler = () => {
+    history.push("/Settings");
+  };
   return (
-    <div className="AddUser">
-      <img
-          className="settingsicon"
-          src={SettingsIcon}
-          onClick={invite_UserHandler} 
-        alt=""/>
-            {showInviteUserModal ? (
-        <Modal onClick={invite_UserHandler}className="wrapper">
-          <Invite_User setShowInviteUserModal={setShowInviteUserModal} />
-        </Modal>
-      ) : null}
-      <div>
+    <div className='AddUser'>
+      {Admin ? (
         <img
-          className="logouticon"
-          src={userIcon}
-          onClick={() => setLogout()}
-        alt=""/>
-                     
-        <img className="icon" src={AddIcon} onClick={clickHandler} alt=""/>
-      </div>
-      {showModal ? (
-        <Modal onClick={clickHandler}className="wrapper">
-          <Register setShowModal={setShowModal} />
-        </Modal>
+          className='settingsicon'
+          src={SettingsIcon}
+          onClick={settingsHandler}
+          alt=''
+          title='Invite User'
+          data-toggle='tooltip'
+          data-placement='bottom'
+        />
       ) : null}
+
+      <div>
+        {/* <img
+          className='logouticon'
+          src={userIcon}
+          // onClick={() => setLogout()}
+          alt=''
+        /> */}
+        <div className='logouticon'>
+          <div>
+            <div>
+              <label for='profile2' class='profile-dropdown'>
+                <input type='checkbox' id='profile2' />
+                <img className="avataricon"src={userAvatar}alt="" />
+
+                <ul>
+                  <li>
+                    <a href='#'>
+                      <i className='mdi mdi-settings'></i>Settings
+                    </a>
+                  </li>
+                  <li>
+                    <a href='#' onClick={() => setLogout()}>
+                      <i className='mdi mdi-logout'></i>Logout
+                    </a>
+                  </li>
+                </ul>
+              </label>
+            </div>
+          </div>
+        </div>
+       
+      </div>
+   
     </div>
   );
 }

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useHistory, useParams } from "react-router-dom";
+import {useParams } from "react-router-dom";
 import "./SignUp.css";
 import axios from '../../axios'
-import { Redirect, Route } from "react-router";
+
 
 export default function SignUp() {
   const string = useParams().string
@@ -28,7 +28,7 @@ export default function SignUp() {
                 // handle error
                 console.log(error);
               })
-  },[]);
+  });
   const passwordHandler = (event) => {
     console.log(event.target.value)
     setPassword(event.target.value)

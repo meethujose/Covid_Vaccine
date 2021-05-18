@@ -1,54 +1,26 @@
 import React, { useState, useEffect } from "react";
-import db, { storage } from "../../Data/FirebaseConfig";
-import axios from "axios";
 import EmpCard from "../UI/EmpCard/EmpCard";
 import DetailsCard from "../UI/DetailsCard/DetailsCard";
-import Moment from "moment";
 import Modal from "../UI/Modal/Modal";
 import "./Emplist.css";
-import { Link } from "react-router-dom";
-import Plus from "../Icons/plus.svg";
 import report from "../Icons/report.svg";
 import deleteIcon from "../Icons/delete.svg";
-import Register from "../Register/Register";
-import moment from "moment";
 import VaccineDetails from "../UI/VaccineDetails/VaccineDetails";
 import TestDetails from "../UI/TestDetails/TestDetails";
 import { useSelector } from "react-redux";
-import axiosInstance from "../../axios";
 import getAxiosInstance from "../../axiosInstance";
-// require("../../axiosBkp");
 
 export default function EmpList({ userArray, setUserArray }) {
   const empAddUpdateState = useSelector((state) => state.emp);
-  const fileRef = React.useRef();
   const [selectedUser, setSelectedUser] = useState({});
   const [showModal, setShowModal] = useState(false);
-  const [formData, setFormData] = useState({});
-  const [showVaccineModal, setShowVaccineModal] = useState(false);
   const [userVaccineData, setUserVaccineData] = useState([]);
-  const [vaccineStatus, setVaccineStatus] = useState(<h3>Loading...</h3>);
-  const [status, setStatus] = useState(true);
 
-  const clickPlusHandler = () => {
-    const tempVaccineShowModal = showVaccineModal;
-    setShowVaccineModal(!tempVaccineShowModal);
-  };
-
-  /**
-   * reset selected user
-   */
-  const resetSelectedUser = () => {
-    setSelectedUser({});
-  };
 
   useEffect(() => {
-  // setTimeout(() => {
-    getData();
-  // }, 5000);
-   
-    
-  }, [empAddUpdateState]);
+ 
+   getData();    
+  },[empAddUpdateState]);
 
   const getData = async () => {
 
@@ -72,55 +44,6 @@ export default function EmpList({ userArray, setUserArray }) {
     setShowModal(!tempShowModal);
   };
 
-  const handleChange = (e) => {
-    setFormData((formData) => ({
-      ...formData,
-      [e.target.name]: e.target.value,
-    }));
-  };
-  // submit data
-  const submitData = async (e) => {
-    e.preventDefault();
-    //image upload
-
-    console.log("clicked");
-    var file = fileRef.current.files[0];
-    var storageRef = storage.ref().child(`Attachments/${file.name}`).put(file);
-
-    storageRef.on(
-      "state_changed",
-      (snapshot) => {},
-      (error) => {
-        console.log(error);
-      },
-      () => {
-        storageRef.snapshot.ref.getDownloadURL().then(async (url) => {
-          console.log(url);
-          getAxiosInstance().then(async axiosInstance=>{
-       await axiosInstance
-            .post("api/vaccinecreate/", {
-              vaccine_dose: "first",
-              vaccine_date: formData.First_Dose,
-              remarks: formData.Remarks,
-              attachments: url,
-              name: selectedUser.id,
-            })
-            .then(function (response) {
-              console.log(response);
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-          });
-          formData.username = "";
-          formData.PhoneNumber = "";
-          formData.EmiratesId = "";
-          setShowModal(false);
-        });
-      }
-    );
-  };
-
   const deleteEmpHandler = async (data) => {
     console.log(data.id);
     getAxiosInstance().then(async axiosInstance=>{
@@ -131,7 +54,7 @@ export default function EmpList({ userArray, setUserArray }) {
       })
       .catch((error) => {
         throw error;
-        console.log("delete failed ", error);
+     
       });
     });
   };

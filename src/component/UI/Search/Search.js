@@ -1,27 +1,15 @@
 import React from "react";
 import "./Search.css";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch} from "react-redux";
 import axios from 'axios';
-import axiosInstance from '../../../axios'
 import { empAddUpdateAction } from "../../../store/empAddUpdate";
 import getAxiosInstance from "../../../axiosInstance";
 // var filteredElements = [];
-export default function Search({ userArray, setUserArray, setMount }) {
+export default function Search({ setUserArray }) {
   
   const dispatch = useDispatch();
   let cancelToken;
-  // const searchRef = React.useRef();
-  // var oldData = userArray;
-  // const handleChange = () => {
-  //   filteredElements = userArray.filter((e) =>
-  //     e.name.toLowerCase().includes(searchRef.current.value.toLowerCase())
-  //   );
-  //   if (searchRef.current.value.length === 0) {
-  //     setMount(true);
-  //   } else {
-  //     setUserArray(filteredElements);
-  //   }
-  // };
+ 
   const handleSearch = (e) => {
     let searchTerm = e.target.value;
     if (searchTerm.length === 0) {
@@ -52,7 +40,7 @@ export default function Search({ userArray, setUserArray, setMount }) {
         onChange={handleSearch}
        
       />
-      <a className="search-btn">
+      <a href className="search-btn">
         <i className="fas fa-search"></i>
       </a>
     </div>

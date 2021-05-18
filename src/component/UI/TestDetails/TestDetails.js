@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
-import db, { storage } from "../../../Data/FirebaseConfig";
+import { storage } from "../../../Data/FirebaseConfig";
 import "./TestDetails.css";
 import Modal from "../Modal/Modal";
-import moment from "moment";
-import axios from "axios";
 import DownloadSVG from "../../Icons/download.svg";
 import EditSVG from "../../Icons/edit.svg";
 import CancelSVG from "../../Icons/cancel.svg";
-import axiosInstance from '../../../axios'
 import getAxiosInstance from "../../../axiosInstance";
 import { useSelector,useDispatch } from "react-redux";
 import {testAddUpdateAction} from "../../../store/testResult";
@@ -70,7 +67,6 @@ export default function VaccineDetails({ selectedUser }) {
     setMount(true);
     e.preventDefault();
     //image upload
-
     if (fileRef.current && fileRef.current.files[0]) {
       var file = fileRef.current.files[0];
       var storageRef = storage.ref().child(`TestResult${file.name}`).put(file);
@@ -92,10 +88,8 @@ export default function VaccineDetails({ selectedUser }) {
               name: selectedUser.id,
             };
             sendEditRequest(data);
-
             formData.First_Dose = "";
             formData.Remarks = "";
-
             setShowTestResultModal(false);
           });
         }
@@ -121,8 +115,7 @@ const deleteTestData=async(data)=>{
   getAxiosInstance().then(async axiosInstance=>{
   await axiosInstance
   .delete(
-    `api/testresultrud/${data.id}`,
-    
+    `api/testresultrud/${data.id}`,  
   )
   .then(function (response) {
     console.log("delete response: ", response);

@@ -98,7 +98,7 @@ export default function Register({ setShowModal }) {
       }
       let finalValue = "";
       for (let x in tempValue) {
-        if (x == 3 || x == 7 || x == 14) {
+        if (x === 3 || x === 7 || x === 14) {
           finalValue += "-";
           finalValue += tempValue.charAt(x);
         } else {
@@ -112,19 +112,6 @@ export default function Register({ setShowModal }) {
   const onSelectFile = (e) => {
     console.log(imageRef.current.files[0]);
     setProfileImage( URL.createObjectURL(e.target.files[0]));
-    const supportedFormat = ["jpeg", "jpg", "png"];
-
-    // if (supportedFormat.includes(e.target.files[0].type.split("/")[1])) {
-    //   if (e.target.files && e.target.files.length > 0) {
-    //     setProfileImage();
-    //     setSelected(true);
-    //     const reader = new FileReader();
-    //     reader.addEventListener("load", () => setUpImg(reader.result));
-    //     reader.readAsDataURL(e.target.files[0]);
-    //   }
-    // } else {
-    //   alert("invalid file format,supported format's jpeg, jpg, png");
-    // }
   };
 
   const onLoad = useCallback((img) => {

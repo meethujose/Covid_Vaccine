@@ -1,6 +1,6 @@
 import firebase from 'firebase';
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = firebase.initializeApp({
+ firebase.initializeApp({
     apiKey: "AIzaSyCfvQlqjVHa60dyaZrMWYhOduXx5724IvQ",
     authDomain: "vaccine-9e17d.firebaseapp.com",
     databaseURL: "https://vaccine-9e17d-default-rtdb.firebaseio.com",

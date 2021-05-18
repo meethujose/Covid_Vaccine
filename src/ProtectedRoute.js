@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 
 export default function ProtectedRoute(props) {
   const isAuthenticated = useSelector((state) => state.isAuth);
+ 
   if (isAuthenticated.isAuth === true) {
     return <Route {...props}>{props.children}</Route>;
   } else {

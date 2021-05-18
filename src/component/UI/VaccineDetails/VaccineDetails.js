@@ -6,8 +6,6 @@ import EditSVG from "../../Icons/edit.svg";
 import CancelSVG from "../../Icons/cancel.svg";
 import Modal from "../Modal/Modal";
 import moment from "moment";
-
-import axiosInstance from '../../../axios'
 import getAxiosInstance from "../../../axiosInstance";
 import { useSelector,useDispatch } from "react-redux";
 import { vaccineAddUpdateAction } from "../../../store/vaccineAddUpdate";
@@ -24,10 +22,6 @@ export default function VaccineDetails({
   const [editModalStatus, setEditModalStatus] = useState(false);
   const [formData, setFormData] = useState({});
   const [selectedVaccine, setSelectedVaccine] = useState({});
-  const[mount,setMount]=useState(true);
-  // const [userArray, setUserArray] = useState();
-
-  // click Handler to Edit  vaccine details
   const editModalHandler = () => {
     const tempEditShowModal = editModalStatus;
     setEditModalStatus(!tempEditShowModal);
@@ -63,7 +57,7 @@ export default function VaccineDetails({
   };
   // function edit
   const editVaccineDetails = async (e) => {
-    setMount(true);
+   
     e.preventDefault();
     //image upload
 
@@ -86,7 +80,7 @@ export default function VaccineDetails({
               vaccine_dose:
               selectedUser &&
                userVaccineData &&
-            userVaccineData.length == 0
+            userVaccineData.length === 0
                   ? "First"
                   :(selectedUser &&
                    userVaccineData &&userVaccineData[0].vaccine_dose ==="First")?
@@ -138,7 +132,7 @@ export default function VaccineDetails({
 
   // delete Vaccine details
 const deleteVaccineData=async(data)=>{
-  setMount(true);
+ 
   console.log(data);
   getAxiosInstance().then(async axiosInstance=>{
   await axiosInstance
