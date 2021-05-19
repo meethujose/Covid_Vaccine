@@ -23,7 +23,9 @@ export default function Routes() {
             <AddUser userArray={userArray} setUserArray={setUserArray}/>
           </Header>
           <div className='body'>
+
               <EmpList userArray={userArray} setUserArray={setUserArray} />
+      
           </div>
         </ProtectedRoute>
         <Route path='/Settings' component={Settings} />

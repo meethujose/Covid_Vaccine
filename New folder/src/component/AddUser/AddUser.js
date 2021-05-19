@@ -151,10 +151,10 @@ export default function AddUser({ userArray, setUserArray }) {
         <img className='dropbtn avataricon' src={userIcon} alt='' />
         <div className='dropdown-content'>
           <a href onClick={() => EditProfileCardHandler()}>
-          <i class="fas fa-user-edit"></i>  Profile
+            <i className='fas fa-cog'></i>  Profile
           </a>
           <a href onClick={() => DetailsCardHandler()}>
-          <i class="fas fa-syringe"></i>  Vaccine Details
+            <i className='fas fa-comment-medical'></i>  Vaccine Details
           </a>
           <a href onClick={() => TestDetailsCardHandler()}>
             <i className='fas fa-notes-medical'></i>  Test Result

@@ -56,9 +56,11 @@ export default function VaccineDetails({
     });
   };
   // function edit
-  const editVaccineDetails = async (e) => { 
+  const editVaccineDetails = async (e) => {
+   
     e.preventDefault();
     //image upload
+
    if (fileRef.current && fileRef.current.files[0]) { 
       var file = fileRef.current.files[0];
       var storageRef = storage

@@ -27,6 +27,76 @@ function Settings() {
         .catch((err) => console.error(err));
     });
   };
+
+  const filterStatus = (event)=>{
+
+    // getData().then(()=>{
+      let status = {filter:'status', key:event.target.value};
+      listData(status);
+    // });
+
+
+  }
+
+const listData = (filter = null)=>{
+  
+  // alert(JSON.stringify(filter));
+
+  if(filter.key == 'all')
+  {
+    getData();
+    return;
+  }
+
+  if(filter != null)
+  {
+    
+    let tempData = [];
+
+    userData.map((item,index) => {
+
+        if((filter.filter == 'status') && (filter.key == 'first_dose'))
+        {
+          if(item.first_dose == true)
+          {
+            tempData.push(item);
+          }
+        }
+
+        if((filter.filter == 'status') && (filter.key == 'not_vaccinated'))
+        {
+          if((item.first_dose == false) && item.second_dose == false)
+          {
+            tempData.push(item);
+          }
+        }
+
+        if((filter.filter == 'status') && (filter.key == 'second_dose'))
+        {
+          if(item.second_dose == true)
+          {
+            if((item.first_dose == true) && (item.second_dose == true))
+            {
+              tempData.push(item);
+            }
+          }
+        }
+
+
+      
+    });
+
+    setUserData(tempData);
+
+  }
+  // else
+  // {
+  //   getData();
+  // }
+
+}
+
+
   return (
     <div>
       <div className='tableheader'>
@@ -45,6 +115,15 @@ function Settings() {
       </div>
       <div id='demo'>
         <h1>User Details</h1>
+        <div style={{padding:"10px 20px", background:"linear-gradient(to bottom right, #50a3a2 0%, #53e3a6 100%)"}}>
+          <label>Vaccine Status</label>
+          <select onChange={filterStatus} style={{marginLeft:"10px"}}>
+            <option value="all">SELECT</option>
+            <option value="not_vaccinated">Not vaccinated</option>
+            <option value="first_dose">First Dose</option>
+            <option value="second_dose">Second Dose</option>
+          </select>
+        </div>
         <div className='table-responsive-vertical shadow-z-1'>
           <table id='table' className='table table-hover table-mc-light-blue'>
             <thead>
@@ -60,22 +139,25 @@ function Settings() {
             </thead>
 
             <tbody className='tbl_body'>
-              {userData &&
-                userData.map((item,index) => (
-                  <tr>
-                    <td data-title='ID'>{index+1}</td>
-                    <td data-title='EmiratesId'>{item.emiratesID}</td>
-                    <td data-title='FirstName'>{item.first_name}</td>
-                    <td data-title='LastName'>{item.last_name}</td>
-                    <td data-title='VaccineStatus'>{item.first_dose===false&&item.second_dose===false?"Not vaccinated":item.first_dose===true?"first Dose":"Second Dose"}</td>
-                    <td data-title='TestStatus'>{item.tests.length===0?"NA":(item.tests.length-1).test_result}</td>
-                    <td data-title='Status'>
-                      <a href='#' target='_blank'>
-                        Invite
-                      </a>
-                    </td>
-                  </tr>
-                ))}
+            {/* {listData()} */}
+
+            {userData.map((item,index) => (
+      
+      <tr>
+        <td data-title='ID'>{index+1}</td>
+        <td data-title='EmiratesId'>{item.emiratesID}</td>
+        <td data-title='FirstName'>{item.first_name}</td>
+        <td data-title='LastName'>{item.last_name}</td>
+        <td data-title='VaccineStatus'>{item.first_dose===false&&item.second_dose===false?"Not vaccinated":item.first_dose===true?"first Dose":"Second Dose"}</td>
+        <td data-title='TestStatus'>{item.tests.length===0?"NA":(item.tests.length-1).test_result}</td>
+        <td data-title='Status'>
+          <a href='#' target='_blank'>
+            Invite
+          </a>
+        </td>
+      </tr>
+    ))}
+
             </tbody>
           </table>
         </div>

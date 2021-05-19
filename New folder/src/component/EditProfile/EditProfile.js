@@ -149,13 +149,13 @@ function EditProfile({
                 type='text'
                 placeholder='Emirates Id'
                 name='EmiratesId'
-                defaultValue={currentData.emiratesID?currentData.emiratesID:EidField}
+                defaultValue={currentData.emiratesID}
                 className='reginputField'
                 onChange={(e) => {
                   EidChangeHandler(e);
                   handleChange(e);
                 }}
-                
+                value={EidField}
               />
             </div>
 
