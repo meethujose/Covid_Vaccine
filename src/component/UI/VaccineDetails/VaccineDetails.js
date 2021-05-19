@@ -7,13 +7,12 @@ import CancelSVG from "../../Icons/cancel.svg";
 import Modal from "../Modal/Modal";
 import moment from "moment";
 import getAxiosInstance from "../../../axiosInstance";
-import { useSelector,useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { vaccineAddUpdateAction } from "../../../store/vaccineAddUpdate";
 export default function VaccineDetails({
   selectedUser,
   userVaccineData,
   setUserVaccineData,
-
 }) {
   const fileRef = React.useRef();
   const dispatch = useDispatch();
@@ -41,25 +40,22 @@ export default function VaccineDetails({
 
   // send api request
   const sendEditRequest = async (data) => {
-    getAxiosInstance().then(async axiosInstance=>{
-    await axiosInstance
-      .put(
-        `api/vaccinerud/${selectedVaccine.id}`,
-        data
-      )
-      .then(function (response) {
-        dispatch(vaccineAddUpdateAction.added());
-        console.log("edit response: ", response);
-      })
-     
+    getAxiosInstance().then(async (axiosInstance) => {
+      await axiosInstance
+        .put(`api/vaccinerud/${selectedVaccine.id}`, data)
+        .then(function (response) {
+          dispatch(vaccineAddUpdateAction.added());
+          console.log("edit response: ", response);
+        });
+
       setEditModalStatus(false);
     });
   };
   // function edit
-  const editVaccineDetails = async (e) => { 
+  const editVaccineDetails = async (e) => {
     e.preventDefault();
     //image upload
-   if (fileRef.current && fileRef.current.files[0]) { 
+    if (fileRef.current && fileRef.current.files[0]) {
       var file = fileRef.current.files[0];
       var storageRef = storage
         .ref()
@@ -76,13 +72,13 @@ export default function VaccineDetails({
             console.log(url);
             const data = {
               vaccine_dose:
-              selectedUser &&
-               userVaccineData &&
-            userVaccineData.length === 0
+                selectedUser && userVaccineData && userVaccineData.length === 0
                   ? "First"
-                  :(selectedUser &&
-                   userVaccineData &&userVaccineData[0].vaccine_dose ==="First")?
-                  "Second":"First",
+                  : selectedUser &&
+                    userVaccineData &&
+                    userVaccineData[0].vaccine_dose === "First"
+                  ? "Second"
+                  : "First",
               vaccine_date: formData.vaccine_date
                 ? formData.vaccine_date
                 : selectedVaccine.vaccine_date,
@@ -118,63 +114,94 @@ export default function VaccineDetails({
   };
 
   useEffect(() => {
-    getAxiosInstance().then(async axiosInstance=>{
-    axiosInstance
-      .get('userapi/selfvaccine/')
-      .then((response) => {
-        console.log("vaccine data",response);
-        setUserVaccineData(response.data);
-      })
-      .catch((err) => console.error(err));
+    getAxiosInstance().then(async (axiosInstance) => {
+      axiosInstance
+        .get("userapi/selfvaccine/")
+        .then((response) => {
+          console.log("vaccine data", response.data);
+          setUserVaccineData([response.data]);
+        })
+        .catch((err) => console.error(err));
     });
-  }, [selectedUser,vaccineAddUpdateState]);
+  }, [selectedUser, vaccineAddUpdateState]);
 
   // delete Vaccine details
-const deleteVaccineData=async(data)=>{
- 
-  console.log(data);
-  getAxiosInstance().then(async axiosInstance=>{
-  await axiosInstance
-  .delete(
-    `userapi/selfvaccine/${data.id}`,
-    
-  )
-  .then(function (response) {
-    dispatch(vaccineAddUpdateAction.added());
-    console.log("delete response: ", response);
-  })
-  .catch((error) => {
-    console.log("delete failed ", error);
-  });
-});
-}
+  const deleteVaccineData = async (data) => {
+    console.log(data);
+    getAxiosInstance().then(async (axiosInstance) => {
+      await axiosInstance
+        .delete(`userapi/selfvaccine/${data.id}`)
+        .then(function (response) {
+          dispatch(vaccineAddUpdateAction.added());
+          console.log("delete response: ", response);
+        })
+        .catch((error) => {
+          console.log("delete failed ", error);
+        });
+    });
+  };
   return (
     <div className='vaccine-dose-wrapper'>
       {userVaccineData &&
         userVaccineData.map((vaccine) => (
-          <div className='row'>
-            {/*  style={{display:"flex",alignContent: 'space-between',width:'100%'}} */}
-            <h1 className='vaccine-dose-label '>{vaccine.vaccine_dose}</h1>
-            <h1 className='vaccine-dose-date'>{vaccine.vaccine_date}</h1>
-            <a href={vaccine.attachments} download>
-              <img
-                src={DownloadSVG}
-                alt=''
-                className='vaccine-dose-download-attachment'
-              />
-            </a>
-            <img
-              src={EditSVG}
-              alt=''
-              className='vaccine-dose-edit scale'
-              onClick={() => editVaccineData(vaccine)}
-            />
-              <img
-              src={CancelSVG}
-              alt=''
-              className='vaccine-dose-edit scale'
-              onClick={() => deleteVaccineData(vaccine)}
-            />
+          <div>
+            {vaccine.first_dose === true ? (
+              <div className='row'>
+                <h1 className='vaccine-dose-label '>First Dose</h1>
+                <h1 className='vaccine-dose-date'>{vaccine.first_dose_date}</h1>
+                <a href={vaccine.first_dose_details} download>
+                  <img
+                    src={DownloadSVG}
+                    alt=''
+                    className='vaccine-dose-download-attachment'
+                  />
+                </a>
+                <img
+                  src={EditSVG}
+                  alt=''
+                  className='vaccine-dose-edit scale'
+                  onClick={() => editVaccineData(vaccine)}
+                />
+                <img
+                  src={CancelSVG}
+                  alt=''
+                  className='vaccine-dose-edit scale'
+                  onClick={() => deleteVaccineData(vaccine)}
+                />
+              </div>
+            ) : null}{" "}
+            {vaccine.second_dose === true ? (
+              <div className='row'>
+                <h1 className='vaccine-dose-label '>Second Dose</h1>
+                <h1 className='vaccine-dose-date'>
+                  {vaccine.second_dose_date}
+                </h1>
+                <a href={vaccine.second_dose_details} download>
+                  <img
+                    src={DownloadSVG}
+                    alt=''
+                    className='vaccine-dose-download-attachment'
+                  />
+                </a>
+                <img
+                  src={EditSVG}
+                  alt=''
+                  className='vaccine-dose-edit scale'
+                  onClick={() => editVaccineData(vaccine)}
+                />
+                <img
+                  src={CancelSVG}
+                  alt=''
+                  className='vaccine-dose-edit scale'
+                  onClick={() => deleteVaccineData(vaccine)}
+                />
+              </div>
+            ) : null}
+            {vaccine.first_dose === false && vaccine.second_dose === false ? (
+              <div className='row'>
+                <h1 className='vaccine-dose-label '>Not Vaccinated</h1>
+              </div>
+            ) : null}
           </div>
         ))}
 
@@ -188,9 +215,7 @@ const deleteVaccineData=async(data)=>{
               </h3>
 
               <div className='form_box'>
-                <label className='EmpSetailsText'>
-               Date:
-                </label>
+                <label className='EmpSetailsText'>Date:</label>
 
                 <input
                   type='date'
@@ -216,14 +241,14 @@ const deleteVaccineData=async(data)=>{
                 />
               </div>
               <div className='form_box'>
-              <label className='EmpSetailsText'>Attachment:</label>
-              <input
-                type='file'
-                id='myfile'
-                name='myfile'
-                // ref={fileRef}
-                onChange={handleChange}></input>
-                </div>
+                <label className='EmpSetailsText'>Attachment:</label>
+                <input
+                  type='file'
+                  id='myfile'
+                  name='myfile'
+                  // ref={fileRef}
+                  onChange={handleChange}></input>
+              </div>
               <input type='submit' className=' EditButton' value='Add' />
             </form>
           </div>

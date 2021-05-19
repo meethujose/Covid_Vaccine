@@ -74,8 +74,7 @@ export default function AddUser({ userArray, setUserArray }) {
         })
         .then(function (response) {
           console.log(response.data);
-          dispatch(userDataUpdateAction.add([{...response.data}]));
-          
+          dispatch(userDataUpdateAction.add([{...response.data}]));         
           console.log(response);
           formData.Dose_Date = "";
           formData.Remarks = "";
