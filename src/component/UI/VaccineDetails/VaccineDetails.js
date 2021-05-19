@@ -122,6 +122,7 @@ export default function VaccineDetails({
     axiosInstance
       .get('userapi/selfvaccine/')
       .then((response) => {
+        console.log("vaccine data",response);
         setUserVaccineData(response.data);
       })
       .catch((err) => console.error(err));

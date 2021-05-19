@@ -28,13 +28,11 @@ function Settings() {
     });
   };
 
-  const filterStatus = (event)=>{
+  const filterStatus = async (event)=>{
 
-    // getData().then(()=>{
-      let status = {filter:'status', key:event.target.value};
-      listData(status);
-    // });
+    let status = {filter:'status', key:event.target.value};
 
+    listData(status);
 
   }
 
@@ -51,42 +49,52 @@ const listData = (filter = null)=>{
   if(filter != null)
   {
     
-    let tempData = [];
+    getAxiosInstance().then(async (axiosInstance) => {
+      await axiosInstance
+        .get("userapi/accounts/")
+        .then((res) => {
 
-    userData.map((item,index) => {
+          let tempData = [];
 
-        if((filter.filter == 'status') && (filter.key == 'first_dose'))
-        {
-          if(item.first_dose == true)
-          {
-            tempData.push(item);
-          }
-        }
-
-        if((filter.filter == 'status') && (filter.key == 'not_vaccinated'))
-        {
-          if((item.first_dose == false) && item.second_dose == false)
-          {
-            tempData.push(item);
-          }
-        }
-
-        if((filter.filter == 'status') && (filter.key == 'second_dose'))
-        {
-          if(item.second_dose == true)
-          {
-            if((item.first_dose == true) && (item.second_dose == true))
-            {
-              tempData.push(item);
-            }
-          }
-        }
-
-
+          res.data.map((item,index) => {
       
-    });
+              if((filter.filter === 'status') && (filter.key === 'first_dose'))
+              {
+                if(item.first_dose === true)
+                {
+                  tempData.push(item);
+                }
+              }
+      
+              if((filter.filter === 'status') && (filter.key === 'not_vaccinated'))
+              {
+                if((item.first_dose === false) && item.second_dose === false)
+                {
+                  tempData.push(item);
+                }
+              }
+      
+              if((filter.filter === 'status') && (filter.key === 'second_dose'))
+              {
+                if(item.second_dose === true)
+                {
+                  if((item.first_dose === true) && (item.second_dose === true))
+                  {
+                    tempData.push(item);
+                  }
+                }
+              }
+      
+      
+            
+          });
+      
+          setUserData(tempData);
 
-    setUserData(tempData);
+
+        })
+        .catch((err) => console.error(err));
+    });
 
   }
   // else
