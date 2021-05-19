@@ -122,7 +122,7 @@ export default function VaccineDetails({
   useEffect(() => {
     getAxiosInstance().then(async axiosInstance=>{
     axiosInstance
-      .get(`api/vaccinelist/${selectedUser.id}`)
+      .get('userapi/selfvaccine/')
       .then((response) => {
         setUserVaccineData(response.data);
       })
@@ -137,7 +137,7 @@ const deleteVaccineData=async(data)=>{
   getAxiosInstance().then(async axiosInstance=>{
   await axiosInstance
   .delete(
-    `api/vaccinerud/${data.id}`,
+    `userapi/selfvaccine/${data.id}`,
     
   )
   .then(function (response) {

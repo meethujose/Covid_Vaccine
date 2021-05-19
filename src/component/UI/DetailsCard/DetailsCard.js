@@ -134,7 +134,7 @@ const submitTestData = async (e) => {
 };
   return (
     <div className='detail-card'>
-      <div className='detail-card-header'>
+      {/* <div className='detail-card-header'>
         <h3 className='detail-card-header__title'>{props.detailType}</h3>
         {props.userVaccineData && props.userVaccineData.length < 2 ? (
           <img
@@ -146,7 +146,7 @@ const submitTestData = async (e) => {
         ) : (
           isVaccinationData(props.userVaccineData)
         )}
-      </div>
+      </div> */}
       {/* <div>dose: {props.userVaccineData &&  props.userVaccineData && props.userVaccineData.length == 1? "First": "Second"}</div> */}
       {ShowVaccineModal ? (
         <Modal onClick={DetailsCardHandler}>

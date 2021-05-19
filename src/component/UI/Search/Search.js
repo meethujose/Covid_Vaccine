@@ -22,9 +22,10 @@ export default function Search({ setUserArray }) {
       getAxiosInstance().then(async axiosInstance=>{
       axiosInstance({
         method: "GET",
-        url: `/api/emplist/?search=${searchTerm}`,
+        url: `/userapi/accounts/?search=${searchTerm}`,
         cancelToken: cancelToken.token,
       }).then((res) => {
+       
         setUserArray(res.data);
       });
     });

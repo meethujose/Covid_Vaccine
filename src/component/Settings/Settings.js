@@ -5,6 +5,7 @@ import Modal from "../../component/UI/Modal/Modal";
 import AddIcon from "../Icons/AddUser.svg";
 import Register from "../Register/Register";
 import getAxiosInstance from "../../axiosInstance";
+import DetailsCard from "../UI/DetailsCard/DetailsCard";
 function Settings() {
   const [showModal, setShowModal] = useState(false);
   const [userData, setUserData] = useState([]);
@@ -60,14 +61,14 @@ function Settings() {
 
             <tbody className='tbl_body'>
               {userData &&
-                userData.map((item) => (
+                userData.map((item,index) => (
                   <tr>
-                    <td data-title='ID'>1</td>
+                    <td data-title='ID'>{index+1}</td>
                     <td data-title='EmiratesId'>{item.emiratesID}</td>
                     <td data-title='FirstName'>{item.first_name}</td>
                     <td data-title='LastName'>{item.last_name}</td>
                     <td data-title='VaccineStatus'>{item.first_dose===false&&item.second_dose===false?"Not vaccinated":item.first_dose===true?"first Dose":"Second Dose"}</td>
-                    <td data-title='TestStatus'>{item.tests.length===0?"NA":item.tests[0].test_result}</td>
+                    <td data-title='TestStatus'>{item.tests.length===0?"NA":(item.tests.length-1).test_result}</td>
                     <td data-title='Status'>
                       <a href='#' target='_blank'>
                         Invite

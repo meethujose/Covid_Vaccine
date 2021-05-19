@@ -12,21 +12,20 @@ import Error404 from "./component/UI/Error404";
 import Settings from "./component/Settings/Settings";
 export default function Routes() {
   const [userArray, setUserArray] = useState([]);
-  const Admin = localStorage.getItem("user_group") === "admin";
   return (
     <div>
       <Switch>
         <ProtectedRoute path='/' exact>
           <Header>
-            {Admin ? (
+            {localStorage.getItem("is_admin") === "true"  ? (
               <Search userArray={userArray} setUserArray={setUserArray} />
             ) : null}
-            <AddUser />
+            <AddUser userArray={userArray} setUserArray={setUserArray}/>
           </Header>
           <div className='body'>
-            {Admin ? (
+
               <EmpList userArray={userArray} setUserArray={setUserArray} />
-            ) : null}
+      
           </div>
         </ProtectedRoute>
         <Route path='/Settings' component={Settings} />

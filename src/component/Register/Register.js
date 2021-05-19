@@ -64,18 +64,21 @@ export default function Register({ setShowModal }) {
         }).then(async()=>{
           getAxiosInstance().then(async axiosInstance=>{
             await  axiosInstance
-            .post("api/empcreate/", {
-             name: formData.username,
-             emiratesID: formData.EmiratesId,         
-             avatarURL:imageUrl?imageUrl: "https://firebasestorage.googleapis.com/v0/b/vaccine-9e17d.appspot.com/o/images%2FaddEmployee.png?alt=media&token=ac8c7ac6-773d-44ff-afa0-1aa76ea1d3d7",
+            .post("userapi/accountscreate/", {
+              first_name: formData.firstname,
+              last_name: formData.last_name,
+              emiratesID: formData.EmiratesId,      
+              email:formData.email,   
+              avatar:formData.image?formData.image: "https://firebasestorage.googleapis.com/v0/b/vaccine-9e17d.appspot.com/o/images%2FaddEmployee.png?alt=media&token=ac8c7ac6-773d-44ff-afa0-1aa76ea1d3d7",
      
            })
            .then(function (response) {
              dispatch(empAddUpdateAction.added());
              console.log(response);
-             formData.username = "";
-             formData.PhoneNumber = "";
+             formData.firstname = "";
+             formData.last_name = "";
              formData.EmiratesId = "";
+             formData.email=""
              setShowModal(false);
            });
          });
@@ -185,23 +188,34 @@ export default function Register({ setShowModal }) {
         </>
       ) : (
         <form className='addform' onSubmit={submitData}>
-          <div className='form_box'>
-            <label>Name</label>
+           <div className='form_box'>
+            <label>First Name</label>
             <input
               type='text'
-              placeholder='Name'
-              name='username'
+              placeholder='First Name'
+              name='firstname'
               required
               className='reginputField'
               onChange={handleChange}
             />
           </div>
           <div className='form_box'>
-            <label>Mob Number</label>
+            <label>Last Name</label>
             <input
               type='text'
-              placeholder='Phone Number'
-              name='PhoneNumber'
+              placeholder='Last Name'
+              name='lastname'
+              required
+              className='reginputField'
+              onChange={handleChange}
+            />
+          </div>
+          <div className='form_box'>
+            <label>Email</label>
+            <input
+              type='email'
+              placeholder='Email'
+              name='email'
               required
               className='reginputField'
               onChange={handleChange}

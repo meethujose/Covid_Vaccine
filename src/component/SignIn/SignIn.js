@@ -49,7 +49,7 @@ export default function SignIn() {
        console.log("decrypted token",decoded);
      
        localStorage.setItem("token_expiry",decoded.exp);
-       localStorage.setItem("user_group",decoded.group);
+       localStorage.setItem("is_admin",decoded.is_admin);
        localStorage.setItem("avatar",decoded.avatar);
        localStorage.setItem("first_name",decoded.first_name);
        localStorage.setItem("last_name",decoded.last_name);

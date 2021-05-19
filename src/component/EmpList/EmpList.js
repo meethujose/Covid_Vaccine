@@ -7,10 +7,11 @@ import report from "../Icons/report.svg";
 import deleteIcon from "../Icons/delete.svg";
 import VaccineDetails from "../UI/VaccineDetails/VaccineDetails";
 import TestDetails from "../UI/TestDetails/TestDetails";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import getAxiosInstance from "../../axiosInstance";
-
+import { userDataUpdateAction } from "../../store/userData";
 export default function EmpList({ userArray, setUserArray }) {
+  const dispatch = useDispatch();
   const empAddUpdateState = useSelector((state) => state.emp);
   const [selectedUser, setSelectedUser] = useState({});
   const [showModal, setShowModal] = useState(false);
@@ -27,9 +28,11 @@ export default function EmpList({ userArray, setUserArray }) {
     getAxiosInstance().then(async axiosInstance=>{
 
       await axiosInstance
-      .get("api/emplist/")
+      .get("userapi/accounts/")
       .then((res) => {
         setUserArray(res.data);
+      dispatch(userDataUpdateAction.add(res.data));
+      localStorage.setItem('userData',JSON.stringify(res.data[0]));
       })
       .catch((err) => console.error(err));
       
@@ -64,7 +67,7 @@ export default function EmpList({ userArray, setUserArray }) {
         userArray.map((item) => (
           <EmpCard key={item.emiratesID}>
             <div className='empcard__textwrapper'>
-              <h3 className='emplist__name'> {item.name}</h3>
+              <h3 className='emplist__name'> {item.first_name} {item.last_name}</h3>
               <h3 className='emplist__eid'>{item.emiratesID}</h3>
             </div>
             <div className='empcard__imagewrapper'>
@@ -89,7 +92,7 @@ export default function EmpList({ userArray, setUserArray }) {
             <img className={"imgCard"} src={selectedUser.Avatar} alt='' />
             <div>
               <h3 className='emplist__name emplist--white'>
-                {selectedUser.name}
+                {selectedUser.first_name}
               </h3>
               <h3 className='emplist__eid emplist--white'>
                 {selectedUser.emiratesID}
