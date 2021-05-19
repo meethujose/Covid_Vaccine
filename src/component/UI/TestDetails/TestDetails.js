@@ -23,7 +23,7 @@ export default function VaccineDetails({ selectedUser }) {
   useEffect(() => {
     getAxiosInstance().then(async axiosInstance=>{
     axiosInstance
-      .get(`api/testresultlist/${selectedUser.id}`)
+      .get('vaccineapi/test')
       .then((response) => {
         setMount(false);
         setUserTestDetails(response.data);

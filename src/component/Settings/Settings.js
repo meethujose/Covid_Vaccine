@@ -6,6 +6,10 @@ import AddIcon from "../Icons/AddUser.svg";
 import Register from "../Register/Register";
 import getAxiosInstance from "../../axiosInstance";
 import DetailsCard from "../UI/DetailsCard/DetailsCard";
+
+let temp = [];
+let filteredElements = [];
+
 function Settings() {
   const [showModal, setShowModal] = useState(false);
   const [userData, setUserData] = useState([]);
@@ -23,81 +27,47 @@ function Settings() {
         .get("userapi/accounts/")
         .then((res) => {
           setUserData(res.data);
+          temp = res.data;
           console.log(res.data);
         })
         .catch((err) => console.error(err));
     });
   };
-
-  const filterStatus = async (event)=>{
-
-    let status = {filter:'status', key:event.target.value};
-
-    listData(status);
-
-  }
-
-const listData = (filter = null)=>{
-  
-  // alert(JSON.stringify(filter));
-
-  if(filter.key == 'all')
-  {
-    getData();
-    return;
-  }
-
-  if(filter != null)
-  {
-    
-    getAxiosInstance().then(async (axiosInstance) => {
-      await axiosInstance
-        .get("userapi/accounts/")
-        .then((res) => {
-
-          let tempData = [];
-
-          res.data.map((item,index) => {
-      
-              if((filter.filter === 'status') && (filter.key === 'first_dose'))
-              {
-                if(item.first_dose === true)
-                {
-                  tempData.push(item);
-                }
-              }
-      
-              if((filter.filter === 'status') && (filter.key === 'not_vaccinated'))
-              {
-                if((item.first_dose === false) && item.second_dose === false)
-                {
-                  tempData.push(item);
-                }
-              }
-      
-              if((filter.filter === 'status') && (filter.key === 'second_dose'))
-              {
-               
-                  if((item.first_dose === true) && (item.second_dose === true))
-                  {
-                    tempData.push(item);
-                  }
-                
-              }              
+  const handleFilter = (e) => {
+    switch (e.target.value) {
+      case "notVacinated":
+        filteredElements = temp.filter((item) => {
+          return item.first_dose === false && item.second_dose === false;
+        });
+        break;
+      case "firstDose":
+        filteredElements = temp.filter((item) => {
+          return item.first_dose === true && item.second_dose === false;
+        });
+        break;
+      case "secondDose":
+        filteredElements = temp.filter((item) => {
+          return item.first_dose === true && item.second_dose === true;
+        });
+        break;
+        case "positive":
+          filteredElements = temp.filter((item) => {
+            return (item.tests.length-1).test_result==='positive';
           });
-      
-          setUserData(tempData);
-        })
-        .catch((err) => console.error(err));
-    });
-
-  }
-  // else
-  // {
-  //   getData();
-  // }
-
-}
+          break;
+          case "negative":
+            filteredElements = temp.filter((item) => {
+              return (item.tests.length-1).test_result==='negative';
+            });
+            break;
+      case "clear":
+        filteredElements = temp;
+        break;
+      default:
+        return temp;
+    }
+    setUserData(filteredElements);
+  };
 
 
   return (
@@ -120,11 +90,18 @@ const listData = (filter = null)=>{
         <h1>User Details</h1>
         <div style={{padding:"10px 20px", background:"linear-gradient(to bottom right, #50a3a2 0%, #53e3a6 100%)"}}>
           <label>Vaccine Status</label>
-          <select onChange={filterStatus} style={{marginLeft:"10px"}}>
-            <option value="all">SELECT</option>
-            <option value="not_vaccinated">Not vaccinated</option>
-            <option value="first_dose">First Dose</option>
-            <option value="second_dose">Second Dose</option>
+          <select onChange={handleFilter}style={{marginLeft:"10px"}}>
+          <option disabled selected>
+          --Select--
+        </option>
+          <option value="notVacinated">Not Vaccinated</option>
+        <option value="firstDose">First dose</option>
+        <option value="secondDose">Second dose</option>
+        <option disabled>----------------------</option>
+        <option value="positive">Positive</option>
+        <option value="negative">Negative</option>
+        <option disabled>----------------------</option>
+        <option value="clear">Clear</option>
           </select>
         </div>
         <div className='table-responsive-vertical shadow-z-1'>
@@ -151,7 +128,7 @@ const listData = (filter = null)=>{
         <td data-title='EmiratesId'>{item.emiratesID}</td>
         <td data-title='FirstName'>{item.first_name}</td>
         <td data-title='LastName'>{item.last_name}</td>
-        <td data-title='VaccineStatus'>{item.first_dose===false&&item.second_dose===false?"Not vaccinated":item.first_dose===true?"first Dose":"Second Dose"}</td>
+        <td data-title='VaccineStatus'>{item.first_dose===false&&item.second_dose===false?"Not vaccinated":item.first_dose===true&&item.second_dose===false?"first Dose":"Second Dose"}</td>
         <td data-title='TestStatus'>{item.tests.length===0?"NA":(item.tests.length-1).test_result}</td>
         <td data-title='Status'>
           <a href='#' target='_blank'>
