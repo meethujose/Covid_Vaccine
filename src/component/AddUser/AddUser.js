@@ -75,7 +75,7 @@ export default function AddUser({ userArray, setUserArray }) {
         .then(function (response) {
           console.log(response.data);
           dispatch(userDataUpdateAction.add([{...response.data}]));
-           localStorage.setItem('userData',JSON.stringify(response.data));
+          
           console.log(response);
           formData.Dose_Date = "";
           formData.Remarks = "";
@@ -175,7 +175,7 @@ export default function AddUser({ userArray, setUserArray }) {
               <div>{userVaccineData}</div>
               <div className='form_box'>
                 <label className='EmpSetailsText' ref={labelRef}>
-                  {selectedUser &&
+                  {/* {selectedUser &&
                   userVaccineData &&
                   userVaccineData.length === 0
                     ? "First Dose"
@@ -183,7 +183,8 @@ export default function AddUser({ userArray, setUserArray }) {
                       userVaccineData &&
                       userVaccineData[0].vaccine_dose === "First"
                     ? "Second Dose"
-                    : "First Dose"}
+                    : "First Dose"} */}
+                    Vaccine Dose
                 </label>
 
                 {userVaccineData.length === 0 ? (

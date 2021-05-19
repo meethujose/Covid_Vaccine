@@ -23,6 +23,7 @@ function Settings() {
         .get("userapi/accounts/")
         .then((res) => {
           setUserData(res.data);
+          console.log(res.data);
         })
         .catch((err) => console.error(err));
     });
@@ -76,22 +77,16 @@ const listData = (filter = null)=>{
       
               if((filter.filter === 'status') && (filter.key === 'second_dose'))
               {
-                if(item.second_dose === true)
-                {
+               
                   if((item.first_dose === true) && (item.second_dose === true))
                   {
                     tempData.push(item);
                   }
-                }
-              }
-      
-      
-            
+                
+              }              
           });
       
           setUserData(tempData);
-
-
         })
         .catch((err) => console.error(err));
     });
