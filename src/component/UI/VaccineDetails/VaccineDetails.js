@@ -42,7 +42,7 @@ export default function VaccineDetails({
   const sendEditRequest = async (data) => {
     getAxiosInstance().then(async (axiosInstance) => {
       await axiosInstance
-        .put(`api/vaccinerud/${selectedVaccine.id}`, data)
+        .put('userapi/selfvaccine/', data)
         .then(function (response) {
           dispatch(vaccineAddUpdateAction.added());
           console.log("edit response: ", response);
@@ -116,10 +116,11 @@ export default function VaccineDetails({
   useEffect(() => {
     getAxiosInstance().then(async (axiosInstance) => {
       axiosInstance
-        .get("userapi/selfvaccine/")
+        .get("userapi/accounts/")
         .then((response) => {
           console.log("vaccine data", response.data);
-          setUserVaccineData([response.data]);
+          console.log(" selected vaccine data", selectedUser);
+          setUserVaccineData(selectedUser);
         })
         .catch((err) => console.error(err));
     });
@@ -142,14 +143,14 @@ export default function VaccineDetails({
   };
   return (
     <div className='vaccine-dose-wrapper'>
-      {userVaccineData &&
-        userVaccineData.map((vaccine) => (
+      {/* {selectedUser &&
+        selectedUser.map((vaccine) => ( */}
           <div>
-            {vaccine.first_dose === true ? (
+            { selectedUser.first_dose === true ? (
               <div className='row'>
                 <h1 className='vaccine-dose-label '>First Dose</h1>
-                <h1 className='vaccine-dose-date'>{vaccine.first_dose_date}</h1>
-                <a href={vaccine.first_dose_details} download>
+                <h1 className='vaccine-dose-date'>{ selectedUser.first_dose_date}</h1>
+                <a href={ selectedUser.first_dose_details} download>
                   <img
                     src={DownloadSVG}
                     alt=''
@@ -160,23 +161,23 @@ export default function VaccineDetails({
                   src={EditSVG}
                   alt=''
                   className='vaccine-dose-edit scale'
-                  onClick={() => editVaccineData(vaccine)}
+                  onClick={() => editVaccineData( selectedUser)}
                 />
                 <img
                   src={CancelSVG}
                   alt=''
                   className='vaccine-dose-edit scale'
-                  onClick={() => deleteVaccineData(vaccine)}
+                  onClick={() => deleteVaccineData( selectedUser)}
                 />
               </div>
             ) : null}{" "}
-            {vaccine.second_dose === true ? (
+            { selectedUser.second_dose === true ? (
               <div className='row'>
                 <h1 className='vaccine-dose-label '>Second Dose</h1>
                 <h1 className='vaccine-dose-date'>
-                  {vaccine.second_dose_date}
+                  { selectedUser.second_dose_date}
                 </h1>
-                <a href={vaccine.second_dose_details} download>
+                <a href={ selectedUser.second_dose_details} download>
                   <img
                     src={DownloadSVG}
                     alt=''
@@ -187,23 +188,23 @@ export default function VaccineDetails({
                   src={EditSVG}
                   alt=''
                   className='vaccine-dose-edit scale'
-                  onClick={() => editVaccineData(vaccine)}
+                  onClick={() => editVaccineData( selectedUser)}
                 />
                 <img
                   src={CancelSVG}
                   alt=''
                   className='vaccine-dose-edit scale'
-                  onClick={() => deleteVaccineData(vaccine)}
+                  onClick={() => deleteVaccineData( selectedUser)}
                 />
               </div>
             ) : null}
-            {vaccine.first_dose === false && vaccine.second_dose === false ? (
+            { selectedUser.first_dose === false &&  selectedUser.second_dose === false ? (
               <div className='row'>
                 <h1 className='vaccine-dose-label '>Not Vaccinated</h1>
               </div>
             ) : null}
           </div>
-        ))}
+        
 
       {/* Edit vaccine details */}
       {editModalStatus ? (
@@ -219,7 +220,8 @@ export default function VaccineDetails({
 
                 <input
                   type='date'
-                  placeholder='First Dose'
+                  placeholder='vaccine_date
+                  '
                   name='vaccine_date'
                   required
                   defaultValue={selectedVaccine.vaccine_date}

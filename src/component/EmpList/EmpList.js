@@ -13,7 +13,7 @@ import { userDataUpdateAction } from "../../store/userData";
 export default function EmpList({ userArray, setUserArray }) {
   const dispatch = useDispatch();
   const empAddUpdateState = useSelector((state) => state.emp);
-  const [selectedUser, setSelectedUser] = useState({});
+  const [selectedUser, setSelectedUser] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [userVaccineData, setUserVaccineData] = useState([]);
 
