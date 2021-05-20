@@ -152,9 +152,11 @@ export default function AddUser({ userArray, setUserArray }) {
           <a href onClick={() => EditProfileCardHandler()}>
           <i class="fas fa-user-edit"></i>  Profile
           </a>
+          {/* {(useraddedData.first_dose=== true&&useraddedData.second_dose=== true)? */}
           <a href onClick={() => DetailsCardHandler()}>
           <i class="fas fa-syringe"></i>  Vaccine Details
           </a>
+           {/* :null}  */}
           <a href onClick={() => TestDetailsCardHandler()}>
             <i className='fas fa-notes-medical'></i>  Test Result
           </a>
