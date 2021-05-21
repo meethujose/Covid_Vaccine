@@ -52,14 +52,14 @@
     display: none;
   }
 }
-.container {
+.signcontainer {
   max-width: 600px;
   margin: 0 auto;
   padding: 80px 0;
   height: 400px;
   text-align: center;
 }
-.container h1 {
+.signcontainer h1 {
   font-size: 40px;
   transition-duration: 1s;
   transition-timing-function: ease-in-put;

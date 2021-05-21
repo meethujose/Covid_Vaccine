@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import Modal from "../UI/Modal/Modal";
 import user from "../Images/user.png";
+import { useHistory } from "react-router-dom";
 import getAxiosInstance from "../../axiosInstance";
 import { empAddUpdateAction } from "../../store/empAddUpdate";
-import {  useDispatch } from "react-redux";
-
-
+import { useDispatch } from "react-redux";
+import  './EditProfile.css';
+import EditSVG from "../Icons/edit.svg";
 function EditProfile({
   selectedUser,
   userVaccineData,
@@ -14,6 +15,7 @@ function EditProfile({
 }) {
   const [formData, setFormData] = useState({});
   const dispatch = useDispatch();
+  const history = useHistory();
   const [ShowVaccineModal, setShowVaccineModal] = useState(false);
   const labelRef = React.useRef();
   const imageRef = React.useRef();
@@ -30,45 +32,48 @@ function EditProfile({
   const DetailsCardHandler = () => {
     setEditProfileModal(!EditProfileModal);
   };
+// edit vaccine data
 
-  const currentData=  JSON.parse(localStorage.getItem('userData'));
-  console.log("current_user",currentData.email);
+const editVaccineData=()=>{
+  history.push("/VaccineEdit");
+}
+  const currentData = JSON.parse(localStorage.getItem("userData"));
+  console.log("current_user", currentData.email);
   const submitData = async (e) => {
     e.preventDefault();
-    console.log("clicked");
     var image = imageRef.current.files[0];
-    
-    //   var storageRef = storage.ref().child(`images/${formData.EmiratesId}`);
-    //   storageRef.put(image).then((snapshot) => {
-    //     snapshot.ref.getDownloadURL().then(async (url) => {
-    //       imageUrl=url;
-
-    //     }).then(async()=>{
-          getAxiosInstance().then(async axiosInstance=>{
-            await  axiosInstance
-            .put("userapi/profile/", {
-              first_name: formData.firstname?formData.firstname:currentData.first_name,
-              last_name: formData.last_name?formData.last_name:currentData.last_name,
-              emiratesID: formData.EmiratesId?formData.EmiratesId:currentData.emiratesID,      
-              email:formData.email?formData.email:currentData.email                  
-           })
-           .then(function (response) {
-             dispatch(empAddUpdateAction.added())        
-             console.log(response);
-             formData.firstname = "";
-             formData.last_name = "";
-             formData.EmiratesId = "";
-             formData.email=""
-           DetailsCardHandler();
-           });
-         });
+    console.log("avatar",image);
+    getAxiosInstance().then(async (axiosInstance) => {
+      await axiosInstance
+        .put("userapi/profile/", {
+          first_name: formData.firstname
+            ? formData.firstname
+            : currentData.first_name,
+          last_name: formData.last_name
+            ? formData.last_name
+            : currentData.last_name,
+          emiratesID: formData.EmiratesId
+            ? formData.EmiratesId
+            : currentData.emiratesID,
+          email: formData.email ? formData.email : currentData.email,
+          avatar:imageRef.current.files[0],
+        })
+        .then(function (response) {
+          console.log("user edit response",userIcon);
+          dispatch(empAddUpdateAction.added());
+          const userIcon=response.data.avatar;         
+          console.log("avatar",userIcon);
+          formData.firstname = "";
+          formData.last_name = "";
+          formData.EmiratesId = "";
+          formData.email = "";
+          DetailsCardHandler();
+        });
+    });
 
     //     })
-      
+
     //   });
-    
-  
-   
   };
   const onSelectFile = (e) => {
     console.log(imageRef.current.files[0]);
@@ -103,10 +108,10 @@ function EditProfile({
             <input
               type='file'
               id='file'
-              name='image'             
+              name='image'
               ref={imageRef}
               onChange={onSelectFile}></input>
-            <img src={profileImage} className='imgFile' alt='img' />
+            <img src={profileImage} className='imgFile' alt={profileImage} />
           </label>
 
           <form className='addform' onSubmit={submitData}>
@@ -115,7 +120,7 @@ function EditProfile({
               <input
                 type='text'
                 placeholder='First Name'
-                name='firstname'         
+                name='firstname'
                 className='reginputField'
                 onChange={handleChange}
                 defaultValue={currentData.first_name}
@@ -126,7 +131,7 @@ function EditProfile({
               <input
                 type='text'
                 placeholder='Last Name'
-                name='lastname'          
+                name='lastname'
                 className='reginputField'
                 onChange={handleChange}
                 defaultValue={currentData.last_name}
@@ -137,7 +142,7 @@ function EditProfile({
               <input
                 type='email'
                 placeholder='Email'
-                name='email'               
+                name='email'
                 className='reginputField'
                 onChange={handleChange}
                 defaultValue={currentData.email}
@@ -149,16 +154,34 @@ function EditProfile({
                 type='text'
                 placeholder='Emirates Id'
                 name='EmiratesId'
-                defaultValue={currentData.emiratesID?currentData.emiratesID:EidField}
+                defaultValue={
+                  currentData.emiratesID ? currentData.emiratesID : EidField
+                }
                 className='reginputField'
                 onChange={(e) => {
                   EidChangeHandler(e);
                   handleChange(e);
                 }}
-                
               />
             </div>
-
+            <div className="editlabelcontainer">
+              <h6 className='editlabel'>Edit Vaccine details</h6> 
+              <img
+                  src={EditSVG}
+                  alt=''
+                  className='editlabelicon scale'
+                  onClick={() => editVaccineData( selectedUser)}
+                />      
+            </div>
+            <div  className="editlabelcontainer" >
+              <h6 className='editlabel'>Edit Test details </h6>    
+              <img
+                  src={EditSVG}
+                  alt=''
+                  className='edittestlabelicon scale'
+                  // onClick={() => editVaccineData( selectedUser)}
+                />        
+            </div>
             <input type='submit' className=' regButton' value='Submit' />
           </form>
         </div>

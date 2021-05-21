@@ -157,18 +157,18 @@ export default function VaccineDetails({
                     className='vaccine-dose-download-attachment'
                   />
                 </a>
-                <img
+                {/* <img
                   src={EditSVG}
                   alt=''
                   className='vaccine-dose-edit scale'
                   onClick={() => editVaccineData( selectedUser)}
-                />
-                <img
+                /> */}
+                {/* <img
                   src={CancelSVG}
                   alt=''
                   className='vaccine-dose-edit scale'
                   onClick={() => deleteVaccineData( selectedUser)}
-                />
+                /> */}
               </div>
             ) : null}{" "}
             { selectedUser.second_dose === true ? (
@@ -184,18 +184,18 @@ export default function VaccineDetails({
                     className='vaccine-dose-download-attachment'
                   />
                 </a>
-                <img
+                {/* <img
                   src={EditSVG}
                   alt=''
                   className='vaccine-dose-edit scale'
                   onClick={() => editVaccineData( selectedUser)}
-                />
-                <img
+                /> */}
+                {/* <img
                   src={CancelSVG}
                   alt=''
                   className='vaccine-dose-edit scale'
                   onClick={() => deleteVaccineData( selectedUser)}
-                />
+                /> */}
               </div>
             ) : null}
             { selectedUser.first_dose === false &&  selectedUser.second_dose === false ? (

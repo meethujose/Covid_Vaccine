@@ -57,14 +57,14 @@
     display: none;
   }
 }
-.container {
+.signupcontainer {
   max-width: 600px;
   margin: 0 auto;
   padding: 80px 0;
   height: 400px;
   text-align: center;
 }
-.container h1 {
+.signupcontainer h1 {
   font-size: 40px;
   transition-duration: 1s;
   transition-timing-function: ease-in-put;

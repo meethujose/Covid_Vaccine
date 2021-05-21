@@ -3,35 +3,47 @@ import "./SignIn.css";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "../../axios";
 import { isAuth } from "../../store/isAuthenticated";
-import {authToken} from "../../store/token";
+import { authToken } from "../../store/token";
 import { useHistory } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 export default function SignIn() {
   const history = useHistory();
   const auth = useSelector((state) => state.isAuth);
   const dispatch = useDispatch();
- 
- 
+
   const [loginStatus, setLoginStatus] = useState(null);
   const [mount, setMount] = useState(false);
 
   useLayoutEffect(() => {
-    if (localStorage.getItem("access_token")) {  
+    if (localStorage.getItem("access_token")&& localStorage.getItem('is_admin')==='false') {
       dispatch(isAuth());
-      history.replace('/');
-      }
+      console.log("customer")
+      history.replace('/')
+    }
+    if (localStorage.getItem("access_token")&& localStorage.getItem('is_admin')==='true') {
+      dispatch(isAuth());
+      console.log("Admin")
+      history.replace('/Admin')
+    }
     if (auth.isAuth === true) {
       setLoginStatus(<h3>Login Success !!!</h3>);
       setTimeout(() => {
-        history.push("/");
+        if (localStorage.getItem("is_admin") === 'false') {
+         
+          history.push("/");
+        } else {
+          history.push("/Admin");
+         
+        }
       }, 1000);
     }
+
     return () => {
       setMount(false);
     };
   }, [mount]);
 
-  const getToken =async (event) => {
+  const getToken = async (event) => {
     event.preventDefault();
     setLoginStatus(<div className='loader'></div>);
     const credentials = {
@@ -39,25 +51,23 @@ export default function SignIn() {
       password: event.target[1].value,
     };
     const url = "/api/token/";
-  axios.post(url, credentials).then(
-     (response)  => {
-       console.log(response);
+    axios.post(url, credentials).then(
+      (response) => {
+        console.log(response);
         dispatch(authToken(response.data));
-       localStorage.setItem("access_token", response.data.access);
-       localStorage.setItem("refresh_token", response.data.refresh);
-       var decoded = jwt_decode(response.data.access);
-       console.log("decrypted token",decoded);
-     
-       localStorage.setItem("token_expiry",decoded.exp);
-       localStorage.setItem("is_admin",decoded.is_admin);
-       localStorage.setItem("avatar",decoded.avatar);
-       localStorage.setItem("first_name",decoded.first_name);
-       localStorage.setItem("last_name",decoded.last_name);
-       localStorage.setItem("username",decoded.username);
-       localStorage.setItem("user_id",decoded.user_id);
+        localStorage.setItem("access_token", response.data.access);
+        localStorage.setItem("refresh_token", response.data.refresh);
+        var decoded = jwt_decode(response.data.access);
 
-       dispatch(isAuth());
-       setMount(true);
+        localStorage.setItem("token_expiry", decoded.exp);
+        localStorage.setItem("is_admin", decoded.is_admin);
+        localStorage.setItem("first_name", decoded.first_name);
+        localStorage.setItem("last_name", decoded.last_name);
+        localStorage.setItem("username", decoded.username);
+        localStorage.setItem("user_id", decoded.user_id);
+
+        dispatch(isAuth());
+        setMount(true);
       },
       (error) => {
         try {
@@ -68,7 +78,8 @@ export default function SignIn() {
             case 401:
               setLoginStatus(<h3>Invalid User</h3>);
               break;
-              default:(<h3>Some Error Occured..Please wait</h3>);
+            default:
+              <h3>Some Error Occured..Please wait</h3>;
           }
         } catch (err) {
           console.log(err);
@@ -79,7 +90,7 @@ export default function SignIn() {
   };
   return (
     <div className='wrapper'>
-      <div className='container'>
+      <div className='signcontainer'>
         <h1>Welcome</h1>
 
         <form className='SignINform ' onSubmit={getToken} method='post'>

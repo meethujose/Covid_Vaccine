@@ -25,7 +25,7 @@ export default function Search({ setUserArray }) {
         url: `/userapi/accounts/?search=${searchTerm}`,
         cancelToken: cancelToken.token,
       }).then((res) => {
-       
+       console.log(res.data)
         setUserArray(res.data);
       });
     });

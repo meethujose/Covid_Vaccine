@@ -65,7 +65,7 @@ export default function SignUp() {
   }
   return (
     <div className="wrapper">
-      <div className="container">
+      <div className="signupcontainer">
         <h1>Welcome {name}</h1>
 
         <form className="formSignUp" method="post" onSubmit={signUpHandler}>

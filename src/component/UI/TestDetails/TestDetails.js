@@ -23,10 +23,11 @@ export default function VaccineDetails({ selectedUser }) {
   useEffect(() => {
     getAxiosInstance().then(async axiosInstance=>{
     axiosInstance
-      .get('vaccineapi/test')
+      .get("userapi/accounts/")
       .then((response) => {
         setMount(false);
-        setUserTestDetails(response.data);
+        console.log("selected user test details",selectedUser.tests);
+        setUserTestDetails(selectedUser.tests);
       })
       .catch((err) => console.error(err));
     });
@@ -128,16 +129,18 @@ const deleteTestData=async(data)=>{
   return (
     <div className='test-wrapper'>
       {userTestDetails &&
-        userTestDetails.map((test) => (
+        userTestDetails.map((test,index) => (
           <div className='row'>
-            <h1 className='test-label '>{test.test_result}</h1>
-            <h1 className='test-date'>{test.test_date}</h1>
+             {/* <h1 className='test-label '>{index+1}.</h1> */}
+             <h1 className='test-date'>{test.test_date}</h1>
+            <h1  className='test-index '>{test.test_result}</h1>
+        
             <img
               src={DownloadSVG}
               alt=''
               className='test-download-attachment'
             />
-            <img
+            {/* <img
               src={EditSVG}
               alt=''
               className='test-edit'
@@ -148,7 +151,7 @@ const deleteTestData=async(data)=>{
               alt=''
               className='test-edit'
               onClick={() => deleteTestData(test)}
-            />
+            /> */}
           </div>
         ))}
       {editModalStatus ? (

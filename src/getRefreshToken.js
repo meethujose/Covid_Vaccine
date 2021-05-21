@@ -8,8 +8,8 @@ export const getRefreshToken = async ()=>{
         refresh: token
       })
       .then(function (response) {   
-        return response.data.access;
-            // localStorage.setItem("access_token",response.data.access);
+        // return response.data.access;
+       localStorage.setItem("access_token",response.data.access);
       })
       .catch(function (error) { 
         console.log(error);

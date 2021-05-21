@@ -1,4 +1,4 @@
-.card {
+.empcard {
   display: flex;
   flex-direction: row;
   width: 30%;
@@ -11,31 +11,31 @@
   transition: all 100ms ease-in;
 }
 @media screen and (max-width:1000px) {
-  .card {
+  .empcard {
     width: 40%;
   }
   
 }
 @media screen and (max-width:800px) {
-  .card {
+  .empcard {
     width: 60%;
   }
   
 }
 
 @media screen and (max-width:700px) {
-  .card {
+  .empcard {
     width: 70%;
   }
   
 }
 @media screen and (max-width:250px) {
-  .card {
+  .empcard {
     display: none;
   }
   
 }
-.card:hover {
+.empcard:hover {
   transform: scale(1.02);
   box-shadow: 0px 0px 10px rgb(133, 131, 131);
   

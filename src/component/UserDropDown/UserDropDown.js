@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./AddUser.css";
+import "./UserDropDown.css";
 import userIcon from "../Icons/uprofile.svg";
 import SettingsIcon from "../Icons/gear.svg";
 import { useSelector, useDispatch } from "react-redux";
@@ -10,6 +10,7 @@ import Modal from "../UI/Modal/Modal";
 import getAxiosInstance from "../../axiosInstance";
 import { userDataUpdateAction } from "../../store/userData";
 import EditProfile from "../EditProfile/EditProfile";
+import { testAddUpdateAction } from "../../store/testResult";
 export default function AddUser({ userArray, setUserArray }) {
   const dispatch = useDispatch();
   const labelRef = React.useRef();
@@ -113,17 +114,16 @@ export default function AddUser({ userArray, setUserArray }) {
     e.preventDefault();
     getAxiosInstance().then(async (axiosInstance) => {
       await axiosInstance
-        .post("userapi/accountscreate/", {
+        .post("/vaccineapi/selftestcreate/", {
           test_date: TestformData.Test_Date,
           test_result: TestformData.Result,
           remarks: TestformData.Remarks
             ? TestformData.Remarks
             : "No Remarks added",
-          attachments: TestformData.testfile ? TestformData.testfile : "",
-          name: selectedUser.id,
+          attachments: TestformData.testfile ? TestformData.testfile : "",       
         })
         .then(function (response) {
-          // dispatch(testAddUpdateAction.added());
+          dispatch(testAddUpdateAction.added());
           console.log(response);
           TestformData.Result = "";
           TestformData.Remarks = "";
@@ -154,11 +154,11 @@ export default function AddUser({ userArray, setUserArray }) {
           </a>
           {/* {(useraddedData.first_dose=== true&&useraddedData.second_dose=== true)? */}
           <a href onClick={() => DetailsCardHandler()}>
-          <i class="fas fa-syringe"></i>  Vaccine Details
+          <i class="fas fa-syringe"></i> Add Vaccine 
           </a>
            {/* :null}  */}
           <a href onClick={() => TestDetailsCardHandler()}>
-            <i className='fas fa-notes-medical'></i>  Test Result
+            <i className='fas fa-notes-medical'></i> Add Test 
           </a>
           <a href onClick={() => setLogout()}>
             <i className='fas fa-sign-out-alt'></i>  Logout

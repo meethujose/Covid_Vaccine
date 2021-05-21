@@ -8,7 +8,13 @@
   filter: invert(100%) sepia(100%) saturate(2%) hue-rotate(82deg)
     brightness(102%) contrast(101%);
 }
-
+.Backicon {
+  width: 25px !important;
+  height: 25px;
+  float: left;
+  margin-top: 100px;
+  margin-left: 70px;
+}
 
 @import "https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic&subset=latin,cyrillic";
 /* -- import Roboto Font ---------------------------- */
@@ -23,7 +29,7 @@
 }
 .tableheader{
   z-index: 4;
-  margin-top: -12rem;
+  margin-top: -11rem;
   height:10rem;
   width: 100%;
   border: #707070;

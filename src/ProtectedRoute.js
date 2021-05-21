@@ -6,6 +6,7 @@ export default function ProtectedRoute(props) {
   const isAuthenticated = useSelector((state) => state.isAuth);
  
   if (isAuthenticated.isAuth === true) {
+    console.log("route",props);
     return <Route {...props}>{props.children}</Route>;
   } else {
     return (
