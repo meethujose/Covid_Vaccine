@@ -1,0 +1,24 @@
+.avatar__container {
+  position: absolute;
+  float: right;
+  right: 2rem;
+  top: 2rem;
+  padding-right: 10px;
+
+}
+.filter_fav{
+  position:fixed;
+}
+.table-style {
+  position : absolute;
+  width: 80%;
+  margin-left: 10%;
+  margin-right: 10%;
+  overflow-y:unset;
+  /* margin-top: 2rem; */
+}
+.Admin_Home_icon {
+  width: 40px;
+  margin-left: 50px;
+  margin-top: 40px;
+}

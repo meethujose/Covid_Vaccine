@@ -5,6 +5,9 @@ import testAddUpdateSlice from "./testResult";
 import isAuthenticated from "./isAuthenticated";
 import _authToken from "./token";
 import userData from "./userData";
+import userDetails from "./userDetails";
+
+
 const store = configureStore({
   reducer: {
     testResult: testAddUpdateSlice,
@@ -13,6 +16,7 @@ const store = configureStore({
     isAuth: isAuthenticated,
     authToken: _authToken,
     userData: userData,
+    userDetails: userDetails,
   },
 });
 

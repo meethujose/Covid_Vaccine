@@ -1,6 +1,6 @@
 .header {
   z-index: 4;
-  margin-top: -12rem;
+ 
   height: 7rem;
   width: 100%;
   border: #707070;
@@ -8,9 +8,9 @@
   position: fixed;
   display: block;
 
-  background: #50a3a2;
-  background: -webkit-linear-gradient(top left, #50a3a2 0%, #53e3a6 100%);
-  background: -moz-linear-gradient(top left, #50a3a2 0%, #53e3a6 100%);
-  background: -o-linear-gradient(top left, #50a3a2 0%, #53e3a6 100%);
-  background: linear-gradient(to bottom right, #50a3a2 0%, #53e3a6 100%);
+  background: #A1C8CF;
+  /* background: -webkit-linear-gradient(top left, #50a3a2 0%, #53e3a6 100%); */
+  /* background: -moz-linear-gradient(top left, #50a3a2 0%, #53e3a6 100%); */
+  /* background: -o-linear-gradient(top left, #50a3a2 0%, #53e3a6 100%); */
+  /* background: linear-gradient(to bottom right, #50a3a2 0%, #53e3a6 100%); */
 }

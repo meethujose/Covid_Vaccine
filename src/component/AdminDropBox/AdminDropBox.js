@@ -29,7 +29,6 @@ export default function AddUser({ userArray, setUserArray }) {
 
   const setLogout = () => {
     dispatch(isAuth());
-    localStorage.clear();
   };
 
   // redirect to settings page

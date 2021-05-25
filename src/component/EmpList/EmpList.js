@@ -3,7 +3,7 @@ import EmpCard from "../UI/EmpCard/EmpCard";
 import DetailsCard from "../UI/DetailsCard/DetailsCard";
 import Modal from "../UI/Modal/Modal";
 import "./Emplist.css";
-import report from "../Icons/report.svg";
+import {ReactComponent as ReportIcon} from "../Icons/report.svg";
 import deleteIcon from "../Icons/delete.svg";
 import VaccineDetails from "../UI/VaccineDetails/VaccineDetails";
 import TestDetails from "../UI/TestDetails/TestDetails";
@@ -28,7 +28,6 @@ export default function EmpList({ userArray, setUserArray }) {
         .get("userapi/accounts/")
         .then((res) => {
           setUserArray(res.data);
-          dispatch(userDataUpdateAction.add(res.data));
           dispatch(userDataUpdateAction.add(res.data));
           localStorage.setItem("userData", JSON.stringify(res.data[0]));
         })
@@ -71,18 +70,7 @@ export default function EmpList({ userArray, setUserArray }) {
               <h3 className='emplist__eid'>{item.emiratesID}</h3>
             </div>
             <div className='empcard__imagewrapper'>
-              <img
-                className='reporticon scale'
-                src={report}
-                alt=''
-               
-              />
-              {/* <img
-                className='deleteicon scale'
-                src={deleteIcon}
-                alt=''
-                onClick={() => deleteEmpHandler(item)}
-              /> */}
+              <ReportIcon className = 'reporticon'/>
             </div>
           </EmpCard>
         ))}

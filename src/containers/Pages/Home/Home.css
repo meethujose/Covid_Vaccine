@@ -1,0 +1,15 @@
+.avatar__container {
+  position: absolute;
+  float: right;
+  right: 2rem;
+  top: 2rem;
+  padding-right: 10px;
+}
+.filter_fav {
+  position: fixed;
+}
+.Admin_settings_icon {
+  width: 50px;
+  margin-left: 18px;
+  margin-top: 40px;
+}

@@ -1,0 +1,93 @@
+.avatar {
+  /* position: relative; */
+  /* right: 1rem; */
+  width: 3rem;
+  height: 3rem;
+  border: solid white;
+  border-radius: 50%;
+  vertical-align: middle;
+  text-align: right;
+  float: right;
+  /* justify-content: flex-start; */
+}
+
+.profile__wrapper {
+    z-index: 6;
+  position: absolute;
+  right: 1rem;
+  top: 2rem;
+  width: 10rem;
+  height: 3rem;
+  display: flex;
+  flex-direction: column;
+}
+.dropdown__wrapper {
+  height: auto;
+}
+.avatar__wrapper {
+  float: right;
+  /* background-color: gray; */
+  justify-content: flex-end;
+}
+.animateddiv {
+  position: fixed;
+  height: auto;
+  right: 1rem;
+  top: 5.5rem;
+  border-radius: 10px;
+  transform: translateX(100);
+  box-shadow: 0px 10px 30px -5px rgba(0, 0, 0, 0.3);
+}
+.dropdownhead {
+  background-image: linear-gradient(#2c9eb3, #a1c8cf);
+  top: 0;
+  height: auto;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+}
+.name {
+  font-family: "Montserrat", sans-serif;
+  color: white;
+  padding-left: 1rem;
+  padding-top: 2rem;
+  height: auto;
+  width: auto;
+  transition: opacity 5s ease-in-out;
+}
+.email {
+  font-family: "Montserrat", sans-serif;
+  font-size: small;
+  color: white;
+  font-weight: 100;
+  font-style: normal;
+  padding-left: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  height: auto;
+  width: auto;
+}
+
+.dropdownbodytext {
+  font-family: "Montserrat", sans-serif;
+  color: rgb(87, 81, 81);
+  padding-left: 1rem;
+  padding-top: 2rem;
+  height: auto;
+  width: auto;
+}
+.dropdown__ul {
+  list-style-type: none;
+  padding-left: 5px;
+  transition: all;
+}
+
+.dropdown__li {
+  padding-top: 10px;
+  transition: all;
+}
+
+.dropdown__li:hover {
+  transform: scale(1.02);
+  text-shadow: 0px 0px 6px rgb(119, 203, 236);
+  cursor: pointer;
+}

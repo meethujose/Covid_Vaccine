@@ -1,13 +1,14 @@
 .empcard {
+  background-color:white;
   display: flex;
   flex-direction: row;
   width: 30%;
-  height: 6rem;
+  height: 7rem;
   margin: auto;
   padding: 1rem;
   margin-top: 1rem;
   border-radius: 10px;
-  box-shadow: 0px 0px 5px rgb(133, 131, 131);
+  box-shadow: 0px 0px 2px rgb(190, 186, 186);
   transition: all 100ms ease-in;
 }
 @media screen and (max-width:1000px) {
@@ -37,6 +38,6 @@
 }
 .empcard:hover {
   transform: scale(1.02);
-  box-shadow: 0px 0px 10px rgb(133, 131, 131);
+  box-shadow: 0px 0px 6px rgb(133, 131, 131);
   
 }

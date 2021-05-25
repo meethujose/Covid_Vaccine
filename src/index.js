@@ -5,11 +5,17 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {Provider} from 'react-redux';
 import store from './store';
+import {IntlProvider} from "react-intl";
+import english from './config/translation/locales/en_US.json';
+import arabic from './config/translation/locales/ar_SA.json';
+
 ReactDOM.render(
   <Provider store={store}>
+    <IntlProvider locale messages = {arabic}>
   <React.StrictMode>
     <App />
   </React.StrictMode>
+  </IntlProvider>
   </Provider>,
   document.getElementById('root')
 );

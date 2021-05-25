@@ -8,19 +8,6 @@
   margin-left: 1.5rem;
   font-family: Segoe UI;
 }
-.Empcard {
-  display: flex;
-  position: relative;
-  width: 100%;
-  height: 320px;
-  margin: auto;
-  padding: 10px;
-  margin-top: 20px;
-  background-color: #87c1ab;
-  border-radius: 10px;
-  box-shadow: 0px 0px 5px rgb(133 131 131);
-  z-index: 1;
-}
 .empcard__textwrapper {
   display: inline;
   align-items: center;
@@ -28,13 +15,18 @@
 }
 
 .emplist__name {
+  font-family: "Nunito", sans-serif;
+  color: rgb(99, 95, 95);
+  text-transform: uppercase;
   text-align: left;
-  font-family: "Open Sans", sans-serif;
   font-weight: 500;
   font-size: 1rem;
-  color: rgb(77, 74, 74);
+  padding-bottom: .5rem;
+  padding-top: .5rem;
 }
 .emplist__eid {
+  font-family: "Nunito", sans-serif;
+  color: rgb(99, 95, 95);
   text-align: left;
   font-family: "Open Sans", sans-serif;
   font-weight: 300;
@@ -51,7 +43,6 @@
   justify-content: center;
   align-items: center;
   width: 20%;
- 
 }
 .empVaccine--text {
   display: flex;
@@ -78,15 +69,15 @@
 }
 .reporticon {
   width: 2.5rem;
+  fill: rgb(116, 111, 111);
   height: 2.5rem;
-  margin-left:0.9rem ;
+  margin-left: 0.9rem;
 }
 .deleteicon {
   width: 2.5rem;
   height: 2.5rem;
-  margin-left:0.9rem ;
-  margin-right:1.3rem ;
-
+  margin-left: 0.9rem;
+  margin-right: 1.3rem;
 }
 .scale {
   transition: transform 0.8s;
@@ -117,7 +108,7 @@
   box-shadow: 0px 0px 8px #888888;
 }
 
-.EmpTitle{
+.EmpTitle {
   display: flex;
   justify-content: space-between;
 }
@@ -183,13 +174,12 @@
   padding: 10px;
   row-gap: 12px;
   box-sizing: border-box;
- 
 }
 .regSubButton {
   margin-top: 50px;
   background-color: #b2d0d7;
   color: white;
-  width:30%;
+  width: 30%;
 }
 .scrollable {
   height: 10rem;
@@ -198,6 +188,5 @@
 .scrollable::-webkit-scrollbar {
   display: none;
 }
-
 
 /*  */

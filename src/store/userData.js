@@ -9,7 +9,7 @@ const userDataUpdateSlice = createSlice({
     reducers : {
         add(state,action) {       
             // state.push(action.payload)
-            console.log("action",action.payload);
+            // console.log("action",action.payload);
             return([...state,...action.payload])
           },
     }
