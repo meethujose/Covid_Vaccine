@@ -59,10 +59,7 @@ const editVaccineData=()=>{
           avatar:imageRef.current.files[0],
         })
         .then(function (response) {
-          console.log("user edit response",userIcon);
-          dispatch(empAddUpdateAction.added());
-          const userIcon=response.data.avatar;         
-          console.log("avatar",userIcon);
+          dispatch(empAddUpdateAction.added());      
           formData.firstname = "";
           formData.last_name = "";
           formData.EmiratesId = "";
@@ -71,9 +68,6 @@ const editVaccineData=()=>{
         });
     });
 
-    //     })
-
-    //   });
   };
   const onSelectFile = (e) => {
     console.log(imageRef.current.files[0]);
@@ -163,24 +157,6 @@ const editVaccineData=()=>{
                   handleChange(e);
                 }}
               />
-            </div>
-            <div className="editlabelcontainer">
-              <h6 className='editlabel'>Edit Vaccine details</h6> 
-              <img
-                  src={EditSVG}
-                  alt=''
-                  className='editlabelicon scale'
-                  onClick={() => editVaccineData( selectedUser)}
-                />      
-            </div>
-            <div  className="editlabelcontainer" >
-              <h6 className='editlabel'>Edit Test details </h6>    
-              <img
-                  src={EditSVG}
-                  alt=''
-                  className='edittestlabelicon scale'
-                  // onClick={() => editVaccineData( selectedUser)}
-                />        
             </div>
             <input type='submit' className=' regButton' value='Submit' />
           </form>

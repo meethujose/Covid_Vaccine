@@ -83,7 +83,7 @@ export default function AddUser({ userArray, setUserArray }) {
           console.log("vaccine update failed",err);
         });
     });
-  }
+   }
   };
 
   // handling test details Form
@@ -175,15 +175,6 @@ export default function AddUser({ userArray, setUserArray }) {
               <div>{userVaccineData}</div>
               <div className='form_box'>
                 <label className='EmpSetailsText' ref={labelRef}>
-                  {/* {selectedUser &&
-                  userVaccineData &&
-                  userVaccineData.length === 0
-                    ? "First Dose"
-                    : selectedUser &&
-                      userVaccineData &&
-                      userVaccineData[0].vaccine_dose === "First"
-                    ? "Second Dose"
-                    : "First Dose"} */}
                     Vaccine Dose
                 </label>
 
@@ -263,14 +254,6 @@ export default function AddUser({ userArray, setUserArray }) {
               </div>
               <div className='form_box'>
                 <label className='EmpSetailsText'>Result:</label>
-                {/* <input
-                  type='text'
-                  placeholder='Negative/Positive'
-                  name='Result'
-                  required
-                  className='inputField'
-                  onChange={handleTestChange}
-                /> */}
                 <select
                   id='Result'
                   name='Result'

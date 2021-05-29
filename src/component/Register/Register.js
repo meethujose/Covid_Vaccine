@@ -4,7 +4,7 @@ import { storage } from "../../Data/FirebaseConfig";
 import user from "../Images/user.png";
 import ReactCrop from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
-import {useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { empAddUpdateAction } from "../../store/empAddUpdate";
 import axiosInstance from "../../axios";
 import getAxiosInstance from "../../axiosInstance";
@@ -32,18 +32,19 @@ function generateDownload(canvas, crop) {
 export default function Register({ setShowModal }) {
   let imageUrl;
   const imageRef = React.useRef();
+
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({});
   const [EidField, setEidField] = useState("");
   const [error, setError] = useState("");
   const [upImg, setUpImg] = useState();
- 
   const imgRef = useRef(null);
   const previewCanvasRef = useRef(null);
   const [crop, setCrop] = useState();
   const [completedCrop, setCompletedCrop] = useState(null);
   const [selected, setSelected] = useState(false);
   const [profileImage, setProfileImage] = useState(user);
+
   const handleChange = (e) => {
     setFormData((formData) => ({
       ...formData,
@@ -55,40 +56,38 @@ export default function Register({ setShowModal }) {
     e.preventDefault();
     console.log("clicked");
     var image = imageRef.current.files[0];
-    
-      var storageRef = storage.ref().child(`images/${formData.EmiratesId}`);
-      storageRef.put(image).then((snapshot) => {
-        snapshot.ref.getDownloadURL().then(async (url) => {
-          imageUrl=url;
 
-        }).then(async()=>{
-          getAxiosInstance().then(async axiosInstance=>{
-            await  axiosInstance
-            .post("userapi/accountscreate/", {
-              first_name: formData.firstname,
-              last_name: formData.last_name,
-              emiratesID: formData.EmiratesId,      
-              email:formData.email,   
-              avatar:formData.image?formData.image: "https://firebasestorage.googleapis.com/v0/b/vaccine-9e17d.appspot.com/o/images%2FaddEmployee.png?alt=media&token=ac8c7ac6-773d-44ff-afa0-1aa76ea1d3d7",
-     
-           })
-           .then(function (response) {
-             dispatch(empAddUpdateAction.added());
-             console.log(response);
-             formData.firstname = "";
-             formData.last_name = "";
-             formData.EmiratesId = "";
-             formData.email=""
-             setShowModal(false);
-           });
-         });
-
+    var storageRef = storage.ref().child(`images/${formData.EmiratesId}`);
+    storageRef.put(image).then((snapshot) => {
+      snapshot.ref
+        .getDownloadURL()
+        .then(async (url) => {
+          imageUrl = url;
         })
-      
-      });
-    
-  
-   
+        .then(async () => {
+          getAxiosInstance().then(async (axiosInstance) => {
+            await axiosInstance
+              .post("userapi/accountscreate/", {
+                first_name: formData.firstname,
+                last_name: formData.last_name,
+                emiratesID: formData.EmiratesId,
+                email: formData.email,
+                avatar: formData.image
+                  ? formData.image
+                  : "https://firebasestorage.googleapis.com/v0/b/vaccine-9e17d.appspot.com/o/images%2FaddEmployee.png?alt=media&token=ac8c7ac6-773d-44ff-afa0-1aa76ea1d3d7",
+              })
+              .then(function (response) {
+                dispatch(empAddUpdateAction.added());
+                console.log(response);
+                formData.firstname = "";
+                formData.last_name = "";
+                formData.EmiratesId = "";
+                formData.email = "";
+                setShowModal(false);
+              });
+          });
+        });
+    });
   };
   const EidChangeHandler = (event) => {
     const Eid = event.target.value;
@@ -114,7 +113,7 @@ export default function Register({ setShowModal }) {
   //image Crop
   const onSelectFile = (e) => {
     console.log(imageRef.current.files[0]);
-    setProfileImage( URL.createObjectURL(e.target.files[0]));
+    setProfileImage(URL.createObjectURL(e.target.files[0]));
   };
 
   const onLoad = useCallback((img) => {
@@ -166,6 +165,7 @@ export default function Register({ setShowModal }) {
           onChange={onSelectFile}></input>
         <img src={profileImage} className='imgFile' alt='img' />
       </label>
+      
       <p className='error'>{error}</p>
       {selected ? (
         <>
@@ -188,7 +188,7 @@ export default function Register({ setShowModal }) {
         </>
       ) : (
         <form className='addform' onSubmit={submitData}>
-           <div className='form_box'>
+          <div className='form_box'>
             <label>First Name</label>
             <input
               type='text'
