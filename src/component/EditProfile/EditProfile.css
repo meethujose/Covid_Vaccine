@@ -1,20 +1,22 @@
-.editlabel{
-    color:#50a3a2;
-    
+.editlabel {
+  color: #50a3a2;
 }
-.editlabelcontainer{
-    display:flex;
-    margin-top: 1rem;
+.editlabelcontainer {
+  display: flex;
+  margin-top: 1rem;
 }
 .editlabelicon {
-    flex: 0.3;
-    width: 1.3rem;
-      height: 1.3rem;
-     
-  }
-  .edittestlabelicon {
-    flex: 0.4;
-    width: 1.3rem;
-      height: 1.3rem;
-     
-  }
+  flex: 0.3;
+  width: 1.3rem;
+  height: 1.3rem;
+}
+.edittestlabelicon {
+  flex: 0.4;
+  width: 1.3rem;
+  height: 1.3rem;
+}
+.button-wrapper {
+  display: flex;
+ margin-left: 20rem;
+  
+}

@@ -6,6 +6,7 @@ import isAuthenticated from "./isAuthenticated";
 import _authToken from "./token";
 import userData from "./userData";
 import userDetails from "./userDetails";
+import profileImage from "./profileImage";
 
 
 const store = configureStore({
@@ -17,6 +18,7 @@ const store = configureStore({
     authToken: _authToken,
     userData: userData,
     userDetails: userDetails,
+    profileImage: profileImage,
   },
 });
 

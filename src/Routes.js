@@ -8,6 +8,7 @@ import { PUBLIC_ROUTE, PRIVATE_ROUTE } from "./route.constants";
 import Admin from './component/Admin/Admin'
 import TestPage from "./containers/Pages/TestPage/TestPage";
 import Settings from './containers/Pages/Settings/Settings';
+import TestResult from './containers/Pages/TestResult/TestResult';
 const publicRoutes = [
   {
     path: PUBLIC_ROUTE.LANDING,
@@ -56,6 +57,9 @@ export default function Routes() {
           </Route>
           <Route path='/settings'>
             <Settings />
+          </Route>
+          <Route path='/testresult'>
+            <TestResult />
           </Route>
 
 

@@ -1,17 +1,23 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import "./TopbarUser.css";
 import { useSpring, animated } from "react-spring";
 import BackDrop from "./BackDrop";
 import { isAuth } from "../../store/isAuthenticated";
 import EditTestResult from "../EditTestResult/EditTestResult";
-import EditVaccine from '../EditVaccine/EditVaccine';
+import EditVaccine from "../EditVaccine/EditVaccine";
 import EditProfile from "../EditProfile/EditProfile";
+import ChangePassword from "../ChangePassword/ChangePassword";
 
 export default function TopbarUser(props) {
 
+
+  
+  const history = useHistory();
   const dispatch = useDispatch();
   const [EditProfileModal, setEditProfileModal] = useState(false);
+  const [ChangePasswordModal, setChangePasswordModal] = useState(false);
   const [EditVaccineModal, setEditVaccineModal] = useState(false);
   const [EditTestResultModal, setEditTestResultModal] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -30,25 +36,26 @@ export default function TopbarUser(props) {
   };
 
   // to show edit profile Modal
-  const EditProfileCardHandler = () => {
-    setEditProfileModal(!EditProfileModal);
+  const EditProfileModalView = () => {
+    setEditProfileModal(EditProfileModal ? false : true);
   };
 
   // to show vaccine Edit Modal
   const EditVaccineCardHandler = () => {
-    setEditVaccineModal(!EditVaccineModal);
+    setEditVaccineModal(!EditVaccineModal ? false :true);
   };
 
   // to show vaccine Edit Modal
   const EditTestResultCardHandler = () => {
-    setEditTestResultModal(!EditTestResultModal);
+    history.push("/testResult");
   };
 
   // logout
   const clickLogoutHandler = () => {
-    // dispatch(isAuth());
-    // alert('clicked');
+  localStorage.clear();
+  history.push('/signin')
   };
+
   return (
     <>
       {isHovered ? <BackDrop onClick={animation_on_button} /> : null}
@@ -84,13 +91,23 @@ export default function TopbarUser(props) {
                     </li>
                     <li
                       className='dropdown__li'
-                      onClick={() => EditProfileCardHandler()}>
+                      onClick={() =>
+                        setEditProfileModal(EditProfileModal ? false : true)
+                      }>
                       My Profile
                     </li>
-                    <li className='dropdown__li'>Change Password</li>
                     <li
                       className='dropdown__li'
-                      onClick={() => EditVaccineCardHandler()}>
+                      onClick={() =>
+                        setChangePasswordModal(
+                          ChangePasswordModal ? false : true
+                        )
+                      }>
+                      Change Password
+                    </li>
+                    <li
+                      className='dropdown__li'
+                      onClick={() => setEditVaccineModal( EditVaccineModal ? false : true)}>
                       Add/Edit Vaccine Details
                     </li>
                     <li
@@ -106,24 +123,24 @@ export default function TopbarUser(props) {
             </div>
           </animated.div>
         </div>
-        {EditProfileModal ? (
-          <EditProfile
-            EditProfileModal={EditProfileModal}
-            setEditProfileModal={setEditProfileModal}
-          />
-        ) : null}
-         {EditVaccineModal ? (
+
+        <EditProfile
+          modalVisible={EditProfileModal}
+          // EditProfileModal={EditProfileModal}
+          setEditProfileModal={setEditProfileModal}
+        />
+        <ChangePassword
+          modalVisible={ChangePasswordModal}
+          setChangePasswordModal={setChangePasswordModal}
+        />
+        {EditVaccineModal ? (
           <EditVaccine
-            EditVaccineModal={EditVaccineModal}
+             modalVisible={EditVaccineModal}
+            // EditVaccineModal={EditVaccineModal}
             setEditVaccineModal={setEditVaccineModal}
           />
         ) : null}
-         {EditTestResultModal ? (
-          <EditTestResult
-            EditTestResultModal={EditTestResultModal}
-            setEditTestResultModal={setEditTestResultModal}
-          />
-        ) : null}
+
       </div>
     </>
   );

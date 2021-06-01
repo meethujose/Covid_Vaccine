@@ -19,6 +19,16 @@ const userDetails = createSlice({
       state.first_name = action.payload.first_name;
       state.last_name = action.payload.last_name;
       state.user_data = action.payload.user_data;
+      
+    },
+    updateUserDetails : (state, action) => {
+      
+      
+      state.first_name = action.payload.first_name;
+      state.last_name = action.payload.last_name;
+      state.avatar = action.payload.avatar;
+      state.last_name = action.payload.last_name;
+      
     }
   },
 });
