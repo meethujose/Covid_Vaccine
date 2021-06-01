@@ -5,10 +5,14 @@ import BackDrop from "../../Filter/BackDrop";
 import "./PlusIcon.css";
 import "antd/dist/antd.css";
 import { Switch } from "antd";
-import { useSelector } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
+import { addUserDetails } from "../../../store/userDetails";
+
 function PlusIcon({ userArray, setUserArray }) {
+  const dispatch = useDispatch();
+  const userData = useSelector((state) => state.userDetails);
   const userList = useSelector((state) => state.userData);
-  const userData = JSON.parse(localStorage.getItem("userData"));
+ 
   const [isHovered, setIsHovered] = useState(false);
   const [isMyCard, setIsMyCard] = useState(false);
   const [isFirstDose, setIsFirstDose] = useState(false);
@@ -53,7 +57,7 @@ function PlusIcon({ userArray, setUserArray }) {
       
     isMyCard
       ? setUserArray(
-          userArray.filter((_user) => _user.email === userData.email)
+          userArray.filter((_user) => _user.email === userData.user_data.email)
         )
       : setUserArray(userList);
 

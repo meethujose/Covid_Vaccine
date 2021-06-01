@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect, useRef } from "react";
 import "antd/dist/antd.css";
 import getAxiosInstance from "../../axiosInstance";
 import { Table, Input, Button, Popconfirm, Form, Space } from "antd";
-import TestDetails from '../UI/TestDetails/TestDetails';
+import TestDetails from '../../component/UI/AddNewTestResult/AddNewTestResult';
 const EditableContext = React.createContext(null);
 
 const EditableRow = ({ index, ...props }) => {
