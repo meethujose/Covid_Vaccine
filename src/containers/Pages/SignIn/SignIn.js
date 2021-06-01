@@ -55,6 +55,7 @@ export default function SignIn(props) {
           refresh: refreshToken,
         })
         .then(function (response) {
+          console.log("response",response.data);
           // return response.data.access;
           localStorage.setItem("access_token", response.data.access);
           dispatch(isAuth(response.data.access));
@@ -94,7 +95,7 @@ export default function SignIn(props) {
         history.push(locationAfterSignIn);
       })
       .catch((error) => {
-        console.log("login error", error.response.data.detail);
+        console.log("login error", error);
         
         try {
           setaxiosMessage({ type : "text-danger", message : error.response.data.detail });
@@ -256,6 +257,7 @@ export default function SignIn(props) {
                     type='email'
                     placeholder='Email address'
                     required
+                    name='email'
                   />
                   <label className='text-muted'>
                     We'll never share your email with anyone else.
@@ -265,6 +267,7 @@ export default function SignIn(props) {
                     className='form-control'
                     placeholder='Password'
                     required
+                    password="password"
                   />
                   <p className={axiosMessage.type}>{axiosMessage.message}</p>
                   <button

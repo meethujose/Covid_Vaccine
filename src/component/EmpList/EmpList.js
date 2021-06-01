@@ -3,15 +3,17 @@ import EmpCard from "../UI/EmpCard/EmpCard";
 import DetailsCard from "../UI/DetailsCard/DetailsCard";
 import Modal from "../UI/Modal/Modal";
 import "./Emplist.css";
-import {ReactComponent as ReportIcon} from "../Icons/report.svg";
+import { ReactComponent as ReportIcon } from "../Icons/report.svg";
 import deleteIcon from "../Icons/delete.svg";
 import VaccineDetails from "../UI/VaccineDetails/VaccineDetails";
 import TestDetails from "../UI/TestDetails/TestDetails";
 import { useSelector, useDispatch } from "react-redux";
 import getAxiosInstance from "../../axiosInstance";
-import { userDataUpdateAction } from "../../store/userData";
+import { addUserDetails } from "../../store/userDetails";
 import { empAddUpdateAction } from "../../store/empAddUpdate";
+
 export default function EmpList({ userArray, setUserArray }) {
+  
   const dispatch = useDispatch();
   const empAddUpdateState = useSelector((state) => state.emp);
   const [selectedUser, setSelectedUser] = useState([]);
@@ -28,17 +30,29 @@ export default function EmpList({ userArray, setUserArray }) {
         .get("userapi/accounts/")
         .then((res) => {
           setUserArray(res.data);
-          dispatch(userDataUpdateAction.add(res.data));
-          localStorage.setItem("userData", JSON.stringify(res.data[0]));
+          console.log("emplist data", res.data);
+          dispatch(
+            addUserDetails({
+              user_id: res.data[0].user_id,
+              is_admin: res.data[0].is_admin,
+              first_name: res.data[0].first_name,
+              last_name: res.data[0].last_name,
+              user_data: {
+                email: res.data[0].email,
+                emiratesID: res.data[0].emiratesID,
+                avatar:res.data[0].avatar,
+              },
+            })
+          );
         })
         .catch((err) => console.error(err));
-    }); 
+    });
   };
 
   const clickHandler = (item) => {
     setSelectedUser(item);
-    const positive =item.covid_status;
-    setCardColor(positive); 
+    const positive = item.covid_status;
+    setCardColor(positive);
     const tempShowModal = showModal;
     setShowModal(!tempShowModal);
   };
@@ -61,7 +75,7 @@ export default function EmpList({ userArray, setUserArray }) {
     <div>
       {userArray &&
         userArray.map((item) => (
-          <EmpCard key={item.emiratesID}  onClick={() => clickHandler(item)}>
+          <EmpCard key={item.emiratesID} onClick={() => clickHandler(item)}>
             <div className='empcard__textwrapper'>
               <h3 className='emplist__name'>
                 {" "}
@@ -70,7 +84,7 @@ export default function EmpList({ userArray, setUserArray }) {
               <h3 className='emplist__eid'>{item.emiratesID}</h3>
             </div>
             <div className='empcard__imagewrapper'>
-              <ReportIcon className = 'reporticon'/>
+              <ReportIcon className='reporticon' />
             </div>
           </EmpCard>
         ))}
@@ -78,7 +92,9 @@ export default function EmpList({ userArray, setUserArray }) {
         <Modal onClick={clickHandler}>
           <div
             className='EmpDetailsWrap'
-            style={{ background: cardColor==='Positive' ? "rgb(255,0,0,0.6)" : null}}>
+            style={{
+              background: cardColor === "Positive" ? "rgb(255,0,0,0.6)" : null,
+            }}>
             <img className={"imgCard"} src={selectedUser.Avatar} alt='' />
             <div>
               <h3 className='emplist__name emplist--white'>

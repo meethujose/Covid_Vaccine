@@ -1,9 +1,9 @@
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 
-const baseURL = "http://lulu.transituae.net/";
+export const baseURL = "http://lulu.transituae.net/";
 
-export const axiosInstancetemp = axios.create({
+const axiosInstancetemp = axios.create({
   baseURL: baseURL,
   timeout: 5000,
   headers: {
@@ -28,9 +28,11 @@ const axiosInstance = () => {
           localStorage.setItem("access_token", response.data.access);
           const decoded = jwt_decode(response.data.access)
           localStorage.setItem("token_expiry", decoded.exp);
+          console.log(decoded.email);
         })
       } 
   return axiosInstancetemp;
 };
 
 export default axiosInstance();
+

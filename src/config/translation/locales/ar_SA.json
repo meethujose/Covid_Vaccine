@@ -448,6 +448,12 @@
   "page404.subTitle": "يبدو أنك قد فقدت",
   "page404.description": "الصفحة التي تبحث عنها غير موجودة أو تم نقلها.",
   "page404.backButton": "عودة المنزل",
+
+  "expired404.title": "404",
+  "expired404.subTitle": "لقد انتهت صلاحية الارتباط",
+  "expired404.description": "الرابط الذي تبحث عنه غير موجود أو انتهت صلاحيته.",
+  "expired404.backButton": "يغلق",
+
   "page500.title": "500",
   "page500.subTitle": "خطأ في الخادم الداخلي",
   "page500.description": "هناك خطأ ما. الرجاء إعادة المحاولة.",

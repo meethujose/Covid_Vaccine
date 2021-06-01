@@ -456,6 +456,13 @@
   "page404.subTitle": "Looks like you got lost",
   "page404.description": "The page youre looking for doesnt exist or has been moved.",
   "page404.backButton": "BACK HOME",
+  
+  "expired404.title": "404",
+  "expired404.subTitle": "The link has been expired",
+  "expired404.description": "The link youre looking for doesnt exist or has been expired.",
+  "expired404.backButton": "Close",
+
+
   "page500.title": "500",
   "page500.subTitle": "Internal Server Error",
   "page500.description": "Something went wrong. Please try again later.",

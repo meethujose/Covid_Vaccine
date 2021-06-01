@@ -1,0 +1,17 @@
+.vaccine-edit-modal {
+  overflow-y: scroll;
+  height: 300px;
+}
+
+::-webkit-scrollbar {
+  width: 0; /* Remove scrollbar space */
+  background: transparent;
+}
+.file-Remarks {
+  display: flex;
+}
+.file-download-icon {
+  width: 30px;
+  height: 30px;
+  margin-left: 2rem;
+}

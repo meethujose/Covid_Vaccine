@@ -161,12 +161,3 @@
   z-index: 1;
   background-color: rgba(0,0,0,0.33);
 }
-
-.box {
-  display: inline-block;
-  padding: 10px;
-  box-sizing: border-box;
-}
-.img-preview {
-  overflow: hidden;
-}
